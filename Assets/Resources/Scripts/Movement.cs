@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Movement : MonoBehaviour
 {
     [SerializeField] private float speed;
     [SerializeField] private Rigidbody2D rb;
@@ -15,8 +15,8 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float hMovement = Input.GetAxis("Horizontal");
-        float vMovement = Input.GetAxis("Vertical");
+        float hMovement = Input.GetAxisRaw("Horizontal");
+        float vMovement = Input.GetAxisRaw("Vertical");
 
         Vector2 playerVelocity = new Vector2(hMovement, vMovement).normalized;
 
