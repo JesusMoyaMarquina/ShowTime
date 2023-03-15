@@ -1,19 +1,35 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MenuManager : MonoBehaviour
 {
     public GameObject mainMenu;
     public GameObject pauseMenu;
     public GameObject settingsMenu;
+    public GameObject keybindsMenu;
+    public AudioMixer audioMixer;
+    public TMP_Dropdown resolutionDropdown;
+    public Toggle fullscreenToggle;
     public static bool isPaused;
 
     private GameObject previousMenu;
+    private Resolution[] resolutions;
+    private List<Resolution> realResolutions;
 
     // Start is called before the first frame update
     void Start()
+    {
+        HandleMenuVisibility();
+        GetResolutionList();
+        fullscreenToggle.isOn = Screen.fullScreen;
+    }
+
+    private void HandleMenuVisibility()
     {
         if (mainMenu != null)
         {
@@ -24,6 +40,7 @@ public class MenuManager : MonoBehaviour
             pauseMenu?.SetActive(false);
         }
         settingsMenu?.SetActive(false);
+        keybindsMenu?.SetActive(false);
     }
 
     // Update is called once per frame
@@ -32,17 +49,79 @@ public class MenuManager : MonoBehaviour
         HandlePauseMenuInputs();
     }
 
-    #region Pause settings options
+    #region General menu options
+    public void Return(GameObject actualMenu)
+    {
+        previousMenu?.SetActive(true);
+        actualMenu?.SetActive(false);
+    }
+    #endregion
+
+    #region Settings menu options
     public void OpenSettings(GameObject menu)
     {
         previousMenu = menu;
         previousMenu?.SetActive(false);
         settingsMenu?.SetActive(true);
     }
-    public void Return()
+
+    public void SetVolume(float volume)
     {
-        previousMenu?.SetActive(true);
-        settingsMenu?.SetActive(false);
+        audioMixer.SetFloat("volume", volume);
+    }
+
+    public void SetQuality(int qualityIndex)
+    {
+        QualitySettings.SetQualityLevel(qualityIndex);
+    }
+
+    public void SetFullscreen (bool isFullscreen)
+    {
+        Screen.fullScreen = isFullscreen;
+    }
+
+    public void SetResolution(int resolutionIndex)
+    {
+        Resolution resolution = realResolutions[resolutionIndex];
+        Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
+    }
+
+    private void GetResolutionList()
+    {
+        resolutions = Screen.resolutions;
+
+        resolutionDropdown.ClearOptions();
+
+        realResolutions = new List<Resolution>();
+        List<string> options = new List<string>();
+
+        //Crear of resolution duplicates
+        string actualResolution = "";
+        for (int i = 0; i < resolutions.Length; i++)
+        {
+            if(!actualResolution.Contains($"{resolutions[i].width} x {resolutions[i].height}"))
+            {
+                actualResolution = $"{resolutions[i].width} x {resolutions[i].height}";
+                realResolutions.Add(resolutions[i]);
+            }
+        }
+
+        int currentResolutionIndex = 0;
+        for (int i = 0; i < realResolutions.Count; i++)
+        {
+            string option = $"{realResolutions[i].width} x {realResolutions[i].height}";
+            options.Add(option);
+
+            if (realResolutions[i].width == Screen.currentResolution.width && realResolutions[i].height == Screen.currentResolution.height)
+            {
+                currentResolutionIndex = i;
+            }
+        }
+
+        resolutionDropdown.AddOptions(options);
+
+        resolutionDropdown.value = currentResolutionIndex;
+        resolutionDropdown.RefreshShownValue();
     }
     #endregion
 
@@ -94,6 +173,19 @@ public class MenuManager : MonoBehaviour
                 PauseGame();
             }
         }
+    }
+    #endregion
+
+    #region Keybinds menu options
+    public void OpenKeybinds()
+    {
+        settingsMenu?.SetActive(false);
+        keybindsMenu?.SetActive(true);
+    }
+    public void KeybindsReturn()
+    {
+        settingsMenu?.SetActive(true);
+        keybindsMenu?.SetActive(false);
     }
     #endregion
 
