@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class MenuManager : MonoBehaviour
 {
@@ -16,6 +17,8 @@ public class MenuManager : MonoBehaviour
     public TMP_Dropdown resolutionDropdown;
     public Toggle fullscreenToggle;
     public static bool isPaused;
+
+    [SerializeField] private InputActionAsset inputActions;
 
     private GameObject previousMenu;
     private Resolution[] resolutions;
@@ -47,6 +50,9 @@ public class MenuManager : MonoBehaviour
     void Update()
     {
         HandlePauseMenuInputs();
+        HandleSettingsMenuInputs();
+        HandleKeybindingMenuInputs();
+
     }
 
     #region General menu options
@@ -123,11 +129,20 @@ public class MenuManager : MonoBehaviour
         resolutionDropdown.value = currentResolutionIndex;
         resolutionDropdown.RefreshShownValue();
     }
+
+    private void HandleSettingsMenuInputs()
+    {
+        if (settingsMenu != null && Input.GetButtonDown("Cancel") && settingsMenu.activeSelf)
+        {
+            Return(settingsMenu);
+        }
+    }
     #endregion
 
     #region Main menu options
     public void StartGame()
     {
+        isPaused = false;
         SceneManager.LoadScene("Game");
     }
 
@@ -159,10 +174,9 @@ public class MenuManager : MonoBehaviour
         SceneManager.LoadScene("MainMenu");
     }
 
-
     private void HandlePauseMenuInputs()
     {
-        if (Input.GetButtonDown("Cancel"))
+        if (pauseMenu != null && Input.GetButtonDown("Cancel") && (pauseMenu.activeSelf || !isPaused))
         {
             if (isPaused)
             {
@@ -182,10 +196,27 @@ public class MenuManager : MonoBehaviour
         settingsMenu?.SetActive(false);
         keybindsMenu?.SetActive(true);
     }
+
     public void KeybindsReturn()
     {
         settingsMenu?.SetActive(true);
         keybindsMenu?.SetActive(false);
+    }
+
+    public void ResetAllBindings()
+    {
+        foreach(InputActionMap map in inputActions.actionMaps)
+        {
+            map.RemoveAllBindingOverrides();
+        }
+    }
+
+    private void HandleKeybindingMenuInputs()
+    {
+        if (keybindsMenu != null && Input.GetButtonDown("Cancel") && keybindsMenu.activeSelf)
+        {
+            KeybindsReturn();
+        }
     }
     #endregion
 
