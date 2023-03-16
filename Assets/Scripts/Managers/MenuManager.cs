@@ -209,6 +209,7 @@ public class MenuManager : MonoBehaviour
         {
             map.RemoveAllBindingOverrides();
         }
+        PlayerPrefs.DeleteKey("rebinds");
     }
 
     private void HandleKeybindingMenuInputs()

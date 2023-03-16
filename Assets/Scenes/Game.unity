@@ -3967,7 +3967,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4294911744
-  m_fontColor: {r: 0, g: 0.15367556, b: 1, a: 1}
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -4931,7 +4931,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1319937767
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9411,6 +9411,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2033818327}
   - component: {fileID: 2033818330}
+  - component: {fileID: 2033818331}
   m_Layer: 0
   m_Name: MenuManager
   m_TagString: Untagged
@@ -9453,6 +9454,19 @@ MonoBehaviour:
   resolutionDropdown: {fileID: 1224389369}
   fullscreenToggle: {fileID: 462922026}
   inputActions: {fileID: -944628639613478452, guid: 8026b8365b5bfa7439446f715aa928f4, type: 3}
+--- !u!114 &2033818331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2033818326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b6c2da2db9374dada6761b5e35121c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actions: {fileID: -944628639613478452, guid: 8026b8365b5bfa7439446f715aa928f4, type: 3}
 --- !u!1 &2059476557
 GameObject:
   m_ObjectHideFlags: 0

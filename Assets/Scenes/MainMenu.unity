@@ -6652,7 +6652,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1669217490
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8152,7 +8152,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2023774239
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8248,6 +8248,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2092719399}
   - component: {fileID: 2092719400}
+  - component: {fileID: 2092719401}
   m_Layer: 0
   m_Name: MenuManager
   m_TagString: Untagged
@@ -8290,6 +8291,19 @@ MonoBehaviour:
   resolutionDropdown: {fileID: 1399254318}
   fullscreenToggle: {fileID: 1007535277}
   inputActions: {fileID: -944628639613478452, guid: 8026b8365b5bfa7439446f715aa928f4, type: 3}
+--- !u!114 &2092719401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2092719398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b6c2da2db9374dada6761b5e35121c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actions: {fileID: -944628639613478452, guid: 8026b8365b5bfa7439446f715aa928f4, type: 3}
 --- !u!1 &2108000717
 GameObject:
   m_ObjectHideFlags: 0
