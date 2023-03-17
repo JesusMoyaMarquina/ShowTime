@@ -44,13 +44,13 @@ public class Movement : MonoBehaviour
 
     private void PlayerDirection()
     {
-        if (rb.velocity.x < -0.1f)
-        {
-            spriteRenderer.flipX = false;
-        }
-        else if (rb.velocity.x > 0.1f)
+        if (rb.velocity.x > 0.1f)
         {
             spriteRenderer.flipX = true;
+        }
+        else if (rb.velocity.x < -0.1f)
+        {
+            spriteRenderer.flipX = false;
         }
         if (rb.velocity != Vector2.zero)
         {
