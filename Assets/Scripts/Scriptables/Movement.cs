@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,6 +14,9 @@ public class Movement : MonoBehaviour
     private Vector2 direction;
 
     private Vector2 movement;
+    private bool isDash;
+    private bool isDashing;
+    private bool isDashInCooldown;
 
     // Start is called before the first frame update
     void Start()
@@ -27,17 +31,25 @@ public class Movement : MonoBehaviour
     void Update()
     {
         movement = playerInput.actions["Move"].ReadValue<Vector2>();
+        isDash = playerInput.actions["Dash"].ReadValue<float>() == 1 ? true : false;
     }
 
     private void FixedUpdate()
     {
-        PlayerMovement();
-        PlayerDirection();
+        if (isDash && !isDashInCooldown) PlayerDash();
+        if (!isDashing)
+        {
+            PlayerMovement(speed);
+            PlayerDirection();
+        } else
+        {
+            PlayerMovement(speed + 10, true);
+        }
     }
 
-    private void PlayerMovement()
+    private void PlayerMovement(float speed, bool isDashing = false)
     {
-        Vector2 playerVelocity = movement.normalized;
+        Vector2 playerVelocity = isDashing ? direction / 10 : movement.normalized;
 
         rb.velocity = playerVelocity * speed;
     }
@@ -59,5 +71,27 @@ public class Movement : MonoBehaviour
 
         anim.SetFloat("speedX", Mathf.Abs(rb.velocity.x));
         anim.SetFloat("speedY", rb.velocity.y);
+    }
+
+    private void PlayerDash()
+    {
+        isDashing = true;
+        anim.SetBool("isDashing", true);
+        anim.SetFloat("speedX", Mathf.Abs(rb.velocity.x));
+        anim.SetFloat("speedY", rb.velocity.y);
+    }
+
+    private void StopDashing()
+    {
+        isDashing = false;
+        anim.SetBool("isDashing", false);
+        StartCoroutine(DashCooldown());
+    }
+
+    IEnumerator DashCooldown()
+    {
+        isDashInCooldown = true;
+        yield return new WaitForSeconds(2);
+        isDashInCooldown = false;
     }
 }
