@@ -18,14 +18,15 @@ public class MenuManager : MonoBehaviour
     public Toggle fullscreenToggle;
     public static bool isPaused;
 
+    public static string settedResolution = "";
+
     [SerializeField] private InputActionAsset inputActions;
 
     private GameObject previousMenu;
     private Resolution[] resolutions;
     private List<Resolution> realResolutions;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         HandleMenuVisibility();
         GetResolutionList();
@@ -52,7 +53,6 @@ public class MenuManager : MonoBehaviour
         HandlePauseMenuInputs();
         HandleSettingsMenuInputs();
         HandleKeybindingMenuInputs();
-
     }
 
     #region General menu options
@@ -90,6 +90,7 @@ public class MenuManager : MonoBehaviour
     {
         Resolution resolution = realResolutions[resolutionIndex];
         Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
+        settedResolution = $"{realResolutions[resolutionIndex].width} x {realResolutions[resolutionIndex].height}";
     }
 
     private void GetResolutionList()
@@ -118,7 +119,10 @@ public class MenuManager : MonoBehaviour
             string option = $"{realResolutions[i].width} x {realResolutions[i].height}";
             options.Add(option);
 
-            if (realResolutions[i].width == Screen.currentResolution.width && realResolutions[i].height == Screen.currentResolution.height)
+            if (realResolutions[i].width == Screen.currentResolution.width && realResolutions[i].height == Screen.currentResolution.height && settedResolution.Equals(""))
+            {
+                currentResolutionIndex = i;
+            } else if (settedResolution.Contains($"{realResolutions[i].width} x {realResolutions[i].height}"))
             {
                 currentResolutionIndex = i;
             }
@@ -127,6 +131,7 @@ public class MenuManager : MonoBehaviour
         resolutionDropdown.AddOptions(options);
 
         resolutionDropdown.value = currentResolutionIndex;
+
         resolutionDropdown.RefreshShownValue();
     }
 

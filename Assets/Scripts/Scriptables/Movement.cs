@@ -56,6 +56,10 @@ public class Movement : MonoBehaviour
         {
             direction = rb.velocity;
         }
+        if(direction.x < 0.1f)
+        {
+            spriteRenderer.flipX = false;
+        }
 
         anim.SetFloat("speedX", Mathf.Abs(rb.velocity.x));
         anim.SetFloat("speedY", rb.velocity.y);
