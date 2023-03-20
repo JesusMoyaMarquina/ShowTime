@@ -6,6 +6,7 @@ using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using System;
 
 public class MenuManager : MonoBehaviour
 {
@@ -52,7 +53,6 @@ public class MenuManager : MonoBehaviour
         HandlePauseMenuInputs();
         HandleSettingsMenuInputs();
         HandleKeybindingMenuInputs();
-
     }
 
     #region General menu options
