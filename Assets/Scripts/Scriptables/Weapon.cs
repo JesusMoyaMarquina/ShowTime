@@ -4,31 +4,43 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
-    public float damage;
+    protected List<float> damage;
     public float atkMng;
 
     protected Animator Anim;   
-    protected int[] atkList;
+    protected List<int> atkList;
     protected int atkCount;  
     protected float atkCD;
-    protected bool atkInCD;
-    protected Vector2 atkDist;
+    protected bool isInCD;
 
-    void AttackB(float vidaEnem, GameObject enemyClose)
+    void AttackB(Vector2 atkDist, GameObject enemyClose, float tiempoCD)
     {
-        StartCoroutine(Magnetismo(enemyClose.transform.position));
-
-        Vector2 hepl = enemyClose.transform.position - transform.position;
-
-        if (hepl.x < atkDist.x && hepl.y < atkDist.y)
+        if (isInCD == false)
         {
-            _ = vidaEnem - damage;
+
+            StartCoroutine(Magnetismo(enemyClose.transform.position, tiempoCD));
+
+            Vector2 hepl = enemyClose.transform.position - transform.position;
+
+            if (hepl.x < atkDist.x && hepl.y < atkDist.y)
+            {
+                enemyClose.GetComponent<Enemy>().MakeDmg(damage[atkCount]);
+            }
+
+            StartCoroutine(TiempoCD(tiempoCD));
         }
     }
 
-    IEnumerator Magnetismo(Vector2 enemCercano)
+    IEnumerator Magnetismo(Vector2 enemCercano, float tiempoCD)
     {
         Vector2.MoveTowards(transform.position, enemCercano, atkMng);
-        yield return null;
+        yield return new WaitForSeconds(tiempoCD);
+    }
+
+    IEnumerator TiempoCD(float tiempoCD)
+    {
+        isInCD = true;
+        yield return new WaitForSeconds(tiempoCD);
+        isInCD = false;
     }
 }
