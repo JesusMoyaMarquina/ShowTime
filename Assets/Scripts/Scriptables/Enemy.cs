@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    float playerDistance;
     // Start is called before the first frame update
     void Start()
     {
@@ -14,6 +15,11 @@ public class Enemy : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public float GetPlayerDistance()
+    {
+        return playerDistance;
     }
 
     public void MakeDmg(float damage)

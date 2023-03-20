@@ -7,7 +7,7 @@ public class Weapon : MonoBehaviour
     protected List<float> damage;
     public float atkMng;
 
-    protected Animator Anim;   
+    protected Animator Anim;
     protected List<int> atkList;
     protected int atkCount;  
     protected float atkCD;

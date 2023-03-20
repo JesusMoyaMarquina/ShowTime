@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,6 +9,7 @@ public class Movement : MonoBehaviour
 {
     public float speed;
     private Rigidbody2D rb;
+    private Collider2D triggerEnemy;
     private Animator anim;
     private SpriteRenderer spriteRenderer;
     private PlayerInput playerInput;
@@ -17,6 +19,7 @@ public class Movement : MonoBehaviour
     private bool isDash;
     private bool isDashing;
     private bool isDashInCooldown;
+    private List<GameObject> listCloseEnemies;
 
     // Start is called before the first frame update
     void Start()
@@ -93,5 +96,26 @@ public class Movement : MonoBehaviour
         isDashInCooldown = true;
         yield return new WaitForSeconds(2);
         isDashInCooldown = false;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "Enemy")
+        {
+            listCloseEnemies.Add(collision.gameObject);
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.tag == "Enemy")
+        {
+            listCloseEnemies.Remove(collision.gameObject);
+        }
+    }
+
+    public void EnemyRadar()
+    {
+        listCloseEnemies.OrderBy(o => o.GetComponent<Enemy>().GetPlayerDistance());
     }
 }
