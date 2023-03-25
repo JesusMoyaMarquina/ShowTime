@@ -7,10 +7,11 @@ public class EnemyMovement : MonoBehaviour
 {
     public GameObject player;
     public float speed;
-    public float distance;
+    public float minDistance;
 
-    private float playerX, playerY;
-    private float enemyX, enemyY;
+    private float distance;
+    private Vector3 playerPos;
+    private Vector3 enemyPos;
     // Start is called before the first frame update
     void Start()
     {
@@ -25,13 +26,16 @@ public class EnemyMovement : MonoBehaviour
 
     public void Movement()
     {
-        playerX = player.transform.position.x;
-        playerY = player.transform.position.y;
+        playerPos = player.transform.position;
+        enemyPos = transform.position;
+        distance = Vector3.Distance(enemyPos, playerPos);
 
-        if (Mathf.Abs(playerX - this.transform.position.x) > distance)
+        if (distance >= minDistance)
         {
-            enemyX = playerX - speed;
+            var targetPos = new Vector3(player.transform.position.x, player.transform.position.y, this.transform.position.z);
+            transform.LookAt(targetPos);
+            transform.position += transform.forward * speed * Time.deltaTime;
+            transform.rotation = Quaternion.identity;
         }
-
     }
 }
