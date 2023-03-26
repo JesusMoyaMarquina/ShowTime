@@ -5,17 +5,18 @@ using UnityEngine.AI;
 
 public class EnemyMovement : MonoBehaviour
 {
-    public GameObject player;
     public float speed;
     public float minDistance;
 
+    private GameObject player, secondPlayer;
     private float distance;
-    private Vector3 playerPos;
+    private Vector3 playerPos, secondPlayerPos;
     private Vector3 enemyPos;
     // Start is called before the first frame update
     void Start()
     {
-        //Movement();
+        player = GameObject.Find("Player");
+        secondPlayer = GameObject.Find("SecondPlayer");
     }
 
     // Update is called once per frame
@@ -27,12 +28,26 @@ public class EnemyMovement : MonoBehaviour
     public void Movement()
     {
         playerPos = player.transform.position;
+        secondPlayerPos = secondPlayer.transform.position;
         enemyPos = transform.position;
-        distance = Vector3.Distance(enemyPos, playerPos);
 
+        if (Vector3.Distance(enemyPos, playerPos) < Vector3.Distance(enemyPos, secondPlayerPos))
+        {
+            distance = Vector3.Distance(enemyPos, playerPos);
+            Tracking(player);
+        }
+        else
+        {
+            distance = Vector3.Distance(enemyPos, secondPlayerPos);
+            Tracking(secondPlayer);
+        }
+    }
+
+    public void Tracking(GameObject trackedPlayer)
+    {
         if (distance >= minDistance)
         {
-            var targetPos = new Vector3(player.transform.position.x, player.transform.position.y, this.transform.position.z);
+            var targetPos = new Vector3(trackedPlayer.transform.position.x, trackedPlayer.transform.position.y, this.transform.position.z);
             transform.LookAt(targetPos);
             transform.position += transform.forward * speed * Time.deltaTime;
             transform.rotation = Quaternion.identity;
