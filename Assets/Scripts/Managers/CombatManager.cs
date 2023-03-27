@@ -16,8 +16,6 @@ public class CombatManager : MonoBehaviour
     public float remainingTime;
     public float extraTime;
 
-    public float resumeTime;
-
     private void Awake()
     {
         GameManager.OnGameStateChange += GameManagerOnGameStateChange;
@@ -29,7 +27,7 @@ public class CombatManager : MonoBehaviour
     {
         if(state == GameState.Combat)
         {
-            resumeTime = Time.time - actualTime;
+            CutPreviousTimer();
         }
     }
 
@@ -64,7 +62,7 @@ public class CombatManager : MonoBehaviour
     private void ManageBattleTime()
     {
         //Update battle time
-        actualTime = (Time.time - resumeTime - previousTimesNonMultiplied) * timerSpeed;
+        actualTime = (Time.time - previousTimesNonMultiplied) * timerSpeed;
         remainingTime = combatTime - (actualTime + previousTimes);
 
 
