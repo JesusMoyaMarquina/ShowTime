@@ -7,13 +7,12 @@ public class Weapon : MonoBehaviour
     protected List<float> damage;
     public float atkMng;
 
-    protected Animator Anim;
     protected List<int> atkList;
     protected int atkCount;  
     protected float atkCD;
     protected bool isInCD;
 
-    void AttackB(Vector2 atkDist, GameObject enemyClose, float tiempoCD)
+    public void AttackB(Vector2 atkDist, GameObject enemyClose, float tiempoCD)
     {
         if (isInCD == false)
         {

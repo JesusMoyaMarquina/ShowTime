@@ -4,7 +4,12 @@ using UnityEngine;
 
 public class Fist : Weapon
 {
+    public float fistMng;
+    public float[] fistCd;
+    public Vector2[] atkDist;
 
+    private GameObject enmClose;
+    private Animator Anim;
 
     void Start()
     {
@@ -13,14 +18,24 @@ public class Fist : Weapon
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+
+    }
+
+    public void ShoftHit(Vector2 atkDist, GameObject enmClose, float fistCd)
+    {
+        if (Input.GetKeyDown(KeyCode.J))
         {
             //Putaso flojo
+            AttackB(atkDist, enmClose, fistCd);
         }
+    }
 
-        if (Input.GetKeyDown(KeyCode.Alpha2))
+    public void StrongHit(Vector2 atkDist, GameObject enmClose, float fistCd)
+    {
+        if (Input.GetKeyDown(KeyCode.J))
         {
-            //Putaso al suelo
+            //Putaso flojo
+            AttackB(atkDist, enmClose, fistCd);
         }
     }
 }
