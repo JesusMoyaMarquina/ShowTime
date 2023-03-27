@@ -77,7 +77,7 @@ public class CombatManager : MonoBehaviour
         progressBar.GetComponent<ProgressBar>().SetText(sTime);
 
         //Check win condition
-        if (actualTime > combatTime)
+        if (remainingTime <= 0)
         {
             GameManager.Instance.UpdateGameState(GameState.Vicory);
         }
