@@ -9,13 +9,12 @@ using UnityEngine.InputSystem;
 
 public class MenuManager : MonoBehaviour
 {
-    public GameObject mainMenu;
-    public GameObject pauseMenu;
-    public GameObject settingsMenu;
-    public GameObject keybindsMenu;
+    public GameObject victoryMenu, loseMenu, mainMenu, pauseMenu, settingsMenu, keybindsMenu;
+
     public AudioMixer audioMixer;
     public TMP_Dropdown resolutionDropdown;
     public Toggle fullscreenToggle;
+
     public static bool isPaused;
 
     public static string settedResolution = "";
@@ -25,6 +24,25 @@ public class MenuManager : MonoBehaviour
     private GameObject previousMenu;
     private Resolution[] resolutions;
     private List<Resolution> realResolutions;
+
+    private bool closeDelay;
+
+    private void Awake()
+    {
+        GameManager.OnGameStateChange += GameManagerOnGameStateChange;
+    }
+
+    private void OnDestroy()
+    {
+        GameManager.OnGameStateChange -= GameManagerOnGameStateChange;
+    }
+
+    private void GameManagerOnGameStateChange(GameState state)
+    {
+        HandleGamePause(state == GameState.Pause);
+        victoryMenu.SetActive(state == GameState.Vicory);
+        loseMenu.SetActive(state == GameState.Lose);
+    }
 
     private void Start()
     {
@@ -47,7 +65,6 @@ public class MenuManager : MonoBehaviour
         keybindsMenu?.SetActive(false);
     }
 
-    // Update is called once per frame
     void Update()
     {
         HandlePauseMenuInputs();
@@ -56,6 +73,12 @@ public class MenuManager : MonoBehaviour
     }
 
     #region General menu options
+    public void BackToMainMenu()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("MainMenu");
+    }
+
     public void Return(GameObject actualMenu)
     {
         previousMenu?.SetActive(true);
@@ -159,39 +182,37 @@ public class MenuManager : MonoBehaviour
 
     #region Pause menu options
 
-    public void PauseGame()
+    private void HandleGamePause(bool paused)
     {
-        pauseMenu?.SetActive(true);
-        Time.timeScale = 0f;
-        isPaused = true;
+        if(paused)
+        {
+            StartCoroutine(CloseMenuDelay());
+        }
+        if (pauseMenu != null)
+        {
+            pauseMenu?.SetActive(paused);
+        }
     }
 
     public void ResumeGame()
     {
-        pauseMenu?.SetActive(false);
-        Time.timeScale = 1f;
-        isPaused = false;
-    }
-
-    public void BackToMenu()
-    {
-        Time.timeScale = 1f;
-        SceneManager.LoadScene("MainMenu");
+        GameManager.Instance.UpdateGameState(GameState.Combat);
     }
 
     private void HandlePauseMenuInputs()
     {
-        if (pauseMenu != null && Input.GetButtonDown("Cancel") && (pauseMenu.activeSelf || !isPaused))
+        if(pauseMenu != null && pauseMenu.activeSelf && Input.GetButtonDown("Cancel") && !closeDelay) 
         {
-            if (isPaused)
-            {
-                ResumeGame();
-            }
-            else
-            {
-                PauseGame();
-            }
+            GameManager.Instance.UpdateGameState(GameState.Combat);
         }
+    }
+
+    IEnumerator CloseMenuDelay()
+    {
+        closeDelay = true;
+        yield return new WaitForEndOfFrame();
+        closeDelay = false;
+
     }
     #endregion
 
