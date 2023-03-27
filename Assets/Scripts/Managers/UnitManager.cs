@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class UnitManager : MonoBehaviour
 {
+    public GameObject meleeUnit;
+    public GameObject rangedUnit;
+
     // Start is called before the first frame update
     void Start()
     {
