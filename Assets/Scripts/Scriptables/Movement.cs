@@ -25,6 +25,7 @@ public class Movement : MonoBehaviour
         anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         playerInput = GetComponent<PlayerInput>();
+        direction = new Vector2(0, -1 * speed);
     }
 
     // Update is called once per frame
