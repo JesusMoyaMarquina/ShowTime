@@ -14,13 +14,12 @@ public class CombatManager : MonoBehaviour
     public float previousTimes;
     public float previousTimesNonMultiplied;
     public float remainingTime;
-    public float extraTime;
+    public float beginBattleTime;
 
     private void Awake()
     {
         GameManager.OnGameStateChange += GameManagerOnGameStateChange;
-        progressBar.GetComponent<ProgressBar>().maximum = combatTime;
-        timerSpeed = 1;
+        RestartGameTimer();
     }
 
     private void GameManagerOnGameStateChange(GameState state)
@@ -47,6 +46,17 @@ public class CombatManager : MonoBehaviour
         }
     }
 
+    private void RestartGameTimer()
+    {
+        progressBar.GetComponent<ProgressBar>().maximum = combatTime;
+        timerSpeed = 1;
+
+        previousTimes = 0;
+        previousTimesNonMultiplied = 0;
+
+        beginBattleTime = Time.time;
+    }
+
     public void MultiplyTimeSpeed(float multiplier)
     {
         CutPreviousTimer();
@@ -62,7 +72,8 @@ public class CombatManager : MonoBehaviour
     private void ManageBattleTime()
     {
         //Update battle time
-        actualTime = (Time.time - previousTimesNonMultiplied) * timerSpeed;
+        float realBattleTime = Time.time - beginBattleTime;
+        actualTime = (realBattleTime - previousTimesNonMultiplied) * timerSpeed;
         remainingTime = combatTime - (actualTime + previousTimes);
 
 
