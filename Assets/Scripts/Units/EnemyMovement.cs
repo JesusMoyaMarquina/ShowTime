@@ -33,10 +33,18 @@ public class EnemyMovement : MonoBehaviour
     public void Movement()
     {
         playerPos = player.transform.position;
-        secondPlayerPos = secondPlayer.transform.position;
+        if (secondPlayer != null)
+        {
+            secondPlayerPos = secondPlayer.transform.position;
+        }
         enemyPos = transform.position;
 
-        if (Vector3.Distance(enemyPos, playerPos) < Vector3.Distance(enemyPos, secondPlayerPos))
+        if (secondPlayer == null)
+        {
+            distance = Vector3.Distance(enemyPos, playerPos);
+            direction = new Vector2(playerPos.x - enemyPos.x, playerPos.y - enemyPos.y);
+            Tracking(player);
+        } else if(Vector3.Distance(enemyPos, playerPos) < Vector3.Distance(enemyPos, secondPlayerPos))
         {
             distance = Vector3.Distance(enemyPos, playerPos);
             direction = new Vector2(playerPos.x - enemyPos.x, playerPos.y - enemyPos.y);

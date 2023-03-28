@@ -1,25 +1,38 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class CombatManager : MonoBehaviour
 {
-    public float timerSpeed;
 
     public GameObject progressBar;
-    public float combatTime;
-    public float actualTime;
-    public float previousTimes;
-    public float previousTimesNonMultiplied;
-    public float remainingTime;
-    public float beginBattleTime;
+    public TextMeshProUGUI timerSpeedText;
 
-    private void Awake()
+    public UnitManager unitManager;
+
+    public int startGenerateUnit;
+    public int unitIncremental;
+    public int secondsToGenerate;
+
+    public float combatTime;
+
+    private int generateIteration;
+
+    private float actualTime;
+    private float previousTimes;
+    private float previousTimesNonMultiplied;
+    private float remainingTime;
+    private float beginBattleTime;
+    private float timerSpeed;
+
+    private void Start()
     {
         GameManager.OnGameStateChange += GameManagerOnGameStateChange;
         RestartGameTimer();
+        generateIteration = 0;
     }
 
     private void GameManagerOnGameStateChange(GameState state)
@@ -43,7 +56,17 @@ public class CombatManager : MonoBehaviour
         if (GameManager.Instance.state == GameState.Combat)
         {
             ManageBattleTime();
+            if (remainingTime == combatTime - secondsToGenerate * generateIteration || remainingTime == combatTime)
+            {
+                GenerateUnits();
+            }
         }
+    }
+
+    private void GenerateUnits()
+    {
+        unitManager.GenerateUnits(startGenerateUnit + unitIncremental * generateIteration);
+        generateIteration++;
     }
 
     private void RestartGameTimer()
@@ -61,6 +84,13 @@ public class CombatManager : MonoBehaviour
     {
         CutPreviousTimer();
         timerSpeed = multiplier;
+        if (multiplier > 1)
+        {
+            timerSpeedText.text = $"x{multiplier}";
+        } else
+        {
+            timerSpeedText.text = "";
+        }
     }
 
     private void CutPreviousTimer()
