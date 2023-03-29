@@ -8,20 +8,23 @@ using UnityEngine.InputSystem;
 public class CombatManager : MonoBehaviour
 {
 
-    public GameObject progressBar;
-    public TextMeshProUGUI timerSpeedText;
+    public GameObject timerProgressBar;
+    public GameObject timerMultiplierProgressBar;
 
     public UnitManager unitManager;
 
     public int startGenerateUnit;
     public int unitIncremental;
     public int secondsToGenerate;
+    public float multiplierTime;
 
     public float combatTime;
 
     private int generateIteration;
+    private bool multiplierActive;
 
     private float actualTime;
+    private float acumulatedMultiplierTime;
     private float previousTimes;
     private float previousTimesNonMultiplied;
     private float remainingTime;
@@ -32,7 +35,6 @@ public class CombatManager : MonoBehaviour
     {
         GameManager.OnGameStateChange += GameManagerOnGameStateChange;
         RestartGameTimer();
-        generateIteration = 0;
     }
 
     private void GameManagerOnGameStateChange(GameState state)
@@ -40,6 +42,10 @@ public class CombatManager : MonoBehaviour
         if(state == GameState.Combat)
         {
             CutPreviousTimer();
+        } 
+        else if (state == GameState.Pause) 
+        {
+            acumulatedMultiplierTime = actualTime;
         }
     }
 
@@ -60,8 +66,6 @@ public class CombatManager : MonoBehaviour
         if (GameManager.Instance.state == GameState.Combat)
         {
             ManageBattleTime();
-            Debug.Log(secondsToGenerate * generateIteration);
-            Debug.Log(combatTime - secondsToGenerate * generateIteration);
         }
     }
 
@@ -73,7 +77,12 @@ public class CombatManager : MonoBehaviour
 
     private void RestartGameTimer()
     {
-        progressBar.GetComponent<ProgressBar>().maximum = combatTime;
+        timerProgressBar.GetComponent<ProgressBar>().maximum = combatTime;
+        timerMultiplierProgressBar.gameObject.SetActive(false);
+
+        generateIteration = 0;
+        acumulatedMultiplierTime = 0;
+        multiplierActive = false;
         timerSpeed = 1;
 
         previousTimes = 0;
@@ -86,12 +95,16 @@ public class CombatManager : MonoBehaviour
     {
         CutPreviousTimer();
         timerSpeed = multiplier;
+        acumulatedMultiplierTime = 0;
         if (multiplier > 1)
         {
-            timerSpeedText.text = $"x{multiplier}";
+            timerMultiplierProgressBar.gameObject.SetActive(true);
+            timerMultiplierProgressBar.GetComponent<ProgressBar>().SetText($"x{multiplier}");
+            multiplierActive = true;
         } else
         {
-            timerSpeedText.text = "";
+            timerMultiplierProgressBar.gameObject.SetActive(false);
+            multiplierActive = false;
         }
     }
 
@@ -108,6 +121,18 @@ public class CombatManager : MonoBehaviour
         actualTime = (realBattleTime - previousTimesNonMultiplied) * timerSpeed;
         remainingTime = combatTime - (actualTime + previousTimes);
 
+        //Manage multiplier time
+        if (multiplierActive && multiplierTime - actualTime - acumulatedMultiplierTime >= 0)
+        {
+            timerMultiplierProgressBar.GetComponent<ProgressBar>().maximum = multiplierTime;
+            timerMultiplierProgressBar.GetComponent<ProgressBar>().current = multiplierTime - actualTime - acumulatedMultiplierTime;
+            timerMultiplierProgressBar.GetComponent<ProgressBar>().GetCurrentFill();
+        }
+        else if (multiplierActive && multiplierTime - actualTime - acumulatedMultiplierTime < 0)
+        {
+            MultiplyTimeSpeed(1);
+        }
+
 
         //Format time string
         TimeSpan t = TimeSpan.FromSeconds((int)Math.Ceiling(remainingTime));
@@ -115,9 +140,9 @@ public class CombatManager : MonoBehaviour
 
 
         //Update graphic values
-        progressBar.GetComponent<ProgressBar>().current = actualTime + previousTimes;
-        progressBar.GetComponent<ProgressBar>().GetCurrentFill();
-        progressBar.GetComponent<ProgressBar>().SetText(sTime);
+        timerProgressBar.GetComponent<ProgressBar>().current = combatTime - remainingTime;
+        timerProgressBar.GetComponent<ProgressBar>().GetCurrentFill();
+        timerProgressBar.GetComponent<ProgressBar>().SetText(sTime);
 
         //Check win condition
         if (remainingTime <= 0)
@@ -151,10 +176,6 @@ public class CombatManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.V))
         {
             MultiplyTimeSpeed(2);
-        }
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            MultiplyTimeSpeed(1);
         }
     }
 }
