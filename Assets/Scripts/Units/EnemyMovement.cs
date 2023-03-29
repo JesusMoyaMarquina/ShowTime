@@ -8,20 +8,19 @@ public class EnemyMovement : MonoBehaviour
     public float speed;
     public float minDistance;
 
-    private GameObject player, secondPlayer;
+    private GameObject[] players;
+    private GameObject nearPlayer;
     private Animator anim;
     private SpriteRenderer spriteRenderer;
     private float distance;
     private Vector2 direction;
-    private Vector3 playerPos, secondPlayerPos;
     private Vector3 enemyPos;
     // Start is called before the first frame update
     void Start()
     {
         anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        player = GameObject.Find("Player");
-        secondPlayer = GameObject.Find("SecondPlayer");
+        players = GameObject.FindGameObjectsWithTag("Player");
     }
 
     // Update is called once per frame
@@ -32,29 +31,31 @@ public class EnemyMovement : MonoBehaviour
 
     public void Movement()
     {
-        playerPos = player.transform.position;
-        secondPlayerPos = secondPlayer.transform.position;
-        enemyPos = transform.position;
+        nearPlayer = FindNearPlayer();
 
-        if (Vector3.Distance(enemyPos, playerPos) < Vector3.Distance(enemyPos, secondPlayerPos))
-        {
-            distance = Vector3.Distance(enemyPos, playerPos);
-            direction = new Vector2(playerPos.x - enemyPos.x, playerPos.y - enemyPos.y);
-            Tracking(player);
-        }
-        else
-        {
-            distance = Vector3.Distance(enemyPos, secondPlayerPos);
-            direction = new Vector2(secondPlayerPos.x - enemyPos.x, secondPlayerPos.y - enemyPos.y);
-            Tracking(secondPlayer);
-        }
+        distance = Vector3.Distance(enemyPos, nearPlayer.transform.position);
+        direction = new Vector2(nearPlayer.transform.position.x - enemyPos.x, nearPlayer.transform.position.y - enemyPos.y);
+        Tracking();
     }
 
-    public void Tracking(GameObject trackedPlayer)
+    public GameObject FindNearPlayer()
+    {
+        GameObject auxPlayer = players[0];
+        enemyPos = transform.position;
+
+        foreach (var player in players)
+        {
+            if (Vector3.Distance(enemyPos, player.transform.position) < Vector3.Distance(enemyPos, auxPlayer.transform.position))
+                auxPlayer = player;
+        }
+        return auxPlayer;
+    }
+
+    public void Tracking()
     {
         if (distance > minDistance)
         {
-            var targetPos = new Vector3(trackedPlayer.transform.position.x, trackedPlayer.transform.position.y, this.transform.position.z);
+            var targetPos = new Vector3(nearPlayer.transform.position.x, nearPlayer.transform.position.y, this.transform.position.z);
             transform.LookAt(targetPos);
             transform.position += speed * Time.deltaTime * transform.forward;
             transform.rotation = Quaternion.identity;
