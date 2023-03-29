@@ -48,6 +48,10 @@ public class CombatManager : MonoBehaviour
         if (GameManager.Instance.state == GameState.Combat)
         {
             HandleCombatInputs();
+            if ((int)(Math.Ceiling(remainingTime)) == combatTime - secondsToGenerate * generateIteration || remainingTime == combatTime)
+            {
+                GenerateUnits();
+            }
         }
     }
 
@@ -56,10 +60,8 @@ public class CombatManager : MonoBehaviour
         if (GameManager.Instance.state == GameState.Combat)
         {
             ManageBattleTime();
-            if (remainingTime == combatTime - secondsToGenerate * generateIteration || remainingTime == combatTime)
-            {
-                GenerateUnits();
-            }
+            Debug.Log(secondsToGenerate * generateIteration);
+            Debug.Log(combatTime - secondsToGenerate * generateIteration);
         }
     }
 
