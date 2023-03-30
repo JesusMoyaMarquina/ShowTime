@@ -66,6 +66,8 @@ public class CombatManager : MonoBehaviour
         if (GameManager.Instance.state == GameState.Combat)
         {
             ManageBattleTime();
+            ManageLoseCondition();
+            ManageWinCondition();
         }
     }
 
@@ -75,6 +77,37 @@ public class CombatManager : MonoBehaviour
         generateIteration++;
     }
 
+    #region State conditions
+    private void ManageLoseCondition()
+    {
+        Transform players = GameObject.Find("Players").transform;
+        int totalOfPlayers = players.childCount;
+        int deadPlayers = 0;
+
+        for(int i = 0; i < totalOfPlayers; i++)
+        {
+            if (!players.GetChild(i).GetComponent<Player>().isAlive())
+            {
+                deadPlayers++;
+            }
+        }
+
+        if(deadPlayers == totalOfPlayers) 
+        {
+            GameManager.Instance.UpdateGameState(GameState.Lose);
+        }
+    }
+
+    private void ManageWinCondition()
+    {
+        if (remainingTime <= 0)
+        {
+            GameManager.Instance.UpdateGameState(GameState.Vicory);
+        }
+    }
+    #endregion
+
+    #region Timer management
     private void RestartGameTimer()
     {
         timerProgressBar.GetComponent<ProgressBar>().maximum = combatTime;
@@ -143,13 +176,8 @@ public class CombatManager : MonoBehaviour
         timerProgressBar.GetComponent<ProgressBar>().current = combatTime - remainingTime;
         timerProgressBar.GetComponent<ProgressBar>().GetCurrentFill();
         timerProgressBar.GetComponent<ProgressBar>().SetText(sTime);
-
-        //Check win condition
-        if (remainingTime <= 0)
-        {
-            GameManager.Instance.UpdateGameState(GameState.Vicory);
-        }
     }
+    #endregion
 
     private void HandleCombatInputs()
     {
@@ -159,7 +187,10 @@ public class CombatManager : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.L))
         {
-            GameManager.Instance.UpdateGameState(GameState.Lose);
+            for (int i = 0; i < GameObject.Find("Players").transform.childCount; i++)
+            {
+                GameObject.Find("Players").transform.GetChild(i).GetComponent<Player>().GetDamage(20);
+            }
         }
         if (Input.GetKeyDown(KeyCode.Z))
         {

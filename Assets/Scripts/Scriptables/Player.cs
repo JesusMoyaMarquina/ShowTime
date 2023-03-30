@@ -4,48 +4,92 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Movement : MonoBehaviour
+public class Player : MonoBehaviour
 {
-    public float speed;
+
+    //General variables
     private Rigidbody2D rb;
     private Animator anim;
     private SpriteRenderer spriteRenderer;
     private PlayerInput playerInput;
-    private Vector2 direction;
 
+
+    //Movement variables
+    public float speed;
+    private Vector2 direction;
     private Vector2 movement;
     private bool isDash;
     private bool isDashing;
     private bool isDashInCooldown;
 
-    // Start is called before the first frame update
+    //Stats variables
+    public float maxHealth;
+    private bool hitted;
+    private bool alive;
+    private float currentHealth;
+
+    private GameObject playerHealthBar;
+    private GameObject otherPlayerHealthBar;
+
+
     void Start()
     {
+        //Start player basics
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         playerInput = GetComponent<PlayerInput>();
+
+        //Start direction
         direction = new Vector2(0, -1 * speed);
+
+        //Start health
+        alive = true;
+        hitted = false;
+        currentHealth = maxHealth;
+
+        playerHealthBar = GameObject.Find("PlayerHealthProgressBar");
+        playerHealthBar.GetComponent<EntityProgressBar>().maximum = maxHealth;
+        playerHealthBar.GetComponent<EntityProgressBar>().current = currentHealth;
+        playerHealthBar.GetComponent<EntityProgressBar>().previousCurrent = currentHealth;
+        playerHealthBar.GetComponent<EntityProgressBar>().GetCurrentFill();
+
+        otherPlayerHealthBar = GameObject.Find("OtherPlayerHealthBar");
     }
 
-    // Update is called once per frame
     void Update()
     {
+        if (!alive || hitted)
+        {
+            return;
+        }
         movement = playerInput.actions["Move"].ReadValue<Vector2>();
         isDash = playerInput.actions["Dash"].ReadValue<float>() == 1 ? true : false;
     }
 
     private void FixedUpdate()
     {
+        if (!alive)
+        {
+            return;
+        }
+        CameraFollowUp();
         if (isDash && !isDashInCooldown) PlayerDash();
         if (!isDashing)
         {
             PlayerMovement(speed);
             PlayerDirection();
-        } else
+        }
+        else
         {
             PlayerMovement(speed + 10, true);
         }
+    }
+
+    #region movement functions
+    private void CameraFollowUp()
+    {
+        Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -10);
     }
 
     private void PlayerMovement(float speed, bool isDashing = false)
@@ -69,7 +113,7 @@ public class Movement : MonoBehaviour
         {
             direction = rb.velocity;
         }
-        if(direction.x < 0.1f)
+        if (direction.x < 0.1f)
         {
             spriteRenderer.flipX = false;
         }
@@ -99,4 +143,45 @@ public class Movement : MonoBehaviour
         yield return new WaitForSeconds(2);
         isDashInCooldown = false;
     }
+    #endregion
+
+    #region stats functions
+    public void GetDamage(float damage)
+    {
+        if (hitted)
+        {
+            return;
+        }
+        currentHealth -= damage;
+        hitted = true;
+        anim.SetBool("hitted", true);
+
+        if (currentHealth <= 0) 
+        {
+            currentHealth = 0;
+            alive = false;
+            rb.velocity = Vector2.zero;
+            anim.SetBool("alive", alive);
+        }
+
+        playerHealthBar.GetComponent<EntityProgressBar>().current = currentHealth;
+        playerHealthBar.GetComponent<EntityProgressBar>().GetCurrentFill();
+    }
+
+    public void SetActiveFalse()
+    {
+        gameObject.SetActive(false);
+    }
+
+    public void SetHittedFalse()
+    {
+        hitted = false;
+        anim.SetBool("hitted", false);
+    }
+
+    public bool isAlive()
+    {
+        return alive;
+    }
+    #endregion
 }
