@@ -2,28 +2,50 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 public class EnemyMovement : MonoBehaviour
 {
+
+    //General variables
+    private Rigidbody2D rb;
+    private Animator anim;
+    private SpriteRenderer spriteRenderer;
+
+    //Movement variables
     public float speed;
+    private Vector2 direction;
+    private Vector2 movement;
+    private bool isDash;
+    private bool isDashing;
+    private bool isDashInCooldown;
+
     public float minDistance;
 
     private GameObject[] players;
     private GameObject nearPlayer;
-    private Animator anim;
-    private SpriteRenderer spriteRenderer;
     private float distance;
-    private Vector2 direction;
     private Vector3 enemyPos;
-    // Start is called before the first frame update
+
+    //Stats variables
+    public float health;
+    private bool hitted;
+    private bool alive;
+
+    //Mocked basic attack variables
+    public float damage;
+    private bool attacking;
+
     void Start()
     {
+        rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         players = GameObject.FindGameObjectsWithTag("Player");
+        alive = true;
     }
 
-    // Update is called once per frame
     void Update()
     {
         Movement();
@@ -53,12 +75,18 @@ public class EnemyMovement : MonoBehaviour
 
     public void Tracking()
     {
+        if (!alive || hitted)
+        {
+            return;
+        }
+
         if (distance > minDistance)
         {
             var targetPos = new Vector3(nearPlayer.transform.position.x, nearPlayer.transform.position.y, this.transform.position.z);
             transform.LookAt(targetPos);
             transform.position += speed * Time.deltaTime * transform.forward;
             transform.rotation = Quaternion.identity;
+            //rb.constraints = RigidbodyConstraints2D.FreezeAll;
             SetAnimation(true);
         }
         else
@@ -106,4 +134,40 @@ public class EnemyMovement : MonoBehaviour
         anim.SetBool("isDown", isDown);
 
     }
+
+    #region stats functions
+    public void GetDamage(float damage)
+    {
+        if (isDashing)
+        {
+            return;
+        }
+
+        hitted = false;
+        anim.SetBool("hitted", hitted);
+
+        health -= damage;
+
+        hitted = true;
+        anim.SetBool("hitted", hitted);
+
+        if (health <= 0)
+        {
+            health = 0;
+            alive = false;
+            anim.SetBool("alive", alive);
+        }
+    }
+
+    public void DestroyThis()
+    {
+        Destroy(gameObject);
+    }
+
+    public void SetHittedFalse()
+    {
+        hitted = false;
+        anim.SetBool("hitted", hitted);
+    }
+    #endregion
 }
