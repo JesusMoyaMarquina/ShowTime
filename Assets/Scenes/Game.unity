@@ -796,6 +796,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 10
   maxHealth: 100
+  damage: 40
 --- !u!1001 &172417515
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4273,7 +4274,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1731232329458910967, guid: f09dc427e53e8b54489c35879b53d3d5, type: 3}
       propertyPath: m_FillAmount
-      value: 0.69
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1731232329839152041, guid: f09dc427e53e8b54489c35879b53d3d5, type: 3}
       propertyPath: m_text
@@ -4322,6 +4323,10 @@ PrefabInstance:
     - target: {fileID: 5005637853426110184, guid: f09dc427e53e8b54489c35879b53d3d5, type: 3}
       propertyPath: m_Color.r
       value: 0.41568628
+      objectReference: {fileID: 0}
+    - target: {fileID: 8146758665680953189, guid: f09dc427e53e8b54489c35879b53d3d5, type: 3}
+      propertyPath: m_FillAmount
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f09dc427e53e8b54489c35879b53d3d5, type: 3}
@@ -4695,7 +4700,7 @@ MonoBehaviour:
   unitIncremental: 3
   secondsToGenerate: 20
   multiplierTime: 5
-  combatTime: 120
+  combatTime: 60
 --- !u!1 &941698167
 GameObject:
   m_ObjectHideFlags: 0

@@ -145,7 +145,7 @@ Animator:
   m_GameObject: {fileID: 5037429430027693209}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: db34aad48cef6e3449183afa045c9478, type: 2}
+  m_Controller: {fileID: 9100000, guid: c8941695b412cd342ab97be0068fa46b, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -169,3 +169,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 6
   minDistance: 5
+  health: 50
+  damage: 20

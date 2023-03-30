@@ -31,6 +31,10 @@ public class Player : MonoBehaviour
     private GameObject playerHealthBar;
     private GameObject otherPlayerHealthBar;
 
+    //Mocked basic attack variables
+    public float damage;
+    private bool attacking;
+
 
     void Start()
     {
@@ -55,21 +59,28 @@ public class Player : MonoBehaviour
         playerHealthBar.GetComponent<EntityProgressBar>().GetCurrentFill();
 
         otherPlayerHealthBar = GameObject.Find("OtherPlayerHealthBar");
+
+        //Mocked basic attack
+        attacking = false;
     }
 
     void Update()
     {
-        if (!alive || hitted)
+        if (!alive || hitted || attacking)
         {
             return;
         }
         movement = playerInput.actions["Move"].ReadValue<Vector2>();
         isDash = playerInput.actions["Dash"].ReadValue<float>() == 1 ? true : false;
+        if (playerInput.actions["Light Hit"].triggered)
+        {
+            executeBasicAttack();
+        }
     }
 
     private void FixedUpdate()
     {
-        if (!alive)
+        if (!alive || attacking)
         {
             return;
         }
@@ -154,7 +165,7 @@ public class Player : MonoBehaviour
         }
         currentHealth -= damage;
         hitted = true;
-        anim.SetBool("hitted", true);
+        anim.SetBool("hitted", hitted);
 
         if (currentHealth <= 0) 
         {
@@ -176,7 +187,7 @@ public class Player : MonoBehaviour
     public void SetHittedFalse()
     {
         hitted = false;
-        anim.SetBool("hitted", false);
+        anim.SetBool("hitted", hitted);
     }
 
     public bool isAlive()
@@ -184,4 +195,41 @@ public class Player : MonoBehaviour
         return alive;
     }
     #endregion
+
+    #region Basic player atack
+    public void SetAttackingFalse()
+    {
+        attacking = false;
+        anim.SetBool("attacking", false);
+    }
+
+    private void executeBasicAttack()
+    {
+        attacking = true;
+        anim.SetBool("attacking", attacking);
+        rb.velocity = Vector2.zero;
+        if (direction.x > 0)
+        {
+            GameObject attack = (GameObject)Instantiate(Resources.Load("Prefabs/Attacks/AttackSquare"), new Vector3(transform.position.x, transform.position.y, 0), Quaternion.identity, transform);
+            attack.transform.rotation = Quaternion.Euler(new Vector3(attack.transform.rotation.x, attack.transform.rotation.y, 90));
+            attack.GetComponent<BasicAttack>().SetDirection("right");
+        } 
+        else if (direction.x < 0)
+        {
+            GameObject attack = (GameObject)Instantiate(Resources.Load("Prefabs/Attacks/AttackSquare"), new Vector3(transform.position.x, transform.position.y, 0), Quaternion.identity, transform);
+            attack.transform.rotation = Quaternion.Euler(new Vector3(attack.transform.rotation.x, attack.transform.rotation.y, 90));
+            attack.GetComponent<BasicAttack>().SetDirection("left");
+        }
+        else if (direction.y > 0)
+        {
+            GameObject attack = (GameObject)Instantiate(Resources.Load("Prefabs/Attacks/AttackSquare"), new Vector3(transform.position.x, transform.position.y, 0), Quaternion.identity, transform);
+            attack.GetComponent<BasicAttack>().SetDirection("up");
+        }
+        else
+        {
+            GameObject attack = (GameObject)Instantiate(Resources.Load("Prefabs/Attacks/AttackSquare"), new Vector3(transform.position.x, transform.position.y, 0), Quaternion.identity, transform);
+        }
+    }
+    #endregion
+
 }
