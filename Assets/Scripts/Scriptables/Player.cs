@@ -148,7 +148,7 @@ public class Player : MonoBehaviour
     #region stats functions
     public void GetDamage(float damage)
     {
-        if (hitted)
+        if (hitted || isDashing)
         {
             return;
         }
