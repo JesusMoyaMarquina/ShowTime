@@ -7,10 +7,13 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using System;
+using Photon.Pun;
+using Photon.Realtime;
 
 public class MenuManager : MonoBehaviour
 {
-    public GameObject victoryMenu, loseMenu, mainMenu, pauseMenu, settingsMenu, keybindsMenu;
+    public GameObject victoryMenu, loseMenu, mainMenu, pauseMenu, settingsMenu, keybindsMenu, serverListMenu, roomMenu;
+    public NetworkManager NetworkManager;
 
     public AudioMixer audioMixer;
     public TMP_Dropdown resolutionDropdown;
@@ -19,6 +22,8 @@ public class MenuManager : MonoBehaviour
     public static bool isPaused;
 
     public static string settedResolution = "";
+
+    public GameObject selectedRoom;
 
     [SerializeField] private InputActionAsset inputActions;
 
@@ -62,6 +67,14 @@ public class MenuManager : MonoBehaviour
         {
             pauseMenu?.SetActive(false);
         }
+        if (serverListMenu != null)
+        {
+            serverListMenu?.SetActive(false);
+        }
+        if (roomMenu != null)
+        {
+            roomMenu?.SetActive(false);
+        }
         settingsMenu?.SetActive(false);
         keybindsMenu?.SetActive(false);
     }
@@ -71,9 +84,11 @@ public class MenuManager : MonoBehaviour
         HandlePauseMenuInputs();
         HandleSettingsMenuInputs();
         HandleKeybindingMenuInputs();
+        HandleMultiplayerMenuInputs();
     }
 
     #region General menu options
+
     public void BackToMainMenu()
     {
         Time.timeScale = 1f;
@@ -85,6 +100,7 @@ public class MenuManager : MonoBehaviour
         previousMenu?.SetActive(true);
         actualMenu?.SetActive(false);
     }
+
     #endregion
 
     #region Settings menu options
@@ -169,6 +185,7 @@ public class MenuManager : MonoBehaviour
     #endregion
 
     #region Main menu options
+
     public void StartGame()
     {
         isPaused = false;
@@ -179,6 +196,7 @@ public class MenuManager : MonoBehaviour
     {
         Application.Quit();
     }
+
     #endregion
 
     #region Pause menu options
@@ -215,9 +233,11 @@ public class MenuManager : MonoBehaviour
         closeDelay = false;
 
     }
+
     #endregion
 
     #region Keybinds menu options
+
     public void OpenKeybinds()
     {
         settingsMenu?.SetActive(false);
@@ -245,6 +265,237 @@ public class MenuManager : MonoBehaviour
         {
             KeybindsReturn();
         }
+    }
+
+    #endregion
+
+    #region Server menu options
+
+    public void OpenServerList()
+    {
+        mainMenu?.SetActive(false);
+        serverListMenu?.SetActive(true);
+        previousMenu = mainMenu;
+        DestroyLoadedServers();
+        LoadServers();
+    }
+
+    public void ChangeOrGenerateNickName(TMP_InputField inputName)
+    {
+        if (!NetworkManager.IsConnected())
+        {
+            return;
+        }
+
+        string name = inputName.text;
+
+        if (name == "")
+        {
+            name = "Player";
+        }
+
+        NetworkManager.player.NickName = name;
+    }
+
+    public void ConnectToServer()
+    {
+        if (!NetworkManager.IsConnected())
+        {
+            return;
+        }
+
+        if (selectedRoom != null)
+        {
+            NetworkManager.JoinRoom(selectedRoom.GetComponent<ServerScript>().roomNameTMP.text);
+        }
+    }
+
+    public void SetSelectedRoom(GameObject newSelectedRoom)
+    {
+        if (selectedRoom != null)
+        {
+            selectedRoom.GetComponent<ServerScript>().IsSelected(false);
+        }
+        selectedRoom = newSelectedRoom;
+        selectedRoom.GetComponent<ServerScript>().IsSelected(true);
+    }
+
+    public void CreateServer(TMP_InputField inputName)
+    {
+        if (!NetworkManager.IsConnected())
+        {
+            return;
+        }
+
+        string name = inputName.text;
+
+        if (name == "")
+        {
+            name = $"{NetworkManager.player.NickName}'s room";
+        }
+
+        int serverWithThisName = 0;
+
+        foreach(RoomInfo roomInfo in NetworkManager.GetServerList())
+        {
+            if(roomInfo.Name == name)
+            {
+                serverWithThisName++;
+            }
+        }
+
+        if(serverWithThisName > 0)
+        {
+            name = $"{name} {serverWithThisName}";
+        }
+
+        NetworkManager.CreateRoom(name);
+    }
+
+    public void LoadServers()
+    {
+        if (!NetworkManager.IsConnected())
+        {
+            return;
+        }
+
+        if (!NetworkManager.IsInLobby())
+        {
+            NetworkManager.JoinLobby();
+        }
+        StartCoroutine(ServerLoad());
+    }
+
+    public void UnselectServer()
+    {
+        selectedRoom = null;
+    }
+
+    IEnumerator ServerLoad()
+    {
+        yield return new WaitForEndOfFrame();
+
+        if (NetworkManager.IsInLobby())
+        {
+            //Get items
+            Transform servers = GameObject.Find("Servers").transform;
+            GameObject serverPanel = (GameObject)Resources.Load("Prefabs/UI/ListItems/ListedServer");
+
+            string previousName = "";
+            //Load server panels
+            for (int i = 0; i < NetworkManager.GetServers(); i++)
+            {
+                if(previousName == NetworkManager.GetServerList()[i].Name)
+                {
+                    continue;
+                }
+
+                //Set panel position
+                float yPosition = servers.localPosition.y - serverPanel.transform.GetComponent<RectTransform>().sizeDelta.y * i - serverPanel.transform.GetComponent<RectTransform>().sizeDelta.y / 2;
+                GameObject actualServerPanel = Instantiate(serverPanel, new Vector3(0, 0, 0), Quaternion.identity, servers);
+                actualServerPanel.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, yPosition, 0);
+
+                //Fill panel info
+                RoomInfo roomInfo = NetworkManager.GetServerList()[i];
+                actualServerPanel.GetComponent<ServerScript>().Inicialize(roomInfo.Name, roomInfo.PlayerCount.ToString(), roomInfo.MaxPlayers.ToString());
+                previousName = roomInfo.Name;
+            }
+
+            //Resize container
+            servers.GetComponent<RectTransform>().sizeDelta = new Vector2(servers.GetComponent<RectTransform>().sizeDelta.x, serverPanel.transform.GetComponent<RectTransform>().sizeDelta.y * NetworkManager.GetServers());
+        }
+        else
+        {
+            StartCoroutine(ServerLoad());
+        }
+    }
+
+    public void DestroyLoadedServers()
+    {
+        //Get servers item
+        Transform servers = GameObject.Find("Servers").transform;
+
+        //Destroy server panels
+        for (int i = 0; i < servers.childCount; i++)
+        {
+            Destroy(servers.GetChild(i).gameObject);
+        }
+
+        //Resize container
+        servers.GetComponent<RectTransform>().sizeDelta = new Vector2 (servers.GetComponent<RectTransform>().sizeDelta.x, 0);
+    }
+
+    private void HandleMultiplayerMenuInputs()
+    {
+        if (serverListMenu != null && Input.GetButtonDown("Cancel") && serverListMenu.activeSelf)
+        {
+            Return(serverListMenu);
+        }
+    }
+
+    #endregion
+
+    #region Room menu options
+
+    public void OpenRoom()
+    {
+        serverListMenu?.SetActive(false);
+        roomMenu?.SetActive(true);
+        previousMenu = serverListMenu;
+
+        roomMenu.transform.Find("RoomNameText").GetComponent<TextMeshProUGUI>().text = NetworkManager.GetRoomName();
+        roomMenu.transform.Find("StartButton").gameObject.SetActive(NetworkManager.IsMaster());
+        LoadPlayers();
+    }
+
+    public void LoadPlayers()
+    {
+        DestroyLoadedPlayers();
+
+        //Get items
+        Transform players = GameObject.Find("Players").transform;
+        GameObject playerPanel = (GameObject)Resources.Load("Prefabs/UI/ListItems/ListedPlayer");
+
+        //Load server panels
+        for (int i = 0; i < NetworkManager.GetRoomPlayers().Length; i++)
+        {
+            //Set panel position
+            float yPosition = players.localPosition.y - playerPanel.transform.GetComponent<RectTransform>().sizeDelta.y * i - playerPanel.transform.GetComponent<RectTransform>().sizeDelta.y / 2;
+            GameObject actualPlayerPanel = Instantiate(playerPanel, new Vector3(0, 0, 0), Quaternion.identity, players);
+            actualPlayerPanel.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, yPosition, 0);
+
+            //Fill panel info
+            Photon.Realtime.Player player = NetworkManager.GetRoomPlayers()[i];
+            actualPlayerPanel.GetComponent<ListPlayerScript>().Inicialize(player.NickName, player.IsMasterClient);
+        }
+
+        //Resize container
+        players.GetComponent<RectTransform>().sizeDelta = new Vector2(players.GetComponent<RectTransform>().sizeDelta.x, playerPanel.transform.GetComponent<RectTransform>().sizeDelta.y * NetworkManager.GetServers());
+    }
+
+    public void DisconnectFromServer()
+    {
+        NetworkManager.DisconnectFromRoom();
+    }
+
+    public void StartMultiplayerGame()
+    {
+        NetworkManager.LoadLevel(1);
+    }
+
+    public void DestroyLoadedPlayers()
+    {
+        //Get servers item
+        Transform players = GameObject.Find("Players").transform;
+
+        //Destroy server panels
+        for (int i = 0; i < players.childCount; i++)
+        {
+            Destroy(players.GetChild(i).gameObject);
+        }
+
+        //Resize container
+        players.GetComponent<RectTransform>().sizeDelta = new Vector2(players.GetComponent<RectTransform>().sizeDelta.x, 0);
     }
     #endregion
 

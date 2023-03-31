@@ -611,6 +611,9 @@ GameObject:
   - component: {fileID: 168202704}
   - component: {fileID: 168202702}
   - component: {fileID: 168202703}
+  - component: {fileID: 168202707}
+  - component: {fileID: 168202706}
+  - component: {fileID: 168202705}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -797,6 +800,82 @@ MonoBehaviour:
   speed: 10
   maxHealth: 100
   damage: 40
+--- !u!114 &168202705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 168202695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e7cb724808c322458aa4d15f5035fa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizeVelocity: 1
+  m_SynchronizeAngularVelocity: 0
+  m_TeleportEnabled: 0
+  m_TeleportIfDistanceGreaterThan: 3
+--- !u!114 &168202706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 168202695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowLayerWeightsInspector: 1
+  ShowParameterInspector: 1
+  m_SynchronizeParameters:
+  - Type: 1
+    SynchronizeType: 1
+    Name: speedX
+  - Type: 1
+    SynchronizeType: 1
+    Name: speedY
+  - Type: 4
+    SynchronizeType: 1
+    Name: isDashing
+  - Type: 4
+    SynchronizeType: 1
+    Name: alive
+  - Type: 4
+    SynchronizeType: 1
+    Name: hitted
+  - Type: 4
+    SynchronizeType: 1
+    Name: attacking
+  m_SynchronizeLayers:
+  - SynchronizeType: 1
+    LayerIndex: 0
+--- !u!114 &168202707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 168202695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 168202706}
+  - {fileID: 168202705}
+  sceneViewId: 1
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1001 &172417515
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11705,9 +11784,13 @@ MonoBehaviour:
   pauseMenu: {fileID: 1421489122}
   settingsMenu: {fileID: 407179847}
   keybindsMenu: {fileID: 1319937766}
+  serverListMenu: {fileID: 0}
+  roomMenu: {fileID: 0}
+  NetworkManager: {fileID: 0}
   audioMixer: {fileID: 24100000, guid: a9eb0ba15aaf57642bd13b014311f131, type: 2}
   resolutionDropdown: {fileID: 1224389369}
   fullscreenToggle: {fileID: 462922026}
+  selectedRoom: {fileID: 0}
   inputActions: {fileID: -944628639613478452, guid: 8026b8365b5bfa7439446f715aa928f4, type: 3}
 --- !u!114 &2033818331
 MonoBehaviour:

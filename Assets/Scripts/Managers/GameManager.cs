@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -19,6 +20,14 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         UpdateGameState(GameState.Combat);
+        if (PhotonNetwork.IsMasterClient)
+        {
+            print("Master");
+        }
+        else
+        {
+            print("Not master");
+        }
     }
 
     public void UpdateGameState(GameState newState)
