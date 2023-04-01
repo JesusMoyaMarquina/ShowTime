@@ -69,6 +69,30 @@ public class CombatManager : MonoBehaviour
             ManageLoseCondition();
             ManageWinCondition();
         }
+        if(GameManager.Instance.state == GameState.Spawning)
+        {
+            WaitForPlayerSpawn();
+        }
+    }
+
+    private void WaitForPlayerSpawn()
+    {
+        Transform players = GameObject.Find("Players").transform;
+        int totalOfPlayers = players.childCount;
+        int alivePlayers = 0;
+
+        for (int i = 0; i < totalOfPlayers; i++)
+        {
+            if (players.GetChild(i).GetComponent<Player>().isAlive())
+            {
+                alivePlayers++;
+            }
+        }
+
+        if (totalOfPlayers > 0 && alivePlayers == totalOfPlayers)
+        {
+            GameManager.Instance.UpdateGameState(GameState.Combat);
+        }
     }
 
     private void GenerateUnits()
@@ -92,7 +116,7 @@ public class CombatManager : MonoBehaviour
             }
         }
 
-        if(deadPlayers == totalOfPlayers) 
+        if( deadPlayers == totalOfPlayers) 
         {
             GameManager.Instance.UpdateGameState(GameState.Lose);
         }

@@ -6,13 +6,23 @@ using UnityEngine;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
+    public static NetworkManager Instance;
     public Photon.Realtime.Player player;
 
     private List<RoomInfo> servers;
     private bool connected;
 
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     void Start()
     {
+        if (PhotonNetwork.IsConnected)
+        {
+            PhotonNetwork.Disconnect();
+        }
         PhotonNetwork.ConnectUsingSettings();
         PhotonNetwork.AutomaticallySyncScene = true;
         player = PhotonNetwork.LocalPlayer;
@@ -30,6 +40,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void OnPlayerLeftRoom(Photon.Realtime.Player player)
     {
         GameObject.Find("MenuManager").GetComponent<MenuManager>().LoadPlayers();
+        if(GameManager.Instance != null)
+        {
+            GameManager.Instance.HandlePlayerLeftGame(player);
+        }
     }
 
     override
@@ -53,7 +67,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         GameObject.Find("MenuManager").GetComponent<MenuManager>().OpenRoom();
     }
 
-        public List<RoomInfo> GetServerList()
+    public List<RoomInfo> GetServerList()
     {
         return servers;
     }
@@ -87,6 +101,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         Destroy(gameObject);
     }
 
+    public void DisconnectFromLobby()
+    {
+        PhotonNetwork.LeaveLobby();
+    }
+
     public bool IsInLobby()
     {
         return PhotonNetwork.InLobby;
@@ -105,11 +124,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public bool IsMaster()
     {
         return PhotonNetwork.IsMasterClient;
-    }
-
-    public int GetServers()
-    {
-        return PhotonNetwork.CountOfRooms;
     }
 
     public string GetRoomName()

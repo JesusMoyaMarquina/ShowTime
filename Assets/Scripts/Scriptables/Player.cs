@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,6 +13,11 @@ public class Player : MonoBehaviour
     private Animator anim;
     private SpriteRenderer spriteRenderer;
     private PlayerInput playerInput;
+
+    //Multiplayer variables
+    private PhotonView photonView;
+    private PhotonAnimatorView photonAnimatorView;
+    private PhotonRigidbody2DView photonRigidbody2DView;
 
 
     //Movement variables
@@ -44,6 +50,11 @@ public class Player : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         playerInput = GetComponent<PlayerInput>();
 
+        //Start multiplayer variables
+        photonView = GetComponent<PhotonView>();
+        photonAnimatorView = GetComponent<PhotonAnimatorView>();
+        photonRigidbody2DView = GetComponent<PhotonRigidbody2DView>();
+
         //Start direction
         direction = new Vector2(0, -1 * speed);
 
@@ -70,11 +81,15 @@ public class Player : MonoBehaviour
         {
             return;
         }
-        movement = playerInput.actions["Move"].ReadValue<Vector2>();
-        isDash = playerInput.actions["Dash"].ReadValue<float>() == 1 ? true : false;
-        if (playerInput.actions["Light Hit"].triggered)
+
+        if (photonView.IsMine)
         {
-            executeBasicAttack();
+            movement = playerInput.actions["Move"].ReadValue<Vector2>();
+            isDash = playerInput.actions["Dash"].ReadValue<float>() == 1 ? true : false;
+            if (playerInput.actions["Light Hit"].triggered)
+            {
+                executeBasicAttack();
+            }
         }
     }
 

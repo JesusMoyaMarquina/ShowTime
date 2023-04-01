@@ -13,7 +13,6 @@ using Photon.Realtime;
 public class MenuManager : MonoBehaviour
 {
     public GameObject victoryMenu, loseMenu, mainMenu, pauseMenu, settingsMenu, keybindsMenu, serverListMenu, roomMenu;
-    public NetworkManager NetworkManager;
 
     public AudioMixer audioMixer;
     public TMP_Dropdown resolutionDropdown;
@@ -282,7 +281,7 @@ public class MenuManager : MonoBehaviour
 
     public void ChangeOrGenerateNickName(TMP_InputField inputName)
     {
-        if (!NetworkManager.IsConnected())
+        if (!NetworkManager.Instance.IsConnected())
         {
             return;
         }
@@ -294,19 +293,19 @@ public class MenuManager : MonoBehaviour
             name = "Player";
         }
 
-        NetworkManager.player.NickName = name;
+        NetworkManager.Instance.player.NickName = name;
     }
 
     public void ConnectToServer()
     {
-        if (!NetworkManager.IsConnected())
+        if (!NetworkManager.Instance.IsConnected())
         {
             return;
         }
 
         if (selectedRoom != null)
         {
-            NetworkManager.JoinRoom(selectedRoom.GetComponent<ServerScript>().roomNameTMP.text);
+            NetworkManager.Instance.JoinRoom(selectedRoom.GetComponent<ServerScript>().roomNameTMP.text);
         }
     }
 
@@ -322,7 +321,7 @@ public class MenuManager : MonoBehaviour
 
     public void CreateServer(TMP_InputField inputName)
     {
-        if (!NetworkManager.IsConnected())
+        if (!NetworkManager.Instance.IsConnected())
         {
             return;
         }
@@ -331,12 +330,12 @@ public class MenuManager : MonoBehaviour
 
         if (name == "")
         {
-            name = $"{NetworkManager.player.NickName}'s room";
+            name = $"{NetworkManager.Instance.player.NickName}'s room";
         }
 
         int serverWithThisName = 0;
 
-        foreach(RoomInfo roomInfo in NetworkManager.GetServerList())
+        foreach(RoomInfo roomInfo in NetworkManager.Instance.GetServerList())
         {
             if(roomInfo.Name == name)
             {
@@ -349,19 +348,19 @@ public class MenuManager : MonoBehaviour
             name = $"{name} {serverWithThisName}";
         }
 
-        NetworkManager.CreateRoom(name);
+        NetworkManager.Instance.CreateRoom(name);
     }
 
     public void LoadServers()
     {
-        if (!NetworkManager.IsConnected())
+        if (!NetworkManager.Instance.IsConnected())
         {
             return;
         }
 
-        if (!NetworkManager.IsInLobby())
+        if (!NetworkManager.Instance.IsInLobby())
         {
-            NetworkManager.JoinLobby();
+            NetworkManager.Instance.JoinLobby();
         }
         StartCoroutine(ServerLoad());
     }
@@ -375,7 +374,7 @@ public class MenuManager : MonoBehaviour
     {
         yield return new WaitForEndOfFrame();
 
-        if (NetworkManager.IsInLobby())
+        if (NetworkManager.Instance.IsInLobby())
         {
             //Get items
             Transform servers = GameObject.Find("Servers").transform;
@@ -383,9 +382,9 @@ public class MenuManager : MonoBehaviour
 
             string previousName = "";
             //Load server panels
-            for (int i = 0; i < NetworkManager.GetServers(); i++)
+            for (int i = 0; i < NetworkManager.Instance.GetServerList().Count; i++)
             {
-                if(previousName == NetworkManager.GetServerList()[i].Name)
+                if(previousName == NetworkManager.Instance.GetServerList()[i].Name)
                 {
                     continue;
                 }
@@ -396,13 +395,13 @@ public class MenuManager : MonoBehaviour
                 actualServerPanel.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, yPosition, 0);
 
                 //Fill panel info
-                RoomInfo roomInfo = NetworkManager.GetServerList()[i];
+                RoomInfo roomInfo = NetworkManager.Instance.GetServerList()[i];
                 actualServerPanel.GetComponent<ServerScript>().Inicialize(roomInfo.Name, roomInfo.PlayerCount.ToString(), roomInfo.MaxPlayers.ToString());
                 previousName = roomInfo.Name;
             }
 
             //Resize container
-            servers.GetComponent<RectTransform>().sizeDelta = new Vector2(servers.GetComponent<RectTransform>().sizeDelta.x, serverPanel.transform.GetComponent<RectTransform>().sizeDelta.y * NetworkManager.GetServers());
+            servers.GetComponent<RectTransform>().sizeDelta = new Vector2(servers.GetComponent<RectTransform>().sizeDelta.x, serverPanel.transform.GetComponent<RectTransform>().sizeDelta.y * NetworkManager.Instance.GetServerList().Count);
         }
         else
         {
@@ -425,6 +424,11 @@ public class MenuManager : MonoBehaviour
         servers.GetComponent<RectTransform>().sizeDelta = new Vector2 (servers.GetComponent<RectTransform>().sizeDelta.x, 0);
     }
 
+    public void LeaveFromLobby()
+    {
+        NetworkManager.Instance.DisconnectFromLobby();
+    }
+
     private void HandleMultiplayerMenuInputs()
     {
         if (serverListMenu != null && Input.GetButtonDown("Cancel") && serverListMenu.activeSelf)
@@ -443,8 +447,8 @@ public class MenuManager : MonoBehaviour
         roomMenu?.SetActive(true);
         previousMenu = serverListMenu;
 
-        roomMenu.transform.Find("RoomNameText").GetComponent<TextMeshProUGUI>().text = NetworkManager.GetRoomName();
-        roomMenu.transform.Find("StartButton").gameObject.SetActive(NetworkManager.IsMaster());
+        roomMenu.transform.Find("RoomNameText").GetComponent<TextMeshProUGUI>().text = NetworkManager.Instance.GetRoomName();
+        roomMenu.transform.Find("StartButton").gameObject.SetActive(NetworkManager.Instance.IsMaster());
         LoadPlayers();
     }
 
@@ -457,7 +461,7 @@ public class MenuManager : MonoBehaviour
         GameObject playerPanel = (GameObject)Resources.Load("Prefabs/UI/ListItems/ListedPlayer");
 
         //Load server panels
-        for (int i = 0; i < NetworkManager.GetRoomPlayers().Length; i++)
+        for (int i = 0; i < NetworkManager.Instance.GetRoomPlayers().Length; i++)
         {
             //Set panel position
             float yPosition = players.localPosition.y - playerPanel.transform.GetComponent<RectTransform>().sizeDelta.y * i - playerPanel.transform.GetComponent<RectTransform>().sizeDelta.y / 2;
@@ -465,22 +469,25 @@ public class MenuManager : MonoBehaviour
             actualPlayerPanel.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, yPosition, 0);
 
             //Fill panel info
-            Photon.Realtime.Player player = NetworkManager.GetRoomPlayers()[i];
+            Photon.Realtime.Player player = NetworkManager.Instance.GetRoomPlayers()[i];
             actualPlayerPanel.GetComponent<ListPlayerScript>().Inicialize(player.NickName, player.IsMasterClient);
         }
 
         //Resize container
-        players.GetComponent<RectTransform>().sizeDelta = new Vector2(players.GetComponent<RectTransform>().sizeDelta.x, playerPanel.transform.GetComponent<RectTransform>().sizeDelta.y * NetworkManager.GetServers());
+        players.GetComponent<RectTransform>().sizeDelta = new Vector2(players.GetComponent<RectTransform>().sizeDelta.x, playerPanel.transform.GetComponent<RectTransform>().sizeDelta.y * NetworkManager.Instance.GetRoomPlayers().Length);
     }
 
     public void DisconnectFromServer()
     {
-        NetworkManager.DisconnectFromRoom();
+        if (NetworkManager.Instance != null && NetworkManager.Instance.IsInRoom())
+        {
+            NetworkManager.Instance.DisconnectFromRoom();
+        }
     }
 
     public void StartMultiplayerGame()
     {
-        NetworkManager.LoadLevel(1);
+        NetworkManager.Instance.LoadLevel(1);
     }
 
     public void DestroyLoadedPlayers()
@@ -496,6 +503,13 @@ public class MenuManager : MonoBehaviour
 
         //Resize container
         players.GetComponent<RectTransform>().sizeDelta = new Vector2(players.GetComponent<RectTransform>().sizeDelta.x, 0);
+    }
+
+    public void RoomReturn(GameObject actualMenu)
+    {
+        previousMenu?.SetActive(true);
+        actualMenu?.SetActive(false);
+        previousMenu = mainMenu;
     }
     #endregion
 
