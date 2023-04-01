@@ -82,7 +82,7 @@ public class Player : MonoBehaviour
             return;
         }
 
-        if (photonView.IsMine)
+        if ((GetComponent<Photon.Pun.PhotonView>().IsMine || !PhotonNetwork.InRoom) && GameManager.Instance.state == GameState.Combat)
         {
             movement = playerInput.actions["Move"].ReadValue<Vector2>();
             isDash = playerInput.actions["Dash"].ReadValue<float>() == 1 ? true : false;
@@ -99,16 +99,20 @@ public class Player : MonoBehaviour
         {
             return;
         }
-        CameraFollowUp();
-        if (isDash && !isDashInCooldown) PlayerDash();
-        if (!isDashing)
+
+        if ((GetComponent<Photon.Pun.PhotonView>().IsMine || !PhotonNetwork.InRoom) && GameManager.Instance.state == GameState.Combat)
         {
-            PlayerMovement(speed);
-            PlayerDirection();
-        }
-        else
-        {
-            PlayerMovement(speed + 10, true);
+            CameraFollowUp();
+            if (isDash && !isDashInCooldown) PlayerDash();
+            if (!isDashing)
+            {
+                PlayerMovement(speed);
+                PlayerDirection();
+            }
+            else
+            {
+                PlayerMovement(speed + 10, true);
+            }
         }
     }
 

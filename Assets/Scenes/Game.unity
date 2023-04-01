@@ -2452,7 +2452,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2033818330}
         m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
-        m_MethodName: BackToMainMenu
+        m_MethodName: DisconnectFromServer
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2464,7 +2464,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 2033818330}
         m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
-        m_MethodName: DisconnectFromServer
+        m_MethodName: BackToMainMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5534,6 +5534,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1116379004}
   - component: {fileID: 1116379005}
+  - component: {fileID: 1116379006}
   m_Layer: 0
   m_Name: UnitManager
   m_TagString: Untagged
@@ -5577,6 +5578,28 @@ MonoBehaviour:
   minRangedPercentage: 40
   meleeUnitPercentage: 0
   rangedUnitPercentage: 0
+--- !u!114 &1116379006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1116379003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 1
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &1172724221
 GameObject:
   m_ObjectHideFlags: 0

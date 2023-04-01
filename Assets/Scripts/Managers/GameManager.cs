@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour, IPunObservable
 
     private void Start()
     {
-        if (NetworkManager.Instance != null && NetworkManager.Instance.IsInRoom())
+        if (PhotonNetwork.InRoom)
         {
             HandleMultiplayerMode();
         }
@@ -83,8 +83,7 @@ public class GameManager : MonoBehaviour, IPunObservable
     private void HandlePause()
     {
         Debug.Log("Handle Pause");
-        print(NetworkManager.Instance.IsInRoom());
-        if (NetworkManager.Instance != null && !NetworkManager.Instance.IsInRoom())
+        if (!PhotonNetwork.InRoom)
         {
             Time.timeScale = 0f;
         }
@@ -109,16 +108,19 @@ public class GameManager : MonoBehaviour, IPunObservable
 
     private void HandleMultiplayerMode()
     {
-        if (NetworkManager.Instance != null && NetworkManager.Instance.IsMaster())
+        GameObject player = null;
+        if (NetworkManager.Instance.IsMaster())
         {
             print("Master");
-            Instantiate(Resources.Load("Prefabs/Player"), new Vector3(0, 0, 0), Quaternion.identity, GameObject.Find("Players").transform);
+            player = PhotonNetwork.Instantiate("Prefabs/Players/Player", new Vector3(1, 0, 0), Quaternion.identity);
+
         }
         else
         {
             print("Not master");
-            Instantiate(Resources.Load("Prefabs/Players/SecondaryPlayer"), new Vector3(0, 0, 0), Quaternion.identity, GameObject.Find("Players").transform);
+            player = PhotonNetwork.Instantiate("Prefabs/Players/SecondaryPlayer", new Vector3(-1, 0, 0), Quaternion.identity);
         }
+        player.transform.parent = GameObject.Find("Players").transform;
         multiplayerMode = true;
     }
 

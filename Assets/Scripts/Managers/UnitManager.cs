@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
 public class UnitManager : MonoBehaviour
 {
+    //Unit manager variables
     public GameObject meleeUnit;
     public GameObject rangedUnit;
     public GameObject unitContaner;
@@ -11,7 +13,6 @@ public class UnitManager : MonoBehaviour
     public int minMeleePercentage, maxMeleePercentage, minRangedPercentage;
     public float meleeUnitPercentage, rangedUnitPercentage;
 
-    // Start is called before the first frame update
     void Start()
     {
         GetSpawnAreas();
@@ -20,10 +21,12 @@ public class UnitManager : MonoBehaviour
 
     public void GenerateUnits(int numberOfUnits)
     {
-        if (spawnAreas.Length <= 0)
+        if (spawnAreas.Length <= 0 || !PhotonNetwork.IsMasterClient)
         {
             return;
         }
+
+        List<GameObject> units = new List<GameObject>(); 
 
         bool addExtra = false;
 
@@ -54,7 +57,14 @@ public class UnitManager : MonoBehaviour
                 float spawnXPos = Random.Range(- area.transform.localScale.x / 2, area.transform.localScale.x / 2) + area.transform.position.x;
                 float spawnYPos = Random.Range(- area.transform.localScale.y / 2, area.transform.localScale.y / 2) + area.transform.position.y;
 
-                Instantiate(meleeUnit, new Vector3(spawnXPos, spawnYPos, 0), Quaternion.identity, unitContaner.transform);
+                if (PhotonNetwork.InRoom)
+                {
+                    PhotonNetwork.InstantiateRoomObject("Prefabs/Units/Enemy", new Vector3(spawnXPos, spawnYPos, 0), Quaternion.identity);
+                }
+                else
+                {
+                    Instantiate(meleeUnit, new Vector3(spawnXPos, spawnYPos, 0), Quaternion.identity, unitContaner.transform);
+                }
 
                 meleeUnitsToSpawn--;
             }
@@ -64,7 +74,14 @@ public class UnitManager : MonoBehaviour
                 float spawnXPos = Random.Range(- area.transform.localScale.x / 2, area.transform.localScale.x / 2) + area.transform.position.x;
                 float spawnYPos = Random.Range(- area.transform.localScale.y / 2, area.transform.localScale.y / 2) + area.transform.position.y;
 
-                Instantiate(rangedUnit, new Vector3(spawnXPos, spawnYPos, 0), Quaternion.identity, unitContaner.transform);
+                if (PhotonNetwork.InRoom)
+                {
+                    PhotonNetwork.InstantiateRoomObject("Prefabs/Units/Enemy 1", new Vector3(spawnXPos, spawnYPos, 0), Quaternion.identity);
+                }
+                else
+                {
+                    Instantiate(rangedUnit, new Vector3(spawnXPos, spawnYPos, 0), Quaternion.identity, unitContaner.transform);
+                }
 
                 rangedUnitsToSpawn--;
             }
@@ -76,7 +93,14 @@ public class UnitManager : MonoBehaviour
             float spawnXPos = Random.Range(-area.transform.localScale.x / 2, area.transform.localScale.x / 2) + area.transform.position.x;
             float spawnYPos = Random.Range(-area.transform.localScale.y / 2, area.transform.localScale.y / 2) + area.transform.position.y;
 
-            Instantiate(meleeUnit, new Vector3(spawnXPos, spawnYPos, 0), Quaternion.identity, unitContaner.transform);
+            if (PhotonNetwork.InRoom)
+            {
+                PhotonNetwork.InstantiateRoomObject("Prefabs/Units/Enemy", new Vector3(spawnXPos, spawnYPos, 0), Quaternion.identity);
+            }
+            else
+            {
+                Instantiate(meleeUnit, new Vector3(spawnXPos, spawnYPos, 0), Quaternion.identity, unitContaner.transform);
+            }
         }
     }
 

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem;
@@ -12,6 +13,9 @@ public class EnemyMovement : MonoBehaviour
     private Rigidbody2D rb;
     private Animator anim;
     private SpriteRenderer spriteRenderer;
+
+    //Multiplayer variables
+    private PhotonView photonView;
 
     //Movement variables
     public float speed;
@@ -39,16 +43,23 @@ public class EnemyMovement : MonoBehaviour
 
     void Start()
     {
+        gameObject.transform.parent = GameObject.Find("Units").transform;
+
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         players = GameObject.FindGameObjectsWithTag("Player");
         alive = true;
+
+        photonView = GetComponent<PhotonView>();
     }
 
     void Update()
     {
-        Movement();
+        if (GameManager.Instance.state == GameState.Combat || GameManager.Instance.state == GameState.Pause)
+        {
+            Movement();
+        }
     }
 
     public void Movement()

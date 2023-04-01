@@ -28,7 +28,12 @@ public class OrderInLayerScript : MonoBehaviour
         
         units = units.OrderBy(unit => unit.transform.position.y * -1).ToList();
         
-        for (int i = 0; i < units.Count; i++) 
-            units[i].GetComponent<SpriteRenderer>().sortingOrder = i;
+        for (int i = 0; i < units.Count; i++)
+        {
+            if(units[i].GetComponent<SpriteRenderer>() != null)
+            {
+                units[i].GetComponent<SpriteRenderer>().sortingOrder = i;
+            }
+        }
     }
 }

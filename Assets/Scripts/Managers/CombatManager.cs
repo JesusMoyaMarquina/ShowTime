@@ -30,6 +30,7 @@ public class CombatManager : MonoBehaviour
     private float remainingTime;
     private float beginBattleTime;
     private float timerSpeed;
+    private bool stopTimer;
 
     private void Start()
     {
@@ -47,6 +48,10 @@ public class CombatManager : MonoBehaviour
         {
             acumulatedMultiplierTime = actualTime;
         }
+        else if (state == GameState.Vicory || state == GameState.Lose)
+        {
+            stopTimer = true;
+        }
     }
 
     void Update()
@@ -63,15 +68,14 @@ public class CombatManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (GameManager.Instance.state == GameState.Combat)
+        if(GameManager.Instance.state == GameState.Spawning)
+        {
+            WaitForPlayerSpawn();
+        } else
         {
             ManageBattleTime();
             ManageLoseCondition();
             ManageWinCondition();
-        }
-        if(GameManager.Instance.state == GameState.Spawning)
-        {
-            WaitForPlayerSpawn();
         }
     }
 
@@ -173,6 +177,11 @@ public class CombatManager : MonoBehaviour
 
     private void ManageBattleTime()
     {
+        if (stopTimer)
+        {
+            return;
+        }
+
         //Update battle time
         float realBattleTime = Time.time - beginBattleTime;
         actualTime = (realBattleTime - previousTimesNonMultiplied) * timerSpeed;
