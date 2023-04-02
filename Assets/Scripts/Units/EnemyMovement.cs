@@ -5,7 +5,7 @@ using UnityEngine.AI;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
-public class EnemyMovement : MonoBehaviour
+public abstract class EnemyMovement : MonoBehaviour
 {
 
     //General variables
@@ -24,14 +24,14 @@ public class EnemyMovement : MonoBehaviour
     public float minDistance;
 
     private GameObject[] players;
-    private GameObject nearPlayer;
-    private float distance;
+    protected GameObject nearPlayer;
+    protected float distance;
     private Vector3 enemyPos;
 
     //Stats variables
     public float health;
-    private bool hitted;
-    private bool alive;
+    protected bool hitted;
+    protected bool alive;
 
     //Mocked basic attack variables
     public float damage;
@@ -73,27 +73,7 @@ public class EnemyMovement : MonoBehaviour
         return auxPlayer;
     }
 
-    public void Tracking()
-    {
-        if (!alive || hitted)
-        {
-            return;
-        }
-
-        if (distance > minDistance)
-        {
-            var targetPos = new Vector3(nearPlayer.transform.position.x, nearPlayer.transform.position.y, this.transform.position.z);
-            transform.LookAt(targetPos);
-            transform.position += speed * Time.deltaTime * transform.forward;
-            transform.rotation = Quaternion.identity;
-            //rb.constraints = RigidbodyConstraints2D.FreezeAll;
-            SetAnimation(true);
-        }
-        else
-        {
-            SetAnimation(false);
-        }
-    }
+    public abstract void Tracking();
 
     public void SetAnimation(bool isMoving)
     {
