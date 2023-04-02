@@ -99,7 +99,7 @@ AnimationClip:
   - time: 0.9166667
     functionName: StopDashing
     data: 
-    objectReferenceParameter: {fileID: 11500000, guid: d61dd668a383b1e47a37bcee93ef1447, type: 3}
+    objectReferenceParameter: {fileID: 11500000, guid: 6da2a6a012b797a4dac64529e205abb2, type: 3}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
