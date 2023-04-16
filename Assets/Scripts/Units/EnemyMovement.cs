@@ -57,6 +57,7 @@ public abstract class EnemyMovement : MonoBehaviour
 
         distance = Vector3.Distance(enemyPos, nearPlayer.transform.position);
         direction = new Vector2(nearPlayer.transform.position.x - enemyPos.x, nearPlayer.transform.position.y - enemyPos.y);
+
         Tracking();
     }
 
@@ -80,8 +81,6 @@ public abstract class EnemyMovement : MonoBehaviour
         bool isDown = false;
         bool isUp = false;
         bool isSide = false;
-
-        anim.SetBool("isMoving", isMoving);
 
         if (direction.y >= 0)
         {
@@ -108,6 +107,21 @@ public abstract class EnemyMovement : MonoBehaviour
 
         spriteRenderer.flipX = direction.x > 0;
 
+        if (isMoving)
+        {
+            rb.mass = 1;
+            rb.constraints = RigidbodyConstraints2D.None | RigidbodyConstraints2D.FreezeRotation;
+        }
+        else
+        {
+            rb.mass = 0.025f;
+            if (isUp || isDown) 
+               rb.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
+            else if (isSide)
+                rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+        }
+
+        anim.SetBool("isMoving", isMoving);
         anim.SetBool("isUp", isUp);
         anim.SetBool("isSide", isSide);
         anim.SetBool("isDown", isDown);
