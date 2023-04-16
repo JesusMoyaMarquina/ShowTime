@@ -9,7 +9,7 @@ public abstract class EnemyMovement : MonoBehaviour
 {
 
     //General variables
-    private Rigidbody2D rb;
+    protected Rigidbody2D rb;
     private Animator anim;
     private SpriteRenderer spriteRenderer;
 
@@ -82,7 +82,6 @@ public abstract class EnemyMovement : MonoBehaviour
         bool isSide = false;
 
         anim.SetBool("isMoving", isMoving);
-        if (!isMoving) return;
 
         if (direction.y >= 0)
         {
@@ -112,7 +111,6 @@ public abstract class EnemyMovement : MonoBehaviour
         anim.SetBool("isUp", isUp);
         anim.SetBool("isSide", isSide);
         anim.SetBool("isDown", isDown);
-
     }
 
     #region stats functions
