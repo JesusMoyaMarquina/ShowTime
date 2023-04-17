@@ -116,6 +116,6 @@ public class Movement : MonoBehaviour
 
     public void EnemyRadar()
     {
-        listCloseEnemies.OrderBy(o => o.GetComponent<Enemy>().GetPlayerDistance());
+        listCloseEnemies.OrderBy(o => o.GetComponent<EnemyMovement>().distanceToPlayer);
     }
 }

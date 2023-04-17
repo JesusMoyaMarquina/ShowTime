@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Linq;
 
 public class Player : MonoBehaviour
 {
@@ -34,6 +35,7 @@ public class Player : MonoBehaviour
     //Mocked basic attack variables
     public float damage;
     private bool attacking;
+    private List<GameObject> listCloseEnemies;
 
 
     void Start()
@@ -62,6 +64,7 @@ public class Player : MonoBehaviour
 
         //Mocked basic attack
         attacking = false;
+        listCloseEnemies = new List<GameObject>();
     }
 
     void Update()
@@ -74,7 +77,7 @@ public class Player : MonoBehaviour
         isDash = playerInput.actions["Dash"].ReadValue<float>() == 1 ? true : false;
         if (playerInput.actions["Light Hit"].triggered)
         {
-            executeBasicAttack();
+
         }
     }
 
@@ -196,7 +199,7 @@ public class Player : MonoBehaviour
     }
     #endregion
 
-    #region Basic player atack
+    /*#region Basic player atack
     public void SetAttackingFalse()
     {
         attacking = false;
@@ -230,6 +233,27 @@ public class Player : MonoBehaviour
             GameObject attack = (GameObject)Instantiate(Resources.Load("Prefabs/Attacks/AttackSquare"), new Vector3(transform.position.x, transform.position.y, 0), Quaternion.identity, transform);
         }
     }
-    #endregion
+    #endregion*/
 
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Enemy"))
+        {
+            listCloseEnemies.Add(collision.gameObject);
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Enemy"))
+        {
+            listCloseEnemies.Remove(collision.gameObject);
+        }
+    }
+
+    public void EnemyRadar()
+    {
+        listCloseEnemies = listCloseEnemies.OrderBy(o => o.GetComponent<EnemyMovement>().distanceToPlayer).ToList();
+    }
 }

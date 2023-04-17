@@ -35,7 +35,8 @@ public abstract class EnemyMovement : MonoBehaviour
 
     //Mocked basic attack variables
     public float damage;
-    private bool attacking;
+
+    public float distanceToPlayer;
 
     void Start()
     {
@@ -71,8 +72,13 @@ public abstract class EnemyMovement : MonoBehaviour
             if (Vector3.Distance(enemyPos, player.transform.position) < Vector3.Distance(enemyPos, auxPlayer.transform.position))
                 auxPlayer = player;
         }
+
+        distanceToPlayer = Vector3.Distance(enemyPos, auxPlayer.transform.position);
+
         return auxPlayer;
     }
+
+
 
     public abstract void Tracking();
 
