@@ -17,7 +17,7 @@ public class Weapon : MonoBehaviour
 
             if (hepl.x < atkDist.x && hepl.y < atkDist.y)
             {
-                enemyClose.GetComponent<Enemy>().MakeDmg(damageDeal);
+                enemyClose.GetComponent<EnemyMovement>().GetDamage(damageDeal);
             }
             StartCoroutine(TiempoCD(tiempoCD));
         }
