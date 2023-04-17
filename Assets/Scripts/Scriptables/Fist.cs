@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,10 +7,10 @@ public class Fist : Weapon
 {
     protected Vector2[] atkDist = new Vector2[2];
 
-    protected GameObject enemyClose = null;
-
     protected float[] tiempoCD = new float[2];
     protected float[] damageDeal = new float[2];
+
+    protected GameObject enemyClose = null;
 
     protected float atkMng = 10;
 
@@ -27,30 +28,30 @@ public class Fist : Weapon
 
     void Update()
     {
-
-    }
-
-    public void ShoftHit(Vector2 atkDist, GameObject enmClose, float fistCd)
-    {
         if (Input.GetKeyDown(KeyCode.J))
         {
-            //Golpe flojo
+            ShoftHit(atkDist[0], enemyClose, tiempoCD[0]);
+        }
 
-            if (enemyClose != null)
-                AttackB(atkDist[0], enemyClose, tiempoCD[0], atkMng, damageDeal[0]);
-
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            ShoftHit(atkDist[1], enemyClose, tiempoCD[1]);
         }
     }
 
-    public void StrongHit(Vector2 atkDist, GameObject enmClose, float fistCd)
+    public void ShoftHit(Vector2 atkDist, GameObject enmClose, float tiempoCD)
     {
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            //Putaso al suelo
+        //Golpe flojo
 
-            if (enemyClose != null)
-                AttackB(atkDist[1], enemyClose, tiempoCD[1], atkMng, damageDeal[1]);
+        if (enemyClose != null)
+            AttackB(atkDist, enemyClose, tiempoCD, atkMng, damageDeal[0]);
+    }
 
-        }
+    public void StrongHit(Vector2[] atkDist, GameObject enmClose, float fistCd)
+    {
+        //Putaso al suelo
+
+        if (enemyClose != null)
+            AttackB(atkDist[1], enemyClose, tiempoCD[1], atkMng, damageDeal[1]);
     }
 }
