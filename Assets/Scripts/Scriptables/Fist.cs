@@ -4,16 +4,25 @@ using UnityEngine;
 
 public class Fist : Weapon
 {
-    public float fistMng;
-    public float[] fistCd;
-    public Vector2[] atkDist;
+    protected Vector2[] atkDist = new Vector2[2];
 
-    private GameObject enmClose;
-    private Animator Anim;
+    protected GameObject enemyClose = null;
+
+    protected float[] tiempoCD = new float[2];
+    protected float[] damageDeal = new float[2];
+
+    protected float atkMng = 10;
 
     void Start()
     {
-        
+        atkDist[0] = new Vector2();
+        atkDist[1] = new Vector2();
+
+        tiempoCD[0] = 1;
+        tiempoCD[1] = 1.5f;
+
+        damageDeal[0] = 15;
+        damageDeal[1] = 25;
     }
 
     void Update()
@@ -25,8 +34,11 @@ public class Fist : Weapon
     {
         if (Input.GetKeyDown(KeyCode.J))
         {
-            //Putaso flojo
-            AttackB(atkDist, enmClose, fistCd);
+            //Golpe flojo
+
+            if (enemyClose != null)
+                AttackB(atkDist[0], enemyClose, tiempoCD[0], atkMng, damageDeal[0]);
+
         }
     }
 
@@ -34,8 +46,11 @@ public class Fist : Weapon
     {
         if (Input.GetKeyDown(KeyCode.J))
         {
-            //Putaso flojo
-            AttackB(atkDist, enmClose, fistCd);
+            //Putaso al suelo
+
+            if (enemyClose != null)
+                AttackB(atkDist[1], enemyClose, tiempoCD[1], atkMng, damageDeal[1]);
+
         }
     }
 }
