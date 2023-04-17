@@ -10,12 +10,13 @@ GameObject:
   m_Component:
   - component: {fileID: 5037429430027693208}
   - component: {fileID: 5037429430027693207}
+  - component: {fileID: 50180745004207341}
   - component: {fileID: 5037429430027693204}
   - component: {fileID: 5037429430027693205}
   - component: {fileID: 5037429430027693211}
-  - component: {fileID: 5037429430027693206}
-  m_Layer: 0
-  m_Name: Enemy
+  - component: {fileID: 5892606983111386611}
+  m_Layer: 7
+  m_Name: EnemyDistance
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78,7 +79,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: 6084859605308855041, guid: 9c447c54c8e0416e9446cadb88c48fd3, type: 3}
-  m_Color: {r: 1, g: 0.046545736, b: 0, a: 1}
+  m_Color: {r: 1, g: 0.6544963, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -88,8 +89,8 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &5037429430027693204
-BoxCollider2D:
+--- !u!58 &50180745004207341
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -101,7 +102,23 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.005, y: 0.005}
+  serializedVersion: 2
+  m_Radius: 0.2
+--- !u!61 &5037429430027693204
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5037429430027693209}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.005, y: 0.005}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.1}
@@ -112,7 +129,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.4, y: 0.4}
   m_EdgeRadius: 0
 --- !u!50 &5037429430027693205
 Rigidbody2D:
@@ -155,7 +172,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &5037429430027693206
+--- !u!114 &5892606983111386611
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -164,10 +181,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 5037429430027693209}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6da2a6a012b797a4dac64529e205abb2, type: 3}
+  m_Script: {fileID: 11500000, guid: 765cf038549b1554f9d01d0b7a04a5f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 6
-  minDistance: 2
-  health: 100
-  damage: 10
+  minDistance: 5
+  health: 50
+  damage: 20
+  maxDistance: 8

@@ -5,11 +5,11 @@ using UnityEngine.AI;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
-public class EnemyMovement : MonoBehaviour
+public abstract class EnemyMovement : MonoBehaviour
 {
 
     //General variables
-    private Rigidbody2D rb;
+    protected Rigidbody2D rb;
     private Animator anim;
     private SpriteRenderer spriteRenderer;
 
@@ -24,14 +24,14 @@ public class EnemyMovement : MonoBehaviour
     public float minDistance;
 
     private GameObject[] players;
-    private GameObject nearPlayer;
-    private float distance;
+    protected GameObject nearPlayer;
+    protected float distance;
     private Vector3 enemyPos;
 
     //Stats variables
     public float health;
-    private bool hitted;
-    private bool alive;
+    protected bool hitted;
+    protected bool alive;
 
     //Mocked basic attack variables
     public float damage;
@@ -57,6 +57,7 @@ public class EnemyMovement : MonoBehaviour
 
         distance = Vector3.Distance(enemyPos, nearPlayer.transform.position);
         direction = new Vector2(nearPlayer.transform.position.x - enemyPos.x, nearPlayer.transform.position.y - enemyPos.y);
+
         Tracking();
     }
 
@@ -73,36 +74,13 @@ public class EnemyMovement : MonoBehaviour
         return auxPlayer;
     }
 
-    public void Tracking()
-    {
-        if (!alive || hitted)
-        {
-            return;
-        }
-
-        if (distance > minDistance)
-        {
-            var targetPos = new Vector3(nearPlayer.transform.position.x, nearPlayer.transform.position.y, this.transform.position.z);
-            transform.LookAt(targetPos);
-            transform.position += speed * Time.deltaTime * transform.forward;
-            transform.rotation = Quaternion.identity;
-            //rb.constraints = RigidbodyConstraints2D.FreezeAll;
-            SetAnimation(true);
-        }
-        else
-        {
-            SetAnimation(false);
-        }
-    }
+    public abstract void Tracking();
 
     public void SetAnimation(bool isMoving)
     {
         bool isDown = false;
         bool isUp = false;
         bool isSide = false;
-
-        anim.SetBool("isMoving", isMoving);
-        if (!isMoving) return;
 
         if (direction.y >= 0)
         {
@@ -129,10 +107,24 @@ public class EnemyMovement : MonoBehaviour
 
         spriteRenderer.flipX = direction.x > 0;
 
+        if (isMoving)
+        {
+            rb.mass = 1;
+            rb.constraints = RigidbodyConstraints2D.None | RigidbodyConstraints2D.FreezeRotation;
+        }
+        else
+        {
+            rb.mass = 0.025f;
+            if (isUp || isDown) 
+               rb.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
+            else if (isSide)
+                rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+        }
+
+        anim.SetBool("isMoving", isMoving);
         anim.SetBool("isUp", isUp);
         anim.SetBool("isSide", isSide);
         anim.SetBool("isDown", isDown);
-
     }
 
     #region stats functions
