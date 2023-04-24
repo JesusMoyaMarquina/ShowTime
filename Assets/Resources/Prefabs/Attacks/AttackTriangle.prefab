@@ -11,8 +11,7 @@ GameObject:
   - component: {fileID: 1393277690351578812}
   - component: {fileID: 1393277690351578808}
   - component: {fileID: 1393277690351578809}
-  - component: {fileID: 1393277690351578810}
-  - component: {fileID: 1393277690351578811}
+  - component: {fileID: 7803417704187774559}
   m_Layer: 0
   m_Name: AttackTriangle
   m_TagString: Untagged
@@ -97,7 +96,7 @@ PolygonCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -120,27 +119,7 @@ PolygonCollider2D:
       - {x: 0.16917658, y: -0.4228037}
       - {x: 0.3385613, y: -0.36704832}
       - {x: 0.5, y: -0.28866667}
---- !u!95 &1393277690351578810
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1393277690351578813}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 5ac8f1223154a9e4aa7f868ca656b10d, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &1393277690351578811
+--- !u!114 &7803417704187774559
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -149,6 +128,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1393277690351578813}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a657304be2304634c858beab3382c1df, type: 3}
+  m_Script: {fileID: 11500000, guid: cf7877672e25c40438a7661e3ade624e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}

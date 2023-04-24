@@ -14,6 +14,7 @@ public abstract class EnemyMovement : MonoBehaviour
     private BoxCollider2D bc;
     private Animator anim;
     private SpriteRenderer spriteRenderer;
+    public GameObject attackObject;
 
     //Movement variables
     public float speed;
@@ -28,7 +29,7 @@ public abstract class EnemyMovement : MonoBehaviour
     protected bool inMovementRange;
 
     private GameObject[] players;
-    private GameObject nearPlayer;
+    protected GameObject nearPlayer;
     protected float distance;
     private Vector3 enemyPos;
 
