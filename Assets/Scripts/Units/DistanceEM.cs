@@ -9,39 +9,40 @@ using static UnityEngine.GraphicsBuffer;
 public class DistanceEM : EnemyMovement
 {
     public float maxDistance;
-    private bool fixedPosition = false;
+    private bool inMaxRange;
+    private bool inMinRange;
 
     public override void Tracking()
     {
-        if (!alive || hitted) return;
+        inMinRange = distance > minDistance;
+        inMaxRange = distance <= maxDistance;
 
-        if (!fixedPosition)
-        {
-            if (distance > minDistance)
-            {
-                Vector2 direction = (nearPlayer.transform.position - transform.position).normalized;
-                var targetPos = new Vector3(nearPlayer.transform.position.x, nearPlayer.transform.position.y, this.transform.position.z);
-                transform.LookAt(targetPos);
-                rb.velocity = direction * speed;
-                transform.rotation = Quaternion.identity;
-                //rb.constraints = RigidbodyConstraints2D.FreezeAll;
-                SetAnimation(true);
-            }
-            else
-            {
-                fixedPosition = true; 
-                rb.velocity = Vector2.zero;
-                SetAnimation(false);
-            }
-        }
-        else
-        {
-            rb.velocity = Vector2.zero;
-            SetAnimation(false);
-            if (distance > maxDistance)
-            {
-                fixedPosition = false;
-            }
-        }
+        if (!inMaxRange)
+            inMovementRange = true;
+        else if (!inMinRange)
+            inMovementRange = false;
+
+        Translation();
+        SetAnimation();
+    }
+
+    public override void Attacking()
+    {
+        GameObject attack = Instantiate(attackObject, new Vector3(transform.position.x, transform.position.y, 0), Quaternion.identity, transform);
+        attack.GetComponent<MeleAttack>().Launch(nearPlayer);
+        //if (direction.x > 0)
+        //{
+        //    attack.transform.rotation = Quaternion.Euler(new Vector3(attack.transform.rotation.x, attack.transform.rotation.y, 90));
+        //    attack.GetComponent<BasicAttack>().SetDirection("right");
+        //}
+        //else if (direction.x < 0)
+        //{
+        //    attack.transform.rotation = Quaternion.Euler(new Vector3(attack.transform.rotation.x, attack.transform.rotation.y, 90));
+        //    attack.GetComponent<BasicAttack>().SetDirection("left");
+        //}
+        //else if (direction.y > 0)
+        //{
+        //    attack.GetComponent<BasicAttack>().SetDirection("up");
+        //}
     }
 }

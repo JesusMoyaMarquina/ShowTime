@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem;
@@ -10,18 +11,22 @@ public abstract class EnemyMovement : MonoBehaviour
 
     //General variables
     protected Rigidbody2D rb;
+    private BoxCollider2D bc;
     private Animator anim;
     private SpriteRenderer spriteRenderer;
+    public GameObject attackObject;
 
     //Movement variables
     public float speed;
-    private Vector2 direction;
+    protected Vector2 direction;
     private Vector2 movement;
     private bool isDash;
     private bool isDashing;
     private bool isDashInCooldown;
 
+    private Vector2 position;
     public float minDistance;
+    protected bool inMovementRange;
 
     private GameObject[] players;
     protected GameObject nearPlayer;
@@ -30,20 +35,24 @@ public abstract class EnemyMovement : MonoBehaviour
 
     //Stats variables
     public float health;
-    protected bool hitted;
-    protected bool alive;
+    private bool hitted;
+    private bool alive;
 
     //Mocked basic attack variables
     public float damage;
     private bool attacking;
+    private float lastAttack;
+    private float attackCooldown;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        bc = GetComponent<BoxCollider2D>();
         anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         players = GameObject.FindGameObjectsWithTag("Player");
         alive = true;
+        attackCooldown = 3f;
     }
 
     void Update()
@@ -53,6 +62,8 @@ public abstract class EnemyMovement : MonoBehaviour
 
     public void Movement()
     {
+        if (!alive) return;
+
         nearPlayer = FindNearPlayer();
 
         distance = Vector3.Distance(enemyPos, nearPlayer.transform.position);
@@ -75,9 +86,35 @@ public abstract class EnemyMovement : MonoBehaviour
     }
 
     public abstract void Tracking();
+    public abstract void Attacking();
 
-    public void SetAnimation(bool isMoving)
+    public void Translation()
     {
+        if (inMovementRange)
+        {
+            if (hitted || attacking) return;
+            Vector2 direction = (nearPlayer.transform.position - transform.position).normalized;
+            var targetPos = new Vector3(nearPlayer.transform.position.x, nearPlayer.transform.position.y, this.transform.position.z);
+            transform.LookAt(targetPos);
+            rb.velocity = direction * speed;
+            transform.rotation = Quaternion.identity;
+            //rb.constraints = RigidbodyConstraints2D.FreezeAll;
+        }
+        else
+        {
+            position = rb.position;
+            rb.velocity = Vector2.zero;
+        }
+    }
+
+    public void SetAnimation()
+    {
+        if ((attacking || hitted) && Vector2.Distance(rb.position, position) > 0.5f)
+        {
+            rb.constraints = RigidbodyConstraints2D.FreezeAll;
+            return;
+        }
+
         bool isDown = false;
         bool isUp = false;
         bool isSide = false;
@@ -107,7 +144,7 @@ public abstract class EnemyMovement : MonoBehaviour
 
         spriteRenderer.flipX = direction.x > 0;
 
-        if (isMoving)
+        if (inMovementRange)
         {
             rb.mass = 1;
             rb.constraints = RigidbodyConstraints2D.None | RigidbodyConstraints2D.FreezeRotation;
@@ -115,13 +152,21 @@ public abstract class EnemyMovement : MonoBehaviour
         else
         {
             rb.mass = 0.025f;
+
             if (isUp || isDown) 
-               rb.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
+                rb.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
             else if (isSide)
                 rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+            
+            if (!hitted && (!attacking && Time.time > lastAttack + attackCooldown))
+            {
+                attacking = true;
+                Attacking();
+            }
         }
 
-        anim.SetBool("isMoving", isMoving);
+        anim.SetBool("attacking", attacking);
+        anim.SetBool("isMoving", inMovementRange);
         anim.SetBool("isUp", isUp);
         anim.SetBool("isSide", isSide);
         anim.SetBool("isDown", isDown);
@@ -134,21 +179,24 @@ public abstract class EnemyMovement : MonoBehaviour
         {
             return;
         }
-
-        hitted = false;
-        anim.SetBool("hitted", hitted);
-
+        
         health -= damage;
-
-        hitted = true;
-        anim.SetBool("hitted", hitted);
 
         if (health <= 0)
         {
+            bc.enabled = false;
+            rb.constraints = RigidbodyConstraints2D.FreezeAll;
             health = 0;
             alive = false;
             anim.SetBool("alive", alive);
         }
+        
+        hitted = false;
+        anim.SetBool("hitted", hitted);
+
+        if (!attacking)
+            hitted = true;
+            anim.SetBool("hitted", hitted);
     }
 
     public void DestroyThis()
@@ -160,6 +208,13 @@ public abstract class EnemyMovement : MonoBehaviour
     {
         hitted = false;
         anim.SetBool("hitted", hitted);
+    }
+    
+    public void SetAttackingFalse()
+    {
+        lastAttack = Time.time;
+        attacking = false;
+        anim.SetBool("attacking", attacking);
     }
     #endregion
 }
