@@ -188,3 +188,4 @@ MonoBehaviour:
   minDistance: 2
   health: 60
   damage: 30
+  distanceToPlayer: 0

@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
     private Animator anim;
     private SpriteRenderer spriteRenderer;
     private PlayerInput playerInput;
+    private Fist fist;
 
 
     //Movement variables
@@ -32,10 +33,15 @@ public class Player : MonoBehaviour
     private GameObject playerHealthBar;
     private GameObject otherPlayerHealthBar;
 
-    //Mocked basic attack variables
-    public float damage;
+    //Atack Stats
+    protected Vector2[] atkDist = new Vector2[2];
+
+    protected float[] tiempoCD = new float[2];
+    protected float[] damageDeal = new float[2];
+
+    protected float atkMng = 10;
+
     private bool attacking;
-    private List<GameObject> listCloseEnemies;
 
 
     void Start()
@@ -45,6 +51,7 @@ public class Player : MonoBehaviour
         anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         playerInput = GetComponent<PlayerInput>();
+        fist = GetComponent<Fist>();
 
         //Start direction
         direction = new Vector2(0, -1 * speed);
@@ -62,9 +69,15 @@ public class Player : MonoBehaviour
 
         otherPlayerHealthBar = GameObject.Find("OtherPlayerHealthBar");
 
-        //Mocked basic attack
-        attacking = false;
-        listCloseEnemies = new List<GameObject>();
+        //Atack Stats
+        atkDist[0] = new Vector2();
+        atkDist[1] = new Vector2();
+
+        tiempoCD[0] = 1;
+        tiempoCD[1] = 1.5f;
+
+        damageDeal[0] = 15;
+        damageDeal[1] = 25;
     }
 
     void Update()
@@ -97,6 +110,16 @@ public class Player : MonoBehaviour
         else
         {
             PlayerMovement(speed + 10, true);
+        }
+
+        if (playerInput.actions["SoftHit"].triggered)
+        {
+            ShoftAttack();
+        }
+
+        if (playerInput.actions["StrongHit"].triggered)
+        {
+            StrongAttack();
         }
     }
 
@@ -199,61 +222,29 @@ public class Player : MonoBehaviour
     }
     #endregion
 
-    /*#region Basic player atack
+    #region atack
     public void SetAttackingFalse()
     {
         attacking = false;
         anim.SetBool("attacking", false);
     }
 
-    private void executeBasicAttack()
+    private void ShoftAttack()
     {
         attacking = true;
         anim.SetBool("attacking", attacking);
         rb.velocity = Vector2.zero;
-        if (direction.x > 0)
-        {
-            GameObject attack = (GameObject)Instantiate(Resources.Load("Prefabs/Attacks/AttackSquare"), new Vector3(transform.position.x, transform.position.y, 0), Quaternion.identity, transform);
-            attack.transform.rotation = Quaternion.Euler(new Vector3(attack.transform.rotation.x, attack.transform.rotation.y, 90));
-            attack.GetComponent<BasicAttack>().SetDirection("right");
-        } 
-        else if (direction.x < 0)
-        {
-            GameObject attack = (GameObject)Instantiate(Resources.Load("Prefabs/Attacks/AttackSquare"), new Vector3(transform.position.x, transform.position.y, 0), Quaternion.identity, transform);
-            attack.transform.rotation = Quaternion.Euler(new Vector3(attack.transform.rotation.x, attack.transform.rotation.y, 90));
-            attack.GetComponent<BasicAttack>().SetDirection("left");
-        }
-        else if (direction.y > 0)
-        {
-            GameObject attack = (GameObject)Instantiate(Resources.Load("Prefabs/Attacks/AttackSquare"), new Vector3(transform.position.x, transform.position.y, 0), Quaternion.identity, transform);
-            attack.GetComponent<BasicAttack>().SetDirection("up");
-        }
-        else
-        {
-            GameObject attack = (GameObject)Instantiate(Resources.Load("Prefabs/Attacks/AttackSquare"), new Vector3(transform.position.x, transform.position.y, 0), Quaternion.identity, transform);
-        }
+
+        fist.ShoftHit(atkDist[0], direction, tiempoCD[0], atkMng, damageDeal[0]);
     }
-    #endregion*/
 
-
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void StrongAttack()
     {
-        if (collision.CompareTag("Enemy"))
-        {
-            listCloseEnemies.Add(collision.gameObject);
-        }
-    }
+        attacking = true;
+        anim.SetBool("attacking", attacking);
+        rb.velocity = Vector2.zero;
 
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Enemy"))
-        {
-            listCloseEnemies.Remove(collision.gameObject);
-        }
+        fist.StrongHit(atkDist[1], direction, tiempoCD[1], atkMng, damageDeal[1]);
     }
-
-    public void EnemyRadar()
-    {
-        listCloseEnemies = listCloseEnemies.OrderBy(o => o.GetComponent<EnemyMovement>().distanceToPlayer).ToList();
-    }
+    #endregion
 }

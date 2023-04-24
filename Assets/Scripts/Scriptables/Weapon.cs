@@ -6,26 +6,23 @@ public class Weapon : MonoBehaviour
 {
     protected bool isInCD;
 
-    public void AttackB(Vector2 atkDist, GameObject enemyClose, float tiempoCD, float atkMng, float damageDeal)
+    public void AttackB(Vector2 atkDist, Vector2 playerDir, float tiempoCD, float atkMng, float damageDeal)
     {
         if (isInCD == false)
         {
+            StartCoroutine(Magnetismo(playerDir, tiempoCD, atkMng));
 
-            StartCoroutine(Magnetismo(enemyClose.transform.position, tiempoCD, atkMng));
-
-            Vector2 hepl = enemyClose.transform.position - transform.position;
-
-            if (hepl.x < atkDist.x && hepl.y < atkDist.y)
+            if (playerDir.x < atkDist.x && playerDir.y < atkDist.y)
             {
-                enemyClose.GetComponent<EnemyMovement>().GetDamage(damageDeal);
+                //enemyClose.GetComponent<EnemyMovement>().GetDamage(damageDeal);
             }
             StartCoroutine(TiempoCD(tiempoCD));
         }
     }
 
-    IEnumerator Magnetismo(Vector2 enemCercano, float tiempoCD, float atkMng)
+    IEnumerator Magnetismo(Vector2 playerDir, float tiempoCD, float atkMng)
     {
-        Vector2.MoveTowards(transform.position, enemCercano, atkMng);
+        Vector2.MoveTowards(transform.position, playerDir, atkMng);
         yield return new WaitForSeconds(tiempoCD);
     }
 
