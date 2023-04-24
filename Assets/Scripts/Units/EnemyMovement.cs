@@ -11,7 +11,7 @@ public abstract class EnemyMovement : MonoBehaviour
 
     //General variables
     protected Rigidbody2D rb;
-    private BoxCollider2D bc;
+    private CircleCollider2D cc;
     private Animator anim;
     private SpriteRenderer spriteRenderer;
     public GameObject attackObject;
@@ -47,7 +47,7 @@ public abstract class EnemyMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        bc = GetComponent<BoxCollider2D>();
+        cc = GetComponent<CircleCollider2D>();
         anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         players = GameObject.FindGameObjectsWithTag("Player");
@@ -184,7 +184,7 @@ public abstract class EnemyMovement : MonoBehaviour
 
         if (health <= 0)
         {
-            bc.enabled = false;
+            cc.enabled = false;
             rb.constraints = RigidbodyConstraints2D.FreezeAll;
             health = 0;
             alive = false;

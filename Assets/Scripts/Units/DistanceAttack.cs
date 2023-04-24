@@ -4,12 +4,12 @@ using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class MeleAttack : MonoBehaviour
+public class DistanceAttack : MonoBehaviour
 {
     public float launchSpeed;
     public float distance;
     public float damage;
-
+    
     private GameObject player;
     private Rigidbody2D rb;
     private Vector3 enemyPosition;
@@ -21,19 +21,20 @@ public class MeleAttack : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
-    //void Update()
-    //{
-    //    if (!startAttack) return;
+    // Update is called once per frame
+    void Update()
+    {
+        if (!startAttack) return;
 
-    //    //Translation();
+        Translation();
 
-    //    if (Vector3.Distance(transform.position, enemyPosition) >= distance) DestroyObject();
-    //}
+        if (Vector3.Distance(transform.position, enemyPosition) >= distance) DestroyObject();
+    }
 
     public void Launch(GameObject nearPlayer)
     {
         player = nearPlayer;
-        //enemyPosition = transform.position;
+        enemyPosition = transform.position;
         direction = (player.transform.position - transform.position).normalized;
         startAttack = true;
     }
@@ -42,9 +43,9 @@ public class MeleAttack : MonoBehaviour
     {
         //direction = (playerPosition - transform.position).normalized;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90;
-        //float x = transform.position.x + Mathf.Cos(angle * Mathf.Deg2Rad);
-        //float y = transform.position.y + Mathf.Sin(angle * Mathf.Deg2Rad);
-        var targetPos = new Vector3(direction.x, direction.y, this.transform.position.z);
+        float x = transform.position.x + Mathf.Cos(angle * Mathf.Deg2Rad);
+        float y = transform.position.y + Mathf.Sin(angle * Mathf.Deg2Rad);
+        var targetPos = new Vector3(x, y, this.transform.position.z);
         transform.LookAt(targetPos);
         rb.velocity = direction * launchSpeed;
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);

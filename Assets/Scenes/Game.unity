@@ -4698,7 +4698,7 @@ MonoBehaviour:
   unitManager: {fileID: 1116379005}
   startGenerateUnit: 9
   unitIncremental: 3
-  secondsToGenerate: 20
+  secondsToGenerate: 60
   multiplierTime: 5
   combatTime: 60
 --- !u!1 &941698167

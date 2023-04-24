@@ -29,20 +29,6 @@ public class DistanceEM : EnemyMovement
     public override void Attacking()
     {
         GameObject attack = Instantiate(attackObject, new Vector3(transform.position.x, transform.position.y, 0), Quaternion.identity, transform);
-        attack.GetComponent<MeleAttack>().Launch(nearPlayer);
-        //if (direction.x > 0)
-        //{
-        //    attack.transform.rotation = Quaternion.Euler(new Vector3(attack.transform.rotation.x, attack.transform.rotation.y, 90));
-        //    attack.GetComponent<BasicAttack>().SetDirection("right");
-        //}
-        //else if (direction.x < 0)
-        //{
-        //    attack.transform.rotation = Quaternion.Euler(new Vector3(attack.transform.rotation.x, attack.transform.rotation.y, 90));
-        //    attack.GetComponent<BasicAttack>().SetDirection("left");
-        //}
-        //else if (direction.y > 0)
-        //{
-        //    attack.GetComponent<BasicAttack>().SetDirection("up");
-        //}
+        attack.GetComponent<DistanceAttack>().Launch(nearPlayer);
     }
 }
