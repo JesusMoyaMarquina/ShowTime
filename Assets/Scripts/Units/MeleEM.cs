@@ -9,22 +9,28 @@ public class MeleEM : EnemyMovement
 {
     public override void Tracking()
     {
-        if (!alive || hitted) return;
+        inMovementRange = distance > minDistance;
+        Translation();
+        SetAnimation();
+    }
 
-        if (distance > minDistance)
+    public override void Attacking()
+    {
+        GameObject attack = (GameObject)Instantiate(Resources.Load("Prefabs/Attacks/AttackTriangle"), new Vector3(transform.position.x, transform.position.y, 0), Quaternion.identity, transform);
+
+        if (direction.x > 0)
         {
-            Vector2 direction = (nearPlayer.transform.position - transform.position).normalized;
-            var targetPos = new Vector3(nearPlayer.transform.position.x, nearPlayer.transform.position.y, this.transform.position.z);
-            transform.LookAt(targetPos);
-            rb.velocity = direction * speed;
-            transform.rotation = Quaternion.identity;
-            //rb.constraints = RigidbodyConstraints2D.FreezeAll;
-            SetAnimation(true);
+            attack.transform.rotation = Quaternion.Euler(new Vector3(attack.transform.rotation.x, attack.transform.rotation.y, 90));
+            attack.GetComponent<BasicAttack>().SetDirection("right");
         }
-        else
+        else if (direction.x < 0)
         {
-            rb.velocity = Vector2.zero;
-            SetAnimation(false);
+            attack.transform.rotation = Quaternion.Euler(new Vector3(attack.transform.rotation.x, attack.transform.rotation.y, 90));
+            attack.GetComponent<BasicAttack>().SetDirection("left");
+        }
+        else if (direction.y > 0)
+        {
+            attack.GetComponent<BasicAttack>().SetDirection("up");
         }
     }
 }
