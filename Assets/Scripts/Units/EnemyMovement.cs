@@ -12,9 +12,8 @@ public abstract class EnemyMovement : MonoBehaviour
     //General variables
     protected Rigidbody2D rb;
     private CircleCollider2D cc;
-    private Animator anim;
+    protected Animator anim;
     private SpriteRenderer spriteRenderer;
-    public GameObject attackObject;
 
     //Movement variables
     public float speed;
@@ -40,8 +39,8 @@ public abstract class EnemyMovement : MonoBehaviour
 
     //Mocked basic attack variables
     public float damage;
-    private bool attacking;
-    private float lastAttack;
+    protected bool attacking;
+    protected float lastAttack;
     private float attackCooldown;
 
     void Start()
@@ -107,6 +106,24 @@ public abstract class EnemyMovement : MonoBehaviour
         }
     }
 
+    public char SetDirection()
+    {
+        char look;
+
+        if (Mathf.Abs(direction.x) >= Mathf.Abs(direction.y))
+            if (direction.x > 0)
+                look = 'L';
+            else
+                look = 'R';
+        else
+            if (direction.y >= 0)
+                look = 'U';
+            else
+                look = 'D';
+
+        return look;
+    }
+
     public void SetAnimation()
     {
         if ((attacking || hitted) && Vector2.Distance(rb.position, position) > 0.5f)
@@ -119,30 +136,23 @@ public abstract class EnemyMovement : MonoBehaviour
         bool isUp = false;
         bool isSide = false;
 
-        if (direction.y >= 0)
+        switch (SetDirection())
         {
-            if (Mathf.Abs(direction.x) >= Mathf.Abs(direction.y))
-            {
+            case 'L':
+                spriteRenderer.flipX = true;
                 isSide = true;
-            }
-            else
-            {
+                break;
+            case 'R':
+                spriteRenderer.flipX = false;
+                isSide = true;
+                break;
+            case 'U':
                 isUp = true;
-            }
-        }
-        else
-        {
-            if (Mathf.Abs(direction.x) >= Mathf.Abs(direction.y))
-            {
-                isSide = true;
-            }
-            else
-            {
+                break;
+            case 'D':
                 isDown = true;
-            }
+                break;
         }
-
-        spriteRenderer.flipX = direction.x > 0;
 
         if (inMovementRange)
         {
@@ -209,12 +219,7 @@ public abstract class EnemyMovement : MonoBehaviour
         hitted = false;
         anim.SetBool("hitted", hitted);
     }
-    
-    public void SetAttackingFalse()
-    {
-        lastAttack = Time.time;
-        attacking = false;
-        anim.SetBool("attacking", attacking);
-    }
+
+    public abstract void SetAttackingFalse();
     #endregion
 }

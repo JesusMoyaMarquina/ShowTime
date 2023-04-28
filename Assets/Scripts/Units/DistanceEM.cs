@@ -11,6 +11,7 @@ public class DistanceEM : EnemyMovement
     public float maxDistance;
     private bool inMaxRange;
     private bool inMinRange;
+    private GameObject arrow;
 
     public override void Tracking()
     {
@@ -28,7 +29,20 @@ public class DistanceEM : EnemyMovement
 
     public override void Attacking()
     {
-        GameObject attack = Instantiate(attackObject, new Vector3(transform.position.x, transform.position.y, 0), Quaternion.identity, transform);
-        attack.GetComponent<DistanceAttack>().Launch(nearPlayer);
+        arrow = GetComponent<ObjectPool>().GetPooledObject();
+        
+        if (arrow != null)
+        {
+            arrow.transform.SetPositionAndRotation(new Vector3(transform.position.x, transform.position.y, 0), Quaternion.identity);
+            arrow.SetActive(true);
+            arrow.GetComponent<DistanceAttack>().Launch(nearPlayer);
+        }
+    }
+
+    public override void SetAttackingFalse()
+    {
+        lastAttack = Time.time;
+        attacking = false;
+        anim.SetBool("attacking", attacking);
     }
 }

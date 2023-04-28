@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 5037429430027693205}
   - component: {fileID: 5037429430027693211}
   - component: {fileID: 5892606983111386611}
+  - component: {fileID: 6377769181141655034}
   m_Layer: 7
   m_Name: EnemyDistance
   m_TagString: Enemy
@@ -163,3 +164,18 @@ MonoBehaviour:
   health: 50
   damage: 20
   maxDistance: 8
+--- !u!114 &6377769181141655034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5037429430027693209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b940fa4b0b75db4f901b1fe4689140b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pooledObjects: []
+  objectToPool: {fileID: 1393277690351578813, guid: 64b5729b664677140bb7200c90faaa41, type: 3}
+  amountToPool: 1

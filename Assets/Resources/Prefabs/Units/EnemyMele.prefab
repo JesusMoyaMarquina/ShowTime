@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 5037429430027693205}
   - component: {fileID: 5037429430027693211}
   - component: {fileID: 5037429430027693206}
+  - component: {fileID: 3025578673720806773}
   m_Layer: 6
   m_Name: EnemyMele
   m_TagString: Enemy
@@ -32,8 +33,7 @@ Transform:
   m_LocalPosition: {x: 10.36, y: -1, z: 3.5332098}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
-  m_Children:
-  - {fileID: 8296531986185042609}
+  m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -158,75 +158,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 000060b1106ebac439a9c7fc9b9832d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackObject: {fileID: 8296531986185042608}
+  attackObject: {fileID: 1393277690351578813, guid: 3f0a8c472e2835b4282b2e0ab29c5edf, type: 3}
   speed: 6
   minDistance: 2.5
   health: 60
   damage: 30
---- !u!1001 &6950982008736076813
-PrefabInstance:
+--- !u!114 &3025578673720806773
+MonoBehaviour:
   m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 5037429430027693208}
-    m_Modifications:
-    - target: {fileID: 1393277690351578812, guid: 3f0a8c472e2835b4282b2e0ab29c5edf, type: 3}
-      propertyPath: m_RootOrder
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1393277690351578812, guid: 3f0a8c472e2835b4282b2e0ab29c5edf, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1393277690351578812, guid: 3f0a8c472e2835b4282b2e0ab29c5edf, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1393277690351578812, guid: 3f0a8c472e2835b4282b2e0ab29c5edf, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1393277690351578812, guid: 3f0a8c472e2835b4282b2e0ab29c5edf, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1393277690351578812, guid: 3f0a8c472e2835b4282b2e0ab29c5edf, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1393277690351578812, guid: 3f0a8c472e2835b4282b2e0ab29c5edf, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1393277690351578812, guid: 3f0a8c472e2835b4282b2e0ab29c5edf, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1393277690351578812, guid: 3f0a8c472e2835b4282b2e0ab29c5edf, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1393277690351578812, guid: 3f0a8c472e2835b4282b2e0ab29c5edf, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1393277690351578812, guid: 3f0a8c472e2835b4282b2e0ab29c5edf, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1393277690351578813, guid: 3f0a8c472e2835b4282b2e0ab29c5edf, type: 3}
-      propertyPath: m_Name
-      value: AttackTriangle
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 3f0a8c472e2835b4282b2e0ab29c5edf, type: 3}
---- !u!1 &8296531986185042608 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1393277690351578813, guid: 3f0a8c472e2835b4282b2e0ab29c5edf, type: 3}
-  m_PrefabInstance: {fileID: 6950982008736076813}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &8296531986185042609 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1393277690351578812, guid: 3f0a8c472e2835b4282b2e0ab29c5edf, type: 3}
-  m_PrefabInstance: {fileID: 6950982008736076813}
-  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5037429430027693209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b940fa4b0b75db4f901b1fe4689140b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pooledObjects: []
+  objectToPool: {fileID: 1393277690351578813, guid: 3f0a8c472e2835b4282b2e0ab29c5edf, type: 3}
+  amountToPool: 1

@@ -1,61 +1,58 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class MeleAttack : MonoBehaviour
 {
-    public float launchSpeed;
-    public float distance;
     public float damage;
 
     private GameObject player;
     private Rigidbody2D rb;
-    private Vector3 enemyPosition;
     private Vector2 direction;
-    private bool startAttack;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
     }
 
-    //void Update()
-    //{
-    //    if (!startAttack) return;
-
-    //    //Translation();
-
-    //    if (Vector3.Distance(transform.position, enemyPosition) >= distance) DestroyObject();
-    //}
-
-    public void Launch(GameObject nearPlayer)
+    public void Launch(GameObject nearPlayer, char look)
     {
         player = nearPlayer;
-        //enemyPosition = transform.position;
         direction = (player.transform.position - transform.position).normalized;
-        startAttack = true;
+        Rotation(look);
     }
 
-    public void Translation()
+    public void Rotation(char look)
     {
-        //direction = (playerPosition - transform.position).normalized;
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90;
-        //float x = transform.position.x + Mathf.Cos(angle * Mathf.Deg2Rad);
-        //float y = transform.position.y + Mathf.Sin(angle * Mathf.Deg2Rad);
+        float angle = 0f;
+        switch (look)
+        {
+            case 'L':
+                angle = -90f;
+                break;
+            case 'R':
+                angle = 90f;
+                break;
+            case 'U':
+                angle = 0f;
+                break;
+            case 'D':
+                angle = 180f;
+                break;
+        }
+
         var targetPos = new Vector3(direction.x, direction.y, this.transform.position.z);
         transform.LookAt(targetPos);
-        rb.velocity = direction * launchSpeed;
-        transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-
         Debug.Log(angle);
-        Debug.Log(direction);
+        transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
 
     public void DestroyObject()
     {
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

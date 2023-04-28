@@ -41,7 +41,6 @@ public class DistanceAttack : MonoBehaviour
 
     public void Translation()
     {
-        //direction = (playerPosition - transform.position).normalized;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90;
         float x = transform.position.x + Mathf.Cos(angle * Mathf.Deg2Rad);
         float y = transform.position.y + Mathf.Sin(angle * Mathf.Deg2Rad);
@@ -49,14 +48,11 @@ public class DistanceAttack : MonoBehaviour
         transform.LookAt(targetPos);
         rb.velocity = direction * launchSpeed;
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-
-        Debug.Log(angle);
-        Debug.Log(direction);
     }
 
     public void DestroyObject()
     {
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
