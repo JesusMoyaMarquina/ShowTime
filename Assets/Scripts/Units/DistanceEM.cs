@@ -9,39 +9,40 @@ using static UnityEngine.GraphicsBuffer;
 public class DistanceEM : EnemyMovement
 {
     public float maxDistance;
-    private bool fixedPosition = false;
+    private bool inMaxRange;
+    private bool inMinRange;
+    private GameObject arrow;
 
     public override void Tracking()
     {
-        if (!alive || hitted) return;
+        inMinRange = distance > minDistance;
+        inMaxRange = distance <= maxDistance;
 
-        if (!fixedPosition)
+        if (!inMaxRange)
+            inMovementRange = true;
+        else if (!inMinRange)
+            inMovementRange = false;
+
+        Translation();
+        SetAnimation();
+    }
+
+    public override void Attacking()
+    {
+        arrow = GetComponent<ObjectPool>().GetPooledObject();
+        
+        if (arrow != null)
         {
-            if (distance > minDistance)
-            {
-                Vector2 direction = (nearPlayer.transform.position - transform.position).normalized;
-                var targetPos = new Vector3(nearPlayer.transform.position.x, nearPlayer.transform.position.y, this.transform.position.z);
-                transform.LookAt(targetPos);
-                rb.velocity = direction * speed;
-                transform.rotation = Quaternion.identity;
-                //rb.constraints = RigidbodyConstraints2D.FreezeAll;
-                SetAnimation(true);
-            }
-            else
-            {
-                fixedPosition = true; 
-                rb.velocity = Vector2.zero;
-                SetAnimation(false);
-            }
+            arrow.transform.SetPositionAndRotation(new Vector3(transform.position.x, transform.position.y, 0), Quaternion.identity);
+            arrow.SetActive(true);
+            arrow.GetComponent<DistanceAttack>().Launch(nearPlayer);
         }
-        else
-        {
-            rb.velocity = Vector2.zero;
-            SetAnimation(false);
-            if (distance > maxDistance)
-            {
-                fixedPosition = false;
-            }
-        }
+    }
+
+    public override void SetAttackingFalse()
+    {
+        lastAttack = Time.time;
+        attacking = false;
+        anim.SetBool("attacking", attacking);
     }
 }
