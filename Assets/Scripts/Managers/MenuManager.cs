@@ -10,7 +10,7 @@ using System;
 
 public class MenuManager : MonoBehaviour
 {
-    public GameObject victoryMenu, loseMenu, mainMenu, pauseMenu, settingsMenu, keybindsMenu;
+    public GameObject victoryMenu, loseMenu, mainMenu, pauseMenu, settingsMenu, keybindsMenu, gameUI;
 
     public AudioMixer audioMixer;
     public TMP_Dropdown resolutionDropdown;
@@ -194,6 +194,7 @@ public class MenuManager : MonoBehaviour
         }
         if (pauseMenu != null)
         {
+            gameUI?.SetActive(!paused);
             pauseMenu?.SetActive(paused);
         }
     }
