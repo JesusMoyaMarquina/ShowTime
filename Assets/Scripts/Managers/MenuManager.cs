@@ -15,6 +15,8 @@ public class MenuManager : MonoBehaviour
     public AudioMixer audioMixer;
     public TMP_Dropdown resolutionDropdown;
     public Toggle fullscreenToggle;
+    public TextMeshProUGUI volumePercentageText;
+    public Slider volumeSlider;
 
     public static bool isPaused;
 
@@ -98,6 +100,7 @@ public class MenuManager : MonoBehaviour
     public void SetVolume(float volume)
     {
         audioMixer.SetFloat("volume", volume);
+        volumePercentageText.text = (int) ((volumeSlider.value * 100 / 80) + 100) + "%";
     }
 
     public void SetQuality(int qualityIndex)
