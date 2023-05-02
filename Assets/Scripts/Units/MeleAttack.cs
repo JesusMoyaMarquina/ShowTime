@@ -18,9 +18,11 @@ public class MeleAttack : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
-    public void Launch(GameObject nearPlayer, char look)
+    public void Launch(GameObject nearPlayer, float size, char look)
     {
         player = nearPlayer;
+        size *= 1.3f;
+        transform.localScale = new Vector3(size, size, transform.localScale.z);
         direction = (player.transform.position - transform.position).normalized;
         Rotation(look);
     }
@@ -46,7 +48,6 @@ public class MeleAttack : MonoBehaviour
 
         var targetPos = new Vector3(direction.x, direction.y, this.transform.position.z);
         transform.LookAt(targetPos);
-        Debug.Log(angle);
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
 

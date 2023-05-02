@@ -158,7 +158,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 000060b1106ebac439a9c7fc9b9832d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackObject: {fileID: 1393277690351578813, guid: 3f0a8c472e2835b4282b2e0ab29c5edf, type: 3}
   speed: 6
   minDistance: 2.5
   health: 60
@@ -175,6 +174,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b940fa4b0b75db4f901b1fe4689140b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pooledObjects: []
   objectToPool: {fileID: 1393277690351578813, guid: 3f0a8c472e2835b4282b2e0ab29c5edf, type: 3}
   amountToPool: 1
+  pooledObjects: []
