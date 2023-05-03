@@ -38,6 +38,7 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+        GameManager.OnGameStateChange += GameManagerOnGameStateChange;
         //Start player basics
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
@@ -52,24 +53,31 @@ public class Player : MonoBehaviour
         hitted = false;
         currentHealth = maxHealth;
 
-        playerHealthBar = GameObject.Find("PlayerHealthProgressBar");
-        playerHealthBar.GetComponent<EntityProgressBar>().maximum = maxHealth;
-        playerHealthBar.GetComponent<EntityProgressBar>().current = currentHealth;
-        playerHealthBar.GetComponent<EntityProgressBar>().previousCurrent = currentHealth;
-        playerHealthBar.GetComponent<EntityProgressBar>().GetCurrentFill();
-
-        otherPlayerHealthBar = GameObject.Find("OtherPlayerHealthBar");
-
         //Mocked basic attack
         attacking = false;
     }
 
+    private void GameManagerOnGameStateChange(GameState state)
+    {
+        if (state == GameState.Combat)
+        {
+            playerHealthBar = GameObject.Find("PlayerHealthProgressBar");
+            playerHealthBar.GetComponent<EntityProgressBar>().maximum = maxHealth;
+            playerHealthBar.GetComponent<EntityProgressBar>().current = currentHealth;
+            playerHealthBar.GetComponent<EntityProgressBar>().previousCurrent = currentHealth;
+            playerHealthBar.GetComponent<EntityProgressBar>().GetCurrentFill();
+
+            otherPlayerHealthBar = GameObject.Find("OtherPlayerHealthBar");
+        }
+    }
+
     void Update()
     {
-        if (!alive || hitted || attacking)
+        if (!alive || hitted || attacking || GameManager.Instance.state == GameState.Pause)
         {
             return;
         }
+
         movement = playerInput.actions["Move"].ReadValue<Vector2>();
         isDash = playerInput.actions["Dash"].ReadValue<float>() == 1 ? true : false;
         if (playerInput.actions["Light Hit"].triggered)
@@ -84,6 +92,7 @@ public class Player : MonoBehaviour
         {
             return;
         }
+
         CameraFollowUp();
         if (isDash && !isDashInCooldown) PlayerDash();
         if (!isDashing)
