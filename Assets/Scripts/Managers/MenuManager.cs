@@ -45,6 +45,13 @@ public class MenuManager : MonoBehaviour
         HandleGamePause(state == GameState.Pause);
         victoryMenu.SetActive(state == GameState.Vicory);
         loseMenu.SetActive(state == GameState.Lose);
+        if(GameManager.Instance.state != GameState.Combat)
+        {
+            gameUI?.SetActive(false);
+        } else
+        {
+            gameUI?.SetActive(true);
+        }
     }
 
     private void Start()
@@ -198,7 +205,6 @@ public class MenuManager : MonoBehaviour
         }
         if (pauseMenu != null)
         {
-            gameUI?.SetActive(!paused);
             pauseMenu?.SetActive(paused);
         }
     }

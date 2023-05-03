@@ -887,9 +887,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 558.2046, y: 333.016, z: 7.9467}
+    m_Target: {x: 136.8044, y: 442.13626, z: -4.6793365}
     speed: 2
-    m_Value: {x: 558.2046, y: 333.016, z: 7.9467}
+    m_Value: {x: 136.8044, y: 442.13626, z: -4.6793365}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -940,9 +940,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 420.18198
+    m_Target: 968.0548
     speed: 2
-    m_Value: 420.18198
+    m_Value: 968.0548
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -1108,7 +1108,7 @@ MonoBehaviour:
   m_LastFolders:
   - Assets/Scripts/Scriptables
   m_LastFoldersGridSize: -1
-  m_LastProjectPath: D:\UnityProyects\ShowTime
+  m_LastProjectPath: "C:\\Users\\b15-09t\\Desktop\\Dise\xF1o\\ProyectoFinal\\ShowTime"
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
@@ -1143,7 +1143,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000226d0000246d0000266d0000286d00002a6d00002c6d00002e6d0000306d0000326d0000346d0000
+    m_ExpandedIDs: 000000001e6e0000206e0000226e0000246e0000266e0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
