@@ -56,6 +56,10 @@ public class MenuManager : MonoBehaviour
 
     private void HandleMenuVisibility()
     {
+        if(gameUI != null)
+        {
+            gameUI?.SetActive(true);
+        }
         if (mainMenu != null)
         {
             mainMenu?.SetActive(true);
