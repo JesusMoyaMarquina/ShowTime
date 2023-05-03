@@ -10,11 +10,13 @@ using System;
 
 public class MenuManager : MonoBehaviour
 {
-    public GameObject victoryMenu, loseMenu, mainMenu, pauseMenu, settingsMenu, keybindsMenu;
+    public GameObject victoryMenu, loseMenu, mainMenu, pauseMenu, settingsMenu, keybindsMenu, gameUI;
 
     public AudioMixer audioMixer;
     public TMP_Dropdown resolutionDropdown;
     public Toggle fullscreenToggle;
+    public TextMeshProUGUI volumePercentageText;
+    public Slider volumeSlider;
 
     public static bool isPaused;
 
@@ -54,6 +56,10 @@ public class MenuManager : MonoBehaviour
 
     private void HandleMenuVisibility()
     {
+        if(gameUI != null)
+        {
+            gameUI?.SetActive(true);
+        }
         if (mainMenu != null)
         {
             mainMenu?.SetActive(true);
@@ -98,6 +104,7 @@ public class MenuManager : MonoBehaviour
     public void SetVolume(float volume)
     {
         audioMixer.SetFloat("volume", volume);
+        volumePercentageText.text = (int) ((volumeSlider.value * 100 / 80) + 100) + "%";
     }
 
     public void SetQuality(int qualityIndex)
@@ -191,6 +198,7 @@ public class MenuManager : MonoBehaviour
         }
         if (pauseMenu != null)
         {
+            gameUI?.SetActive(!paused);
             pauseMenu?.SetActive(paused);
         }
     }
