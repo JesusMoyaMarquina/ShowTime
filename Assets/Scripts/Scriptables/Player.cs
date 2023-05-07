@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -13,12 +14,14 @@ public class Player : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private PlayerInput playerInput;
 
+    //Color variables
+    private Color baseColor;
+    private Color hitColor;
 
     //Movement variables
     public float speed;
     private Vector2 direction;
     private Vector2 movement;
-    private bool isDash;
     private bool isDashing;
     private bool isDashInCooldown;
 
@@ -35,7 +38,6 @@ public class Player : MonoBehaviour
     public float damage;
     private bool attacking;
 
-
     void Start()
     {
         GameManager.OnGameStateChange += GameManagerOnGameStateChange;
@@ -47,6 +49,12 @@ public class Player : MonoBehaviour
 
         //Start direction
         direction = new Vector2(0, -1 * speed);
+
+        //Start color
+        baseColor = spriteRenderer.color;
+        Color aux = baseColor;
+        aux.a = 0.5f;
+        hitColor = aux;
 
         //Start health
         alive = true;
@@ -73,79 +81,64 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        if (!alive || hitted || attacking || GameManager.Instance.state == GameState.Pause)
-        {
-            return;
-        }
+        if (GameManager.Instance.state == GameState.Pause) return;
 
-        movement = playerInput.actions["Move"].ReadValue<Vector2>();
-        isDash = playerInput.actions["Dash"].ReadValue<float>() == 1 ? true : false;
-        if (playerInput.actions["Light Hit"].triggered)
-        {
-            executeBasicAttack();
-        }
+        PlayerMovement();
     }
 
     private void FixedUpdate()
     {
-        if (!alive || attacking)
-        {
-            return;
-        }
+        if (!alive) return;
 
         CameraFollowUp();
-        if (isDash && !isDashInCooldown) PlayerDash();
-        if (!isDashing)
-        {
-            PlayerMovement(speed);
-            PlayerDirection();
-        }
-        else
-        {
-            PlayerMovement(speed + 10, true);
-        }
+    }
+
+    private void PlayerMovement()
+    {
+        if (!alive) return;
+
+        movement = playerInput.actions["Move"].ReadValue<Vector2>();
+
+        PlayerVelocity();
+        PlayerDirection();
+
+        if (playerInput.actions["Dash"].ReadValue<float>() == 1 && !isDashInCooldown)
+            PlayerDash();
+
+        if (playerInput.actions["Light Hit"].triggered)
+            ExecuteBasicAttack();
     }
 
     #region movement functions
-    private void CameraFollowUp()
-    {
-        Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -10);
-    }
+    private void CameraFollowUp() => Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -10);
 
-    private void PlayerMovement(float speed, bool isDashing = false)
+    private void PlayerVelocity()
     {
-        Vector2 playerVelocity = isDashing ? direction / 10 : movement.normalized;
+        Vector2 pDirection = isDashing ? direction / 10 : movement.normalized; ;
+        float pSpeed = isDashing ? speed * 2 : attacking || hitted ? speed / 2 : speed;
 
-        rb.velocity = playerVelocity * speed;
+        rb.velocity = pDirection * pSpeed;
     }
 
     private void PlayerDirection()
     {
-        if (rb.velocity.x > 0.1f)
-        {
-            spriteRenderer.flipX = true;
-        }
-        else if (rb.velocity.x < -0.1f)
-        {
-            spriteRenderer.flipX = false;
-        }
-        if (rb.velocity != Vector2.zero)
-        {
-            direction = rb.velocity;
-        }
-        if (direction.x < 0.1f)
-        {
-            spriteRenderer.flipX = false;
-        }
+        if (isDashing) return;
 
+        if (rb.velocity != Vector2.zero)
+            direction = rb.velocity;
+
+        spriteRenderer.flipX = direction.x > 0.1f;
+        
         anim.SetFloat("speedX", Mathf.Abs(rb.velocity.x));
         anim.SetFloat("speedY", rb.velocity.y);
     }
 
     private void PlayerDash()
     {
+        if (attacking || hitted) return;
+
         isDashing = true;
-        anim.SetBool("isDashing", true);
+        anim.SetBool("isDashing", isDashing);
         anim.SetFloat("speedX", Mathf.Abs(rb.velocity.x));
         anim.SetFloat("speedY", rb.velocity.y);
     }
@@ -153,7 +146,7 @@ public class Player : MonoBehaviour
     private void StopDashing()
     {
         isDashing = false;
-        anim.SetBool("isDashing", false);
+        anim.SetBool("isDashing", isDashing);
         StartCoroutine(DashCooldown());
     }
 
@@ -168,11 +161,10 @@ public class Player : MonoBehaviour
     #region stats functions
     public void GetDamage(float damage)
     {
-        if (hitted || isDashing)
-        {
-            return;
-        }
+        if (hitted || isDashing) return;
+
         currentHealth -= damage;
+
         hitted = true;
         anim.SetBool("hitted", hitted);
 
@@ -180,8 +172,12 @@ public class Player : MonoBehaviour
         {
             currentHealth = 0;
             alive = false;
-            rb.velocity = Vector2.zero;
+            //rb.velocity = Vector2.zero;
             anim.SetBool("alive", alive);
+        }
+        else
+        {
+            spriteRenderer.color = hitColor;
         }
 
         playerHealthBar.GetComponent<EntityProgressBar>().current = currentHealth;
@@ -197,6 +193,7 @@ public class Player : MonoBehaviour
     {
         hitted = false;
         anim.SetBool("hitted", hitted);
+        spriteRenderer.color = baseColor;
     }
 
     public bool isAlive()
@@ -212,31 +209,28 @@ public class Player : MonoBehaviour
         anim.SetBool("attacking", false);
     }
 
-    private void executeBasicAttack()
+    private void ExecuteBasicAttack()
     {
+        if (isDashing || attacking || hitted) return;
+
         attacking = true;
         anim.SetBool("attacking", attacking);
-        rb.velocity = Vector2.zero;
+        
+        GameObject attack = (GameObject)Instantiate(Resources.Load("Prefabs/Attacks/AttackSquare"), new Vector3(transform.position.x, transform.position.y, 0), Quaternion.identity, transform);
+        
         if (direction.x > 0)
         {
-            GameObject attack = (GameObject)Instantiate(Resources.Load("Prefabs/Attacks/AttackSquare"), new Vector3(transform.position.x, transform.position.y, 0), Quaternion.identity, transform);
             attack.transform.rotation = Quaternion.Euler(new Vector3(attack.transform.rotation.x, attack.transform.rotation.y, 90));
             attack.GetComponent<BasicAttack>().SetDirection("right");
         } 
         else if (direction.x < 0)
         {
-            GameObject attack = (GameObject)Instantiate(Resources.Load("Prefabs/Attacks/AttackSquare"), new Vector3(transform.position.x, transform.position.y, 0), Quaternion.identity, transform);
             attack.transform.rotation = Quaternion.Euler(new Vector3(attack.transform.rotation.x, attack.transform.rotation.y, 90));
             attack.GetComponent<BasicAttack>().SetDirection("left");
         }
         else if (direction.y > 0)
         {
-            GameObject attack = (GameObject)Instantiate(Resources.Load("Prefabs/Attacks/AttackSquare"), new Vector3(transform.position.x, transform.position.y, 0), Quaternion.identity, transform);
             attack.GetComponent<BasicAttack>().SetDirection("up");
-        }
-        else
-        {
-            GameObject attack = (GameObject)Instantiate(Resources.Load("Prefabs/Attacks/AttackSquare"), new Vector3(transform.position.x, transform.position.y, 0), Quaternion.identity, transform);
         }
     }
     #endregion
