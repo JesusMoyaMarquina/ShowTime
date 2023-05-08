@@ -43,6 +43,8 @@ public class Player : MonoBehaviour
 
     private bool attacking;
 
+    //Combo sistem
+    private Queue<InputAction> inputQueue;
 
     void Start()
     {
@@ -78,6 +80,9 @@ public class Player : MonoBehaviour
 
         damageDeal[0] = 15;
         damageDeal[1] = 25;
+
+        //Combo Sistem
+        inputQueue = new Queue<InputAction>();
     }
 
     void Update()
@@ -114,13 +119,43 @@ public class Player : MonoBehaviour
 
         if (playerInput.actions["SoftHit"].triggered)
         {
-            ShoftAttack();
+            inputQueue.Enqueue(playerInput.actions["SoftHit"]);
+            Invoke(nameof(QuitarAccion), 2);
         }
 
         if (playerInput.actions["StrongHit"].triggered)
         {
-            StrongAttack();
+            inputQueue.Enqueue(playerInput.actions["StrongHit"]);
+            Invoke(nameof(QuitarAccion), 2);
         }
+
+        if (inputQueue.Count > 0 && inputQueue.Count <= 2)
+        {
+            if (inputQueue.Peek() == playerInput.actions["SoftHit"])
+            {
+                ShoftAttack();
+            }
+
+            if(inputQueue.Peek() == playerInput.actions["StrongHit"])
+            {
+                StrongAttack();
+            }
+        }
+
+        if (inputQueue.Count == 3)
+        {
+            List<InputAction> actionList = inputQueue.ToList();
+            switch ((actionList[0], actionList[1], actionList[2]))
+            {
+                case (playerInput.actions["SoftHit"], playerInput.actions["SoftHit"], playerInput.actions["SoftHit"]):
+                        break;
+            }
+        }
+    }
+
+    void QuitarAccion()
+    {
+        inputQueue.Clear();
     }
 
     #region movement functions
