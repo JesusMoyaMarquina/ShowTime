@@ -12,6 +12,7 @@ public abstract class EnemyMovement : MonoBehaviour
     protected Rigidbody2D rb;
     private Animator anim;
     private SpriteRenderer spriteRenderer;
+    private CombatManager CombatMng;
 
     //Movement variables
     public float speed;
@@ -149,7 +150,7 @@ public abstract class EnemyMovement : MonoBehaviour
         hitted = true;
         anim.SetBool("hitted", hitted);
 
-        CombatManager.ComboSistem(hitted);
+        CombatMng.ComboSistem(hitted);
 
         if (health <= 0)
         {
