@@ -30,6 +30,9 @@ public class Player : MonoBehaviour
     private bool hitted;
     private bool alive;
     private float currentHealth;
+    private float inmortalityTime;
+    private float startInmortalTime;
+    private bool isInmortal;
 
     private GameObject playerHealthBar;
     private GameObject otherPlayerHealthBar;
@@ -60,6 +63,7 @@ public class Player : MonoBehaviour
         alive = true;
         hitted = false;
         currentHealth = maxHealth;
+        inmortalityTime = 1f;
 
         //Mocked basic attack
         attacking = false;
@@ -107,6 +111,15 @@ public class Player : MonoBehaviour
 
         if (playerInput.actions["Light Hit"].triggered)
             ExecuteBasicAttack();
+
+        if (isInmortal)
+        {
+            if (startInmortalTime + inmortalityTime < Time.time)
+            {
+                isInmortal = false;
+                spriteRenderer.color = baseColor;
+            }
+        }
     }
 
     #region movement functions
@@ -122,7 +135,7 @@ public class Player : MonoBehaviour
 
     private void PlayerDirection()
     {
-        if (isDashing) return;
+        if (isDashing || attacking) return;
 
         if (rb.velocity != Vector2.zero)
             direction = rb.velocity;
@@ -161,27 +174,36 @@ public class Player : MonoBehaviour
     #region stats functions
     public void GetDamage(float damage)
     {
-        if (hitted || isDashing) return;
+        if (isInmortal || isDashing) return;
 
         currentHealth -= damage;
 
-        hitted = true;
-        anim.SetBool("hitted", hitted);
+        DamageAnimation();
 
-        if (currentHealth <= 0) 
+        playerHealthBar.GetComponent<EntityProgressBar>().current = currentHealth;
+        playerHealthBar.GetComponent<EntityProgressBar>().GetCurrentFill();
+    }
+
+    private void DamageAnimation()
+    {
+        if (currentHealth <= 0)
         {
             currentHealth = 0;
             alive = false;
-            //rb.velocity = Vector2.zero;
+            rb.velocity = Vector2.zero;
             anim.SetBool("alive", alive);
         }
         else
         {
+            if (!attacking)
+            {
+                hitted = true;
+                anim.SetBool("hitted", hitted);
+            }
+            startInmortalTime = Time.time;
+            isInmortal = true;
             spriteRenderer.color = hitColor;
         }
-
-        playerHealthBar.GetComponent<EntityProgressBar>().current = currentHealth;
-        playerHealthBar.GetComponent<EntityProgressBar>().GetCurrentFill();
     }
 
     public void SetActiveFalse()
@@ -193,7 +215,6 @@ public class Player : MonoBehaviour
     {
         hitted = false;
         anim.SetBool("hitted", hitted);
-        spriteRenderer.color = baseColor;
     }
 
     public bool isAlive()
