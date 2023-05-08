@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -16,11 +17,12 @@ public class CombatManager : MonoBehaviour
     public int startGenerateUnit;
     public int unitIncremental;
     public int secondsToGenerate;
-    public float multiplierTime;
 
+    public float multiplierTime;
     public float combatTime;
 
     private int generateIteration;
+
     private bool multiplierActive;
 
     private float actualTime;
@@ -30,6 +32,9 @@ public class CombatManager : MonoBehaviour
     private float remainingTime;
     private float beginBattleTime;
     private float timerSpeed;
+    private float comboMp = 1;
+
+    protected int cSHelp = 0;
 
     private void Start()
     {
@@ -209,4 +214,40 @@ public class CombatManager : MonoBehaviour
             MultiplyTimeSpeed(2);
         }
     }
+    #region Sistema de combos
+    public void ComboSistem(bool hit)
+    {
+        StartCoroutine(ComboCD());
+
+        if (hit == true)
+        {
+            StopCoroutine(ComboCD());
+
+            if (cSHelp == 10)
+            {
+                cSHelp = 0;
+                comboMp += 0.1f;
+                MultiplyTimeSpeed(comboMp);
+            }
+            else
+            {
+                cSHelp++;
+            }
+
+            StartCoroutine(ComboCD());
+        }
+
+        if (hit != true)
+        {
+            MultiplyTimeSpeed(1);
+        }
+    }
+
+    IEnumerator ComboCD()
+    {
+        yield return new WaitForSeconds(10);
+
+        ComboSistem(false);
+    }
+    #endregion
 }

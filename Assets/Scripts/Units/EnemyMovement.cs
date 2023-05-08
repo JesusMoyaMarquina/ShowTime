@@ -149,6 +149,8 @@ public abstract class EnemyMovement : MonoBehaviour
         hitted = true;
         anim.SetBool("hitted", hitted);
 
+        CombatManager.ComboSistem(hitted);
+
         if (health <= 0)
         {
             health = 0;
