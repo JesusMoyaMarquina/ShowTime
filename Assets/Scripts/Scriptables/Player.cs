@@ -44,7 +44,7 @@ public class Player : MonoBehaviour
     private bool attacking;
 
     //Combo sistem
-    private Queue<InputAction> inputQueue;
+    private Queue<string> inputQueue;
 
     void Start()
     {
@@ -82,7 +82,7 @@ public class Player : MonoBehaviour
         damageDeal[1] = 25;
 
         //Combo Sistem
-        inputQueue = new Queue<InputAction>();
+        inputQueue = new Queue<string>();
     }
 
     void Update()
@@ -119,24 +119,24 @@ public class Player : MonoBehaviour
 
         if (playerInput.actions["SoftHit"].triggered)
         {
-            inputQueue.Enqueue(playerInput.actions["SoftHit"]);
+            inputQueue.Enqueue("softHit");
             Invoke(nameof(QuitarAccion), 2);
         }
 
         if (playerInput.actions["StrongHit"].triggered)
         {
-            inputQueue.Enqueue(playerInput.actions["StrongHit"]);
+            inputQueue.Enqueue("strongHit");
             Invoke(nameof(QuitarAccion), 2);
         }
 
         if (inputQueue.Count > 0 && inputQueue.Count <= 2)
         {
-            if (inputQueue.Peek() == playerInput.actions["SoftHit"])
+            if (inputQueue.Peek() == "softHit")
             {
                 ShoftAttack();
             }
 
-            if(inputQueue.Peek() == playerInput.actions["StrongHit"])
+            if(inputQueue.Peek() == "strongHit")
             {
                 StrongAttack();
             }
@@ -144,11 +144,33 @@ public class Player : MonoBehaviour
 
         if (inputQueue.Count == 3)
         {
-            List<InputAction> actionList = inputQueue.ToList();
+            List<string> actionList = inputQueue.ToList();
             switch ((actionList[0], actionList[1], actionList[2]))
             {
-                case (playerInput.actions["SoftHit"], playerInput.actions["SoftHit"], playerInput.actions["SoftHit"]):
-                        break;
+                case ("softHit", "softHit", "softHit"):
+                    anim.SetInteger("finish", 0);
+                    break;
+                case ("softHit", "softHit", "strongHit"):
+                    anim.SetInteger("finish", 1);
+                    break;
+                case ("softHit", "strongHit", "softHit"):
+                    anim.SetInteger("finish", 2);
+                    break;
+                case ("softHit", "strongHit", "strongHit"):
+                    anim.SetInteger("finish", 3);
+                    break;
+                case ("strongHit", "softHit", "softHit"):
+                    anim.SetInteger("finish", 4);
+                    break;
+                case ("strongHit", "softHit", "strongHit"):
+                    anim.SetInteger("finish", 5);
+                    break;
+                case ("strongHit", "strongHit", "softHit"):
+                    anim.SetInteger("finish", 6);
+                    break;
+                case ("strongHit", "strongHit", "strongHit"):
+                    anim.SetInteger("finish", 7);
+                    break;
             }
         }
     }
