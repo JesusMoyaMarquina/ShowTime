@@ -14,6 +14,7 @@ public abstract class EnemyMovement : MonoBehaviour
     private CircleCollider2D cc;
     protected Animator anim;
     private SpriteRenderer spriteRenderer;
+    private CombatManager CombatMng;
 
     //Movement variables
     public float speed;
@@ -42,6 +43,8 @@ public abstract class EnemyMovement : MonoBehaviour
     protected bool attacking;
     protected float lastAttack;
     private float attackCooldown;
+
+    public float distanceToPlayer;
 
     void Start()
     {
@@ -81,8 +84,13 @@ public abstract class EnemyMovement : MonoBehaviour
             if (Vector3.Distance(enemyPos, player.transform.position) < Vector3.Distance(enemyPos, auxPlayer.transform.position))
                 auxPlayer = player;
         }
+
+        distanceToPlayer = Vector3.Distance(enemyPos, auxPlayer.transform.position);
+
         return auxPlayer;
     }
+
+
 
     public abstract void Tracking();
     public abstract void Attacking();

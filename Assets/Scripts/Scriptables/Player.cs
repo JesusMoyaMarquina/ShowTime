@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Linq;
 
 public class Player : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class Player : MonoBehaviour
     private Animator anim;
     private SpriteRenderer spriteRenderer;
     private PlayerInput playerInput;
+    private Fist fist;
 
     //Color variables
     private Color baseColor;
@@ -37,9 +39,18 @@ public class Player : MonoBehaviour
     private GameObject playerHealthBar;
     private GameObject otherPlayerHealthBar;
 
-    //Mocked basic attack variables
-    public float damage;
+    //Atack Stats
+    protected Vector2[] atkDist = new Vector2[2];
+
+    protected float[] tiempoCD = new float[2];
+    protected float[] damageDeal = new float[2];
+
+    protected float atkMng = 10;
+
     private bool attacking;
+
+    //Combo sistem
+    private Queue<string> inputQueue;
 
     void Start()
     {
@@ -49,6 +60,7 @@ public class Player : MonoBehaviour
         anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         playerInput = GetComponent<PlayerInput>();
+        fist = GetComponent<Fist>();
 
         //Start direction
         direction = new Vector2(0, -1 * speed);
@@ -65,6 +77,18 @@ public class Player : MonoBehaviour
         currentHealth = maxHealth;
         inmortalityTime = 1f;
 
+        //Atack Stats
+        atkDist[0] = new Vector2();
+        atkDist[1] = new Vector2();
+
+        tiempoCD[0] = 1;
+        tiempoCD[1] = 1.5f;
+
+        damageDeal[0] = 15;
+        damageDeal[1] = 25;
+
+        //Combo Sistem
+        inputQueue = new Queue<string>();
         //Mocked basic attack
         attacking = false;
     }
@@ -80,6 +104,12 @@ public class Player : MonoBehaviour
             playerHealthBar.GetComponent<EntityProgressBar>().GetCurrentFill();
 
             otherPlayerHealthBar = GameObject.Find("OtherPlayerHealthBar");
+        }
+        movement = playerInput.actions["Move"].ReadValue<Vector2>();
+        isDash = playerInput.actions["Dash"].ReadValue<float>() == 1 ? true : false;
+        if (playerInput.actions["Light Hit"].triggered)
+        {
+            executeBasicAttack();
         }
     }
 
@@ -120,6 +150,67 @@ public class Player : MonoBehaviour
                 spriteRenderer.color = baseColor;
             }
         }
+        if (playerInput.actions["SoftHit"].triggered)
+        {
+            inputQueue.Enqueue("softHit");
+            Invoke(nameof(QuitarAccion), 2);
+        }
+
+        if (playerInput.actions["StrongHit"].triggered)
+        {
+            inputQueue.Enqueue("strongHit");
+            Invoke(nameof(QuitarAccion), 2);
+        }
+
+        if (inputQueue.Count > 0 && inputQueue.Count <= 2)
+        {
+            if (inputQueue.Peek() == "softHit")
+            {
+                ShoftAttack();
+            }
+
+            if(inputQueue.Peek() == "strongHit")
+            {
+                StrongAttack();
+            }
+        }
+
+        if (inputQueue.Count == 3)
+        {
+            List<string> actionList = inputQueue.ToList();
+            switch ((actionList[0], actionList[1], actionList[2]))
+            {
+                case ("softHit", "softHit", "softHit"):
+                    anim.SetInteger("finish", 0);
+                    break;
+                case ("softHit", "softHit", "strongHit"):
+                    anim.SetInteger("finish", 1);
+                    break;
+                case ("softHit", "strongHit", "softHit"):
+                    anim.SetInteger("finish", 2);
+                    break;
+                case ("softHit", "strongHit", "strongHit"):
+                    anim.SetInteger("finish", 3);
+                    break;
+                case ("strongHit", "softHit", "softHit"):
+                    anim.SetInteger("finish", 4);
+                    break;
+                case ("strongHit", "softHit", "strongHit"):
+                    anim.SetInteger("finish", 5);
+                    break;
+                case ("strongHit", "strongHit", "softHit"):
+                    anim.SetInteger("finish", 6);
+                    break;
+                case ("strongHit", "strongHit", "strongHit"):
+                    anim.SetInteger("finish", 7);
+                    break;
+            }
+        }
+    }
+
+    void QuitarAccion()
+    {
+        inputQueue.Clear();
     }
 
     #region movement functions
@@ -223,37 +314,31 @@ public class Player : MonoBehaviour
     }
     #endregion
 
-    #region Basic player atack
+    #region atack
     public void SetAttackingFalse()
     {
         attacking = false;
         anim.SetBool("attacking", false);
     }
 
-    private void ExecuteBasicAttack()
+    private void ShoftAttack()
     {
         if (isDashing || attacking || hitted) return;
 
         attacking = true;
         anim.SetBool("attacking", attacking);
-        
-        GameObject attack = (GameObject)Instantiate(Resources.Load("Prefabs/Attacks/AttackSquare"), new Vector3(transform.position.x, transform.position.y, 0), Quaternion.identity, transform);
-        
-        if (direction.x > 0)
-        {
-            attack.transform.rotation = Quaternion.Euler(new Vector3(attack.transform.rotation.x, attack.transform.rotation.y, 90));
-            attack.GetComponent<BasicAttack>().SetDirection("right");
-        } 
-        else if (direction.x < 0)
-        {
-            attack.transform.rotation = Quaternion.Euler(new Vector3(attack.transform.rotation.x, attack.transform.rotation.y, 90));
-            attack.GetComponent<BasicAttack>().SetDirection("left");
-        }
-        else if (direction.y > 0)
-        {
-            attack.GetComponent<BasicAttack>().SetDirection("up");
-        }
+        rb.velocity = Vector2.zero;
+
+        fist.ShoftHit(atkDist[0], direction, tiempoCD[0], atkMng, damageDeal[0]);
+    }
+
+    private void StrongAttack()
+    {
+        attacking = true;
+        anim.SetBool("attacking", attacking);
+        rb.velocity = Vector2.zero;
+
+        fist.StrongHit(atkDist[1], direction, tiempoCD[1], atkMng, damageDeal[1]);
     }
     #endregion
-
 }
