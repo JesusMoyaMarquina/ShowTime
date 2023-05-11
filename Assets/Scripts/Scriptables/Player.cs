@@ -14,7 +14,7 @@ public class Player : MonoBehaviour
     private Animator anim;
     private SpriteRenderer spriteRenderer;
     private PlayerInput playerInput;
-    private Fist fist;
+    private int actualWeapon;
 
     //Color variables
     private Color baseColor;
@@ -60,7 +60,7 @@ public class Player : MonoBehaviour
         anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         playerInput = GetComponent<PlayerInput>();
-        fist = GetComponent<Fist>();
+        actualWeapon = 0;
 
         //Start direction
         direction = new Vector2(0, -1 * speed);
@@ -105,12 +105,6 @@ public class Player : MonoBehaviour
 
             otherPlayerHealthBar = GameObject.Find("OtherPlayerHealthBar");
         }
-        movement = playerInput.actions["Move"].ReadValue<Vector2>();
-        isDash = playerInput.actions["Dash"].ReadValue<float>() == 1 ? true : false;
-        if (playerInput.actions["Light Hit"].triggered)
-        {
-            executeBasicAttack();
-        }
     }
 
     void Update()
@@ -139,9 +133,6 @@ public class Player : MonoBehaviour
         if (playerInput.actions["Dash"].ReadValue<float>() == 1 && !isDashInCooldown)
             PlayerDash();
 
-        if (playerInput.actions["Light Hit"].triggered)
-            ExecuteBasicAttack();
-
         if (isInmortal)
         {
             if (startInmortalTime + inmortalityTime < Time.time)
@@ -150,28 +141,21 @@ public class Player : MonoBehaviour
                 spriteRenderer.color = baseColor;
             }
         }
-        if (playerInput.actions["SoftHit"].triggered)
-        {
-            inputQueue.Enqueue("softHit");
-            Invoke(nameof(QuitarAccion), 2);
-        }
 
-        if (playerInput.actions["StrongHit"].triggered)
+        if (inputQueue.Count >= 0 && inputQueue.Count <= 2)
         {
-            inputQueue.Enqueue("strongHit");
-            Invoke(nameof(QuitarAccion), 2);
-        }
-
-        if (inputQueue.Count > 0 && inputQueue.Count <= 2)
-        {
-            if (inputQueue.Peek() == "softHit")
+            if (playerInput.actions["SoftHit"].triggered)
             {
+                inputQueue.Enqueue("softHit");
                 ShoftAttack();
+                Invoke(nameof(QuitarAccion), 2);
             }
 
-            if(inputQueue.Peek() == "strongHit")
+            if (playerInput.actions["StrongHit"].triggered)
             {
+                inputQueue.Enqueue("strongHit");
                 StrongAttack();
+                Invoke(nameof(QuitarAccion), 2);
             }
         }
 
@@ -186,23 +170,23 @@ public class Player : MonoBehaviour
                 case ("softHit", "softHit", "strongHit"):
                     anim.SetInteger("finish", 1);
                     break;
-                case ("softHit", "strongHit", "softHit"):
+                case ("strongHit", "softHit", "softHit"):
                     anim.SetInteger("finish", 2);
                     break;
-                case ("softHit", "strongHit", "strongHit"):
+                case ("strongHit", "softHit", "strongHit"):
                     anim.SetInteger("finish", 3);
                     break;
-                case ("strongHit", "softHit", "softHit"):
-                    anim.SetInteger("finish", 4);
+                case ("softHit", "strongHit", "softHit"):
+                    anim.SetInteger("finish", 0);
                     break;
-                case ("strongHit", "softHit", "strongHit"):
-                    anim.SetInteger("finish", 5);
+                case ("softHit", "strongHit", "strongHit"):
+                    anim.SetInteger("finish", 1);
                     break;
                 case ("strongHit", "strongHit", "softHit"):
-                    anim.SetInteger("finish", 6);
+                    anim.SetInteger("finish", 2);
                     break;
                 case ("strongHit", "strongHit", "strongHit"):
-                    anim.SetInteger("finish", 7);
+                    anim.SetInteger("finish", 3);
                     break;
             }
         }
@@ -228,13 +212,12 @@ public class Player : MonoBehaviour
     {
         if (isDashing || attacking) return;
 
-        if (rb.velocity != Vector2.zero)
+        if (rb.velocity.x != 0)
             direction = rb.velocity;
 
-        spriteRenderer.flipX = direction.x > 0.1f;
+        spriteRenderer.flipX = direction.x > 0;
         
-        anim.SetFloat("speedX", Mathf.Abs(rb.velocity.x));
-        anim.SetFloat("speedY", rb.velocity.y);
+        anim.SetFloat("speed", rb.velocity.magnitude);
     }
 
     private void PlayerDash()
@@ -323,22 +306,32 @@ public class Player : MonoBehaviour
 
     private void ShoftAttack()
     {
-        if (isDashing || attacking || hitted) return;
+        Weapon weapon;
 
-        attacking = true;
-        anim.SetBool("attacking", attacking);
-        rb.velocity = Vector2.zero;
+        //Default = Fist
+        switch (actualWeapon) 
+        {
+            default:
+                weapon = GetComponent<Fist>();
+                break;
+        }
 
-        fist.ShoftHit(atkDist[0], direction, tiempoCD[0], atkMng, damageDeal[0]);
+        weapon.SoftHit(direction, inputQueue.Count);
     }
 
     private void StrongAttack()
     {
-        attacking = true;
-        anim.SetBool("attacking", attacking);
-        rb.velocity = Vector2.zero;
+        Weapon weapon;
 
-        fist.StrongHit(atkDist[1], direction, tiempoCD[1], atkMng, damageDeal[1]);
+        //Default = Fist
+        switch (actualWeapon)
+        {
+            default:
+                weapon = GetComponent<Fist>();
+                break;
+        }
+
+        weapon.StrongHit(direction, inputQueue.Count);
     }
     #endregion
 }

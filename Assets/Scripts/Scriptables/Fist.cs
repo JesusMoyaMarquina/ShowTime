@@ -5,20 +5,45 @@ using UnityEngine;
 
 public class Fist : Weapon
 {
-    protected Vector2[] atkDist = new Vector2[2];
-
-    protected float[] tiempoCD = new float[2];
-    protected float[] damageDeal = new float[2];
+    public float[] softCD = new float[3];
+    public float[] strongCD = new float[3];
+    public float[] softDamages = new float[3];
+    public float[] strongDamages = new float[3];
+    public GameObject[] colliders;
 
     protected float atkMng = 10;
 
-    public void ShoftHit(Vector2 atkDist, Vector2 playerDir, float tiempoCD, float atkMng, float damageDeal)
+    private float actualDmg = 0;
+
+    override
+    public void SoftHit(Vector2 playerDir, int attackInCombo)
     {
-        AttackB(atkDist, playerDir, tiempoCD, atkMng, damageDeal);
+        attackInCombo = attackInCombo - 1;
+
+        if (!isInCD)
+        {
+            Hit(playerDir, softCD[attackInCombo], atkMng);
+            actualDmg = softDamages[attackInCombo];
+        }
     }
 
-    public void StrongHit(Vector2 atkDist, Vector2 playerDir, float tiempoCD, float atkMng, float damageDeal)
+    override
+    public void StrongHit(Vector2 playerDir, int attackInCombo)
     {
-        AttackB(atkDist, playerDir, tiempoCD, atkMng, damageDeal);
+        attackInCombo = attackInCombo - 1;
+
+        if (!isInCD)
+        {
+            Hit(playerDir, strongCD[attackInCombo], atkMng);
+            actualDmg = strongDamages[attackInCombo];
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Enemy"))
+        {
+            collision.GetComponent<EnemyMovement>().GetDamage(actualDmg);
+        }
     }
 }
