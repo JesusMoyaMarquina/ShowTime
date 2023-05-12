@@ -241,8 +241,7 @@ public class Player : MonoBehaviour
 
         isDashing = true;
         anim.SetBool("isDashing", isDashing);
-        anim.SetFloat("speedX", Mathf.Abs(rb.velocity.x));
-        anim.SetFloat("speedY", rb.velocity.y);
+        anim.SetFloat("speed", rb.velocity.magnitude);
     }
 
     private void StopDashing()
