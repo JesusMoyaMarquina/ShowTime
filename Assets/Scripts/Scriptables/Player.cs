@@ -142,20 +142,34 @@ public class Player : MonoBehaviour
             }
         }
 
-        if (inputQueue.Count >= 0 && inputQueue.Count <= 2)
+        if (inputQueue.Count >= 0 && inputQueue.Count <= 2 && !attacking)
         {
             if (playerInput.actions["SoftHit"].triggered)
             {
+                anim.SetInteger("finish", -1);
+                attacking = true;
+
                 inputQueue.Enqueue("softHit");
                 ShoftAttack();
+                CancelInvoke(nameof(QuitarAccion));
                 Invoke(nameof(QuitarAccion), 2);
+
+                anim.SetBool("attacking", attacking);
+                anim.SetTrigger("softAttack");
             }
 
             if (playerInput.actions["StrongHit"].triggered)
             {
+                anim.SetInteger("finish", -1);
+                attacking = true;
+
                 inputQueue.Enqueue("strongHit");
                 StrongAttack();
+                CancelInvoke(nameof(QuitarAccion));
                 Invoke(nameof(QuitarAccion), 2);
+
+                anim.SetBool("attacking", attacking);
+                anim.SetTrigger("strongAttack");
             }
         }
 
@@ -167,28 +181,29 @@ public class Player : MonoBehaviour
                 case ("softHit", "softHit", "softHit"):
                     anim.SetInteger("finish", 0);
                     break;
-                case ("softHit", "softHit", "strongHit"):
+                case ("softHit", "strongHit", "softHit"):
                     anim.SetInteger("finish", 1);
                     break;
                 case ("strongHit", "softHit", "softHit"):
                     anim.SetInteger("finish", 2);
                     break;
-                case ("strongHit", "softHit", "strongHit"):
+                case ("strongHit", "strongHit", "softHit"):
                     anim.SetInteger("finish", 3);
                     break;
-                case ("softHit", "strongHit", "softHit"):
+                case ("softHit", "softHit", "strongHit"):
                     anim.SetInteger("finish", 0);
                     break;
                 case ("softHit", "strongHit", "strongHit"):
                     anim.SetInteger("finish", 1);
                     break;
-                case ("strongHit", "strongHit", "softHit"):
+                case ("strongHit", "softHit", "strongHit"):
                     anim.SetInteger("finish", 2);
                     break;
                 case ("strongHit", "strongHit", "strongHit"):
                     anim.SetInteger("finish", 3);
                     break;
             }
+            QuitarAccion();
         }
     }
 
@@ -202,7 +217,7 @@ public class Player : MonoBehaviour
 
     private void PlayerVelocity()
     {
-        Vector2 pDirection = isDashing ? direction / 10 : movement.normalized; ;
+        Vector2 pDirection = isDashing ? direction / 10 : movement.normalized;
         float pSpeed = isDashing ? speed * 2 : attacking || hitted ? speed / 2 : speed;
 
         rb.velocity = pDirection * pSpeed;
