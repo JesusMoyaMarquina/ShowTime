@@ -32,13 +32,4 @@ public class BasicAttack : MonoBehaviour
     {
         Destroy(gameObject);
     }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.tag == "Enemy") 
-        {
-            float damage = GetComponentInParent<Player>().damage;
-            collision.GetComponent<EnemyMovement>().GetDamage(damage);
-        }
-    }
 }

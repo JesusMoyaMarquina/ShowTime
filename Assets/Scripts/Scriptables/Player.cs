@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Linq;
 
 public class Player : MonoBehaviour
 {
@@ -12,13 +14,16 @@ public class Player : MonoBehaviour
     private Animator anim;
     private SpriteRenderer spriteRenderer;
     private PlayerInput playerInput;
+    private int actualWeapon;
 
+    //Color variables
+    private Color baseColor;
+    private Color hitColor;
 
     //Movement variables
     public float speed;
     private Vector2 direction;
     private Vector2 movement;
-    private bool isDash;
     private bool isDashing;
     private bool isDashInCooldown;
 
@@ -27,124 +32,222 @@ public class Player : MonoBehaviour
     private bool hitted;
     private bool alive;
     private float currentHealth;
+    private float inmortalityTime;
+    private float startInmortalTime;
+    private bool isInmortal;
 
     private GameObject playerHealthBar;
     private GameObject otherPlayerHealthBar;
 
-    //Mocked basic attack variables
-    public float damage;
+    //Atack Stats
+    protected Vector2[] atkDist = new Vector2[2];
+
+    protected float[] tiempoCD = new float[2];
+    protected float[] damageDeal = new float[2];
+
+    protected float atkMng = 10;
+
     private bool attacking;
 
+    //Combo sistem
+    private Queue<string> inputQueue;
 
     void Start()
     {
+        GameManager.OnGameStateChange += GameManagerOnGameStateChange;
         //Start player basics
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         playerInput = GetComponent<PlayerInput>();
+        actualWeapon = 0;
 
         //Start direction
         direction = new Vector2(0, -1 * speed);
+
+        //Start color
+        baseColor = spriteRenderer.color;
+        Color aux = baseColor;
+        aux.a = 0.5f;
+        hitColor = aux;
 
         //Start health
         alive = true;
         hitted = false;
         currentHealth = maxHealth;
+        inmortalityTime = 1f;
 
-        playerHealthBar = GameObject.Find("PlayerHealthProgressBar");
-        playerHealthBar.GetComponent<EntityProgressBar>().maximum = maxHealth;
-        playerHealthBar.GetComponent<EntityProgressBar>().current = currentHealth;
-        playerHealthBar.GetComponent<EntityProgressBar>().previousCurrent = currentHealth;
-        playerHealthBar.GetComponent<EntityProgressBar>().GetCurrentFill();
+        //Atack Stats
+        atkDist[0] = new Vector2();
+        atkDist[1] = new Vector2();
 
-        otherPlayerHealthBar = GameObject.Find("OtherPlayerHealthBar");
+        tiempoCD[0] = 1;
+        tiempoCD[1] = 1.5f;
 
+        damageDeal[0] = 15;
+        damageDeal[1] = 25;
+
+        //Combo Sistem
+        inputQueue = new Queue<string>();
         //Mocked basic attack
         attacking = false;
     }
 
+    private void GameManagerOnGameStateChange(GameState state)
+    {
+        if (state == GameState.Combat)
+        {
+            playerHealthBar = GameObject.Find("PlayerHealthProgressBar");
+            playerHealthBar.GetComponent<EntityProgressBar>().maximum = maxHealth;
+            playerHealthBar.GetComponent<EntityProgressBar>().current = currentHealth;
+            playerHealthBar.GetComponent<EntityProgressBar>().previousCurrent = currentHealth;
+            playerHealthBar.GetComponent<EntityProgressBar>().GetCurrentFill();
+
+            otherPlayerHealthBar = GameObject.Find("OtherPlayerHealthBar");
+        }
+    }
+
     void Update()
     {
-        if (!alive || hitted || attacking)
-        {
-            return;
-        }
-        movement = playerInput.actions["Move"].ReadValue<Vector2>();
-        isDash = playerInput.actions["Dash"].ReadValue<float>() == 1 ? true : false;
-        if (playerInput.actions["Light Hit"].triggered)
-        {
-            executeBasicAttack();
-        }
+        if (GameManager.Instance.state == GameState.Pause) return;
+
+        PlayerMovement();
     }
 
     private void FixedUpdate()
     {
-        if (!alive || attacking)
-        {
-            return;
-        }
+        if (!alive) return;
+
         CameraFollowUp();
-        if (isDash && !isDashInCooldown) PlayerDash();
-        if (!isDashing)
+    }
+
+    private void PlayerMovement()
+    {
+        if (!alive) return;
+
+        movement = playerInput.actions["Move"].ReadValue<Vector2>();
+
+        PlayerVelocity();
+        PlayerDirection();
+
+        if (playerInput.actions["Dash"].ReadValue<float>() == 1 && !isDashInCooldown)
+            PlayerDash();
+
+        if (isInmortal)
         {
-            PlayerMovement(speed);
-            PlayerDirection();
+            if (startInmortalTime + inmortalityTime < Time.time)
+            {
+                isInmortal = false;
+                spriteRenderer.color = baseColor;
+            }
         }
-        else
+
+        if (inputQueue.Count >= 0 && inputQueue.Count <= 2 && !attacking)
         {
-            PlayerMovement(speed + 10, true);
+            if (playerInput.actions["SoftHit"].triggered)
+            {
+                anim.SetInteger("finish", -1);
+                attacking = true;
+
+                inputQueue.Enqueue("softHit");
+                ShoftAttack();
+                CancelInvoke(nameof(QuitarAccion));
+                Invoke(nameof(QuitarAccion), 2);
+
+                anim.SetBool("attacking", attacking);
+                anim.SetTrigger("softAttack");
+            }
+
+            if (playerInput.actions["StrongHit"].triggered)
+            {
+                anim.SetInteger("finish", -1);
+                attacking = true;
+
+                inputQueue.Enqueue("strongHit");
+                StrongAttack();
+                CancelInvoke(nameof(QuitarAccion));
+                Invoke(nameof(QuitarAccion), 2);
+
+                anim.SetBool("attacking", attacking);
+                anim.SetTrigger("strongAttack");
+            }
         }
+
+        if (inputQueue.Count == 3)
+        {
+            List<string> actionList = inputQueue.ToList();
+            switch ((actionList[0], actionList[1], actionList[2]))
+            {
+                case ("softHit", "softHit", "softHit"):
+                    anim.SetInteger("finish", 0);
+                    break;
+                case ("softHit", "strongHit", "softHit"):
+                    anim.SetInteger("finish", 1);
+                    break;
+                case ("strongHit", "softHit", "softHit"):
+                    anim.SetInteger("finish", 2);
+                    break;
+                case ("strongHit", "strongHit", "softHit"):
+                    anim.SetInteger("finish", 3);
+                    break;
+                case ("softHit", "softHit", "strongHit"):
+                    anim.SetInteger("finish", 0);
+                    break;
+                case ("softHit", "strongHit", "strongHit"):
+                    anim.SetInteger("finish", 1);
+                    break;
+                case ("strongHit", "softHit", "strongHit"):
+                    anim.SetInteger("finish", 2);
+                    break;
+                case ("strongHit", "strongHit", "strongHit"):
+                    anim.SetInteger("finish", 3);
+                    break;
+            }
+            QuitarAccion();
+        }
+    }
+
+    void QuitarAccion()
+    {
+        inputQueue.Clear();
     }
 
     #region movement functions
-    private void CameraFollowUp()
-    {
-        Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -10);
-    }
+    private void CameraFollowUp() => Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -10);
 
-    private void PlayerMovement(float speed, bool isDashing = false)
+    private void PlayerVelocity()
     {
-        Vector2 playerVelocity = isDashing ? direction / 10 : movement.normalized;
+        Vector2 pDirection = isDashing ? direction / 10 : movement.normalized;
+        float pSpeed = isDashing ? speed * 2 : attacking || hitted ? speed / 2 : speed;
 
-        rb.velocity = playerVelocity * speed;
+        rb.velocity = pDirection * pSpeed;
     }
 
     private void PlayerDirection()
     {
-        if (rb.velocity.x > 0.1f)
-        {
-            spriteRenderer.flipX = true;
-        }
-        else if (rb.velocity.x < -0.1f)
-        {
-            spriteRenderer.flipX = false;
-        }
-        if (rb.velocity != Vector2.zero)
-        {
-            direction = rb.velocity;
-        }
-        if (direction.x < 0.1f)
-        {
-            spriteRenderer.flipX = false;
-        }
+        if (isDashing || attacking) return;
 
-        anim.SetFloat("speedX", Mathf.Abs(rb.velocity.x));
-        anim.SetFloat("speedY", rb.velocity.y);
+        if (rb.velocity.x != 0)
+            direction = rb.velocity;
+
+        spriteRenderer.flipX = direction.x > 0;
+        
+        anim.SetFloat("speed", rb.velocity.magnitude);
     }
 
     private void PlayerDash()
     {
+        if (attacking || hitted) return;
+
         isDashing = true;
-        anim.SetBool("isDashing", true);
-        anim.SetFloat("speedX", Mathf.Abs(rb.velocity.x));
-        anim.SetFloat("speedY", rb.velocity.y);
+        anim.SetBool("isDashing", isDashing);
+        anim.SetFloat("speed", rb.velocity.magnitude);
     }
 
     private void StopDashing()
     {
         isDashing = false;
-        anim.SetBool("isDashing", false);
+        anim.SetBool("isDashing", isDashing);
         StartCoroutine(DashCooldown());
     }
 
@@ -159,24 +262,36 @@ public class Player : MonoBehaviour
     #region stats functions
     public void GetDamage(float damage)
     {
-        if (hitted || isDashing)
-        {
-            return;
-        }
-        currentHealth -= damage;
-        hitted = true;
-        anim.SetBool("hitted", hitted);
+        if (isInmortal || isDashing) return;
 
-        if (currentHealth <= 0) 
+        currentHealth -= damage;
+
+        DamageAnimation();
+
+        playerHealthBar.GetComponent<EntityProgressBar>().current = currentHealth;
+        playerHealthBar.GetComponent<EntityProgressBar>().GetCurrentFill();
+    }
+
+    private void DamageAnimation()
+    {
+        if (currentHealth <= 0)
         {
             currentHealth = 0;
             alive = false;
             rb.velocity = Vector2.zero;
             anim.SetBool("alive", alive);
         }
-
-        playerHealthBar.GetComponent<EntityProgressBar>().current = currentHealth;
-        playerHealthBar.GetComponent<EntityProgressBar>().GetCurrentFill();
+        else
+        {
+            if (!attacking)
+            {
+                hitted = true;
+                anim.SetBool("hitted", hitted);
+            }
+            startInmortalTime = Time.time;
+            isInmortal = true;
+            spriteRenderer.color = hitColor;
+        }
     }
 
     public void SetActiveFalse()
@@ -196,40 +311,41 @@ public class Player : MonoBehaviour
     }
     #endregion
 
-    #region Basic player atack
+    #region atack
     public void SetAttackingFalse()
     {
         attacking = false;
         anim.SetBool("attacking", false);
     }
 
-    private void executeBasicAttack()
+    private void ShoftAttack()
     {
-        attacking = true;
-        anim.SetBool("attacking", attacking);
-        rb.velocity = Vector2.zero;
-        if (direction.x > 0)
+        Weapon weapon;
+
+        //Default = Fist
+        switch (actualWeapon) 
         {
-            GameObject attack = (GameObject)Instantiate(Resources.Load("Prefabs/Attacks/AttackSquare"), new Vector3(transform.position.x, transform.position.y, 0), Quaternion.identity, transform);
-            attack.transform.rotation = Quaternion.Euler(new Vector3(attack.transform.rotation.x, attack.transform.rotation.y, 90));
-            attack.GetComponent<BasicAttack>().SetDirection("right");
-        } 
-        else if (direction.x < 0)
-        {
-            GameObject attack = (GameObject)Instantiate(Resources.Load("Prefabs/Attacks/AttackSquare"), new Vector3(transform.position.x, transform.position.y, 0), Quaternion.identity, transform);
-            attack.transform.rotation = Quaternion.Euler(new Vector3(attack.transform.rotation.x, attack.transform.rotation.y, 90));
-            attack.GetComponent<BasicAttack>().SetDirection("left");
+            default:
+                weapon = GetComponent<Fist>();
+                break;
         }
-        else if (direction.y > 0)
+
+        weapon.SoftHit(direction, inputQueue.Count);
+    }
+
+    private void StrongAttack()
+    {
+        Weapon weapon;
+
+        //Default = Fist
+        switch (actualWeapon)
         {
-            GameObject attack = (GameObject)Instantiate(Resources.Load("Prefabs/Attacks/AttackSquare"), new Vector3(transform.position.x, transform.position.y, 0), Quaternion.identity, transform);
-            attack.GetComponent<BasicAttack>().SetDirection("up");
+            default:
+                weapon = GetComponent<Fist>();
+                break;
         }
-        else
-        {
-            GameObject attack = (GameObject)Instantiate(Resources.Load("Prefabs/Attacks/AttackSquare"), new Vector3(transform.position.x, transform.position.y, 0), Quaternion.identity, transform);
-        }
+
+        weapon.StrongHit(direction, inputQueue.Count);
     }
     #endregion
-
 }

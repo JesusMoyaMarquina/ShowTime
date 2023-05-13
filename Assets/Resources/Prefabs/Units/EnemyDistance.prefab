@@ -163,6 +163,7 @@ MonoBehaviour:
   minDistance: 5
   health: 50
   damage: 20
+  distanceToPlayer: 0
   maxDistance: 8
 --- !u!114 &6377769181141655034
 MonoBehaviour:
