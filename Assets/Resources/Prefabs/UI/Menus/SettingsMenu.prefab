@@ -2296,8 +2296,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainAudioMixer: {fileID: 24100000, guid: a9eb0ba15aaf57642bd13b014311f131, type: 2}
-  musicAudioMixer: {fileID: 24100000, guid: cfaaa8095a733da49a32875d0c92dfba, type: 2}
-  FXAudioMixer: {fileID: 24100000, guid: 171328065fddb9e4692693d5acc3394c, type: 2}
   mainVolumePercentageText: {fileID: 7026412677011036353}
   musicVolumePercentageText: {fileID: 7026412676663446486}
   FXVolumePercentageText: {fileID: 7026412677343003520}

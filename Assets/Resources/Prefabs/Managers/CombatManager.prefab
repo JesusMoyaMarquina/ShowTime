@@ -45,7 +45,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de79f194974d7544da766ba34c03a5c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  battleMusic: {fileID: 796824387038009268}
   timerProgressBar: {fileID: 0}
   timerMultiplierProgressBar: {fileID: 0}
   winZone: {fileID: 0}

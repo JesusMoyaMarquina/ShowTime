@@ -45,26 +45,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21b59acb1fbd3da469d535e9e86e1b48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  victoryMenu: {fileID: 0}
-  loseMenu: {fileID: 0}
-  mainMenu: {fileID: 0}
-  pauseMenu: {fileID: 0}
+  principalSceneMenu: {fileID: 0}
   settingsMenu: {fileID: 0}
   keybindsMenu: {fileID: 0}
-  gameUI: {fileID: 0}
-  mainAudioMixer: {fileID: 24100000, guid: a9eb0ba15aaf57642bd13b014311f131, type: 2}
-  musicAudioMixer: {fileID: 24100000, guid: cfaaa8095a733da49a32875d0c92dfba, type: 2}
-  FXAudioMixer: {fileID: 24100000, guid: 171328065fddb9e4692693d5acc3394c, type: 2}
-  mainVolumePercentageText: {fileID: 0}
-  musicVolumePercentageText: {fileID: 0}
-  FXVolumePercentageText: {fileID: 0}
-  mainVolumeSlider: {fileID: 0}
-  musicVolumeSlider: {fileID: 0}
-  FXVolumeSlider: {fileID: 0}
-  resolutionDropdown: {fileID: 0}
-  graphicsDropdown: {fileID: 0}
-  fullscreenToggle: {fileID: 0}
-  inputActions: {fileID: -944628639613478452, guid: 8026b8365b5bfa7439446f715aa928f4, type: 3}
+  closeDelay: 0
 --- !u!114 &3650061362129382475
 MonoBehaviour:
   m_ObjectHideFlags: 0

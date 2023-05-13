@@ -6064,6 +6064,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5526421497139514543, guid: 815897c2898ba1443bc9451ad57672b4, type: 3}
+      propertyPath: meleeUnit
+      value: 
+      objectReference: {fileID: 5037429430027693209, guid: 1e4aec2b6d6c6f94e81d7f7e2a24f654, type: 3}
+    - target: {fileID: 5526421497139514543, guid: 815897c2898ba1443bc9451ad57672b4, type: 3}
+      propertyPath: rangedUnit
+      value: 
+      objectReference: {fileID: 5037429430027693209, guid: 66dc63d1a28706640b90f7fd06d1205b, type: 3}
+    - target: {fileID: 5526421497139514543, guid: 815897c2898ba1443bc9451ad57672b4, type: 3}
+      propertyPath: unitContaner
+      value: 
+      objectReference: {fileID: 1976600395}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 815897c2898ba1443bc9451ad57672b4, type: 3}
 --- !u!1001 &6002727614924392364
@@ -6143,6 +6155,10 @@ PrefabInstance:
       propertyPath: winZone
       value: 
       objectReference: {fileID: 1047872101641241402}
+    - target: {fileID: 7787846795857698412, guid: 18a5144501cd0c44cadebe2837c878c3, type: 3}
+      propertyPath: combatTime
+      value: 60
+      objectReference: {fileID: 0}
     - target: {fileID: 7787846795857698412, guid: 18a5144501cd0c44cadebe2837c878c3, type: 3}
       propertyPath: unitManager
       value: 
