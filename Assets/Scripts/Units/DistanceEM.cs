@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class DistanceEM : EnemyMovement
 {
+    public AudioSource audioSource;
+    public AudioClip attackSound, throwSound;
+
     public float maxDistance;
     private bool inMaxRange;
     private bool inMinRange;
@@ -40,5 +43,15 @@ public class DistanceEM : EnemyMovement
         lastAttack = Time.time;
         attacking = false;
         anim.SetBool("attacking", attacking);
+    }
+
+    public void PlayAttackFX()
+    {
+        audioSource.PlayOneShot(attackSound);
+    }
+
+    public void PlayThrowFX()
+    {
+        audioSource.PlayOneShot(throwSound);
     }
 }

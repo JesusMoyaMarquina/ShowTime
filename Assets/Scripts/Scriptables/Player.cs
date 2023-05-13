@@ -49,12 +49,13 @@ public class Player : MonoBehaviour
 
     private bool attacking;
 
-    //Combo sistem
+    //Combo system
     private Queue<string> inputQueue;
 
-    void Start()
+    private void Awake()
     {
         GameManager.OnGameStateChange += GameManagerOnGameStateChange;
+
         //Start player basics
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
@@ -89,7 +90,8 @@ public class Player : MonoBehaviour
 
         //Combo Sistem
         inputQueue = new Queue<string>();
-        //Mocked basic attack
+
+        //Attack
         attacking = false;
     }
 
@@ -102,8 +104,6 @@ public class Player : MonoBehaviour
             playerHealthBar.GetComponent<EntityProgressBar>().current = currentHealth;
             playerHealthBar.GetComponent<EntityProgressBar>().previousCurrent = currentHealth;
             playerHealthBar.GetComponent<EntityProgressBar>().GetCurrentFill();
-
-            otherPlayerHealthBar = GameObject.Find("OtherPlayerHealthBar");
         }
     }
 

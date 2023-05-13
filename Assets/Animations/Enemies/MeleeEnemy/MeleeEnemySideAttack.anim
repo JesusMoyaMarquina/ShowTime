@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: EnemySideAttack
+  m_Name: MeleeEnemySideAttack
   serializedVersion: 6
   m_Legacy: 0
   m_Compressed: 0
@@ -123,10 +123,17 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
+  - time: 0
+    functionName: PlayAttackFX
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
   - time: 1.6666666
     functionName: SetAttackingFalse
     data: 
-    objectReferenceParameter: {fileID: 11500000, guid: 6da2a6a012b797a4dac64529e205abb2, type: 3}
+    objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0

@@ -8,6 +8,9 @@ using UnityEngine.UIElements;
 
 public class MeleEM : EnemyMovement
 {
+    public AudioSource audioSource;
+    public AudioClip attackSound;
+
     private GameObject sharp;
 
     public override void Tracking()
@@ -35,5 +38,10 @@ public class MeleEM : EnemyMovement
         attacking = false;
         if (sharp != null) sharp.GetComponent<MeleAttack>().DestroyObject();
         anim.SetBool("attacking", attacking);
+    }
+
+    public void PlayAttackFX()
+    {
+        audioSource.PlayOneShot(attackSound);
     }
 }
