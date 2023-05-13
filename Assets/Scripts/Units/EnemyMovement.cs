@@ -114,20 +114,26 @@ public abstract class EnemyMovement : MonoBehaviour
         }
     }
 
-    public char SetDirection()
+    public char SetDirection(bool withFourAngles = false)
     {
         char look;
 
-        if (Mathf.Abs(direction.x) >= Mathf.Abs(direction.y))
+        if (withFourAngles)
+            if (Mathf.Abs(direction.x) >= Mathf.Abs(direction.y))
+                if (direction.x > 0)
+                    look = 'L';
+                else
+                    look = 'R';
+            else
+                if (direction.y >= 0)
+                    look = 'U';
+                else
+                    look = 'D';
+        else
             if (direction.x > 0)
                 look = 'L';
             else
                 look = 'R';
-        else
-            if (direction.y >= 0)
-                look = 'U';
-            else
-                look = 'D';
 
         return look;
     }
@@ -140,25 +146,13 @@ public abstract class EnemyMovement : MonoBehaviour
             return;
         }
 
-        bool isDown = false;
-        bool isUp = false;
-        bool isSide = false;
-
         switch (SetDirection())
         {
             case 'L':
                 spriteRenderer.flipX = true;
-                isSide = true;
                 break;
             case 'R':
                 spriteRenderer.flipX = false;
-                isSide = true;
-                break;
-            case 'U':
-                isUp = true;
-                break;
-            case 'D':
-                isDown = true;
                 break;
         }
 
@@ -171,10 +165,7 @@ public abstract class EnemyMovement : MonoBehaviour
         {
             rb.mass = 0.025f;
 
-            if (isUp || isDown) 
-                rb.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
-            else if (isSide)
-                rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+            rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
             
             if (!hitted && (!attacking && Time.time > lastAttack + attackCooldown))
             {
@@ -185,9 +176,6 @@ public abstract class EnemyMovement : MonoBehaviour
 
         anim.SetBool("attacking", attacking);
         anim.SetBool("isMoving", inMovementRange);
-        anim.SetBool("isUp", isUp);
-        anim.SetBool("isSide", isSide);
-        anim.SetBool("isDown", isDown);
     }
 
     #region stats functions
