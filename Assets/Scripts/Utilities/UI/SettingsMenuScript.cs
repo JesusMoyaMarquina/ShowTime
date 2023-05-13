@@ -140,9 +140,9 @@ public class SettingsMenuScript : MonoBehaviour
 
     void LoadParams()
     {
-        mainAudioMixer.SetFloat("volume", PlayerPrefs.GetFloat(SoundManager.MAIN_KEY));
-        musicAudioMixer.SetFloat("volume", PlayerPrefs.GetFloat(SoundManager.MUSIC_KEY));
-        FXAudioMixer.SetFloat("volume", PlayerPrefs.GetFloat(SoundManager.FX_KEY));
+        mainVolumeSlider.value = PlayerPrefs.GetFloat(SoundManager.MAIN_KEY);
+        musicVolumeSlider.value = PlayerPrefs.GetFloat(SoundManager.MUSIC_KEY);
+        FXVolumeSlider.value = PlayerPrefs.GetFloat(SoundManager.FX_KEY);
         resolutionDropdown.value = PlayerPrefs.GetInt(RESOLUTION_KEY);
         graphicsDropdown.value = PlayerPrefs.GetInt(GRAPHICS_KEY);
     }
