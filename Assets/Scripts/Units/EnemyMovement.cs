@@ -188,21 +188,20 @@ public abstract class EnemyMovement : MonoBehaviour
         
         health -= damage;
 
-        if (health <= 0)
-        {
-            cc.enabled = false;
-            rb.constraints = RigidbodyConstraints2D.FreezeAll;
-            health = 0;
-            alive = false;
-            anim.SetBool("alive", alive);
-        }
-        
+        CheckDeadCondition();
+
         hitted = false;
         anim.SetBool("hitted", hitted);
 
         if (!attacking)
             hitted = true;
             anim.SetBool("hitted", hitted);
+    }
+
+    public void Die()
+    {
+        health = 0;
+        CheckDeadCondition();
     }
 
     public void DestroyThis()
@@ -217,5 +216,18 @@ public abstract class EnemyMovement : MonoBehaviour
     }
 
     public abstract void SetAttackingFalse();
+
+    private void CheckDeadCondition()
+    {
+
+        if (health <= 0)
+        {
+            cc.enabled = false;
+            rb.constraints = RigidbodyConstraints2D.FreezeAll;
+            health = 0;
+            alive = false;
+            anim.SetBool("alive", alive);
+        }
+    }
     #endregion
 }
