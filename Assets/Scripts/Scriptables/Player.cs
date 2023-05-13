@@ -109,7 +109,12 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        if (GameManager.Instance.state == GameState.Pause) return;
+        if (!(GameManager.Instance.state == GameState.Combat))
+        {
+            rb.constraints = RigidbodyConstraints2D.FreezeAll;
+            anim.SetFloat("speed", 0);
+            return;
+        }
 
         PlayerMovement();
     }

@@ -14,7 +14,7 @@ public class SettingsMenuScript : MonoBehaviour
     public const string GRAPHICS_KEY = "graphics";
 
     //Audios
-    public AudioMixer mainAudioMixer, musicAudioMixer, FXAudioMixer;
+    public AudioMixer mainAudioMixer;
     public TextMeshProUGUI mainVolumePercentageText, musicVolumePercentageText, FXVolumePercentageText;
     public Slider mainVolumeSlider, musicVolumeSlider, FXVolumeSlider;
 
@@ -62,19 +62,19 @@ public class SettingsMenuScript : MonoBehaviour
 
     public void SetMainVolume(float volume)
     {
-        mainAudioMixer.SetFloat("volume", volume);
+        mainAudioMixer.SetFloat("mainVolume", volume);
         mainVolumePercentageText.text = (int)((mainVolumeSlider.value * 100 / 80) + 100) + "%";
     }
 
     public void SetMusicVolume(float volume)
     {
-        musicAudioMixer.SetFloat("volume", volume);
+        mainAudioMixer.SetFloat("musicVolume", volume);
         musicVolumePercentageText.text = (int)((musicVolumeSlider.value * 100 / 80) + 100) + "%";
     }
 
     public void SetFXVolume(float volume)
     {
-        FXAudioMixer.SetFloat("volume", volume);
+        mainAudioMixer.SetFloat("fxVolume", volume);
         FXVolumePercentageText.text = (int)((FXVolumeSlider.value * 100 / 80) + 100) + "%";
     }
 

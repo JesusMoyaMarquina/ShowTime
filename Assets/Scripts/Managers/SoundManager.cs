@@ -1,5 +1,7 @@
+using System;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.SceneManagement;
 
 public class SoundManager : MonoBehaviour
 {
@@ -10,8 +12,7 @@ public class SoundManager : MonoBehaviour
 
     public static SoundManager instance;
 
-    public AudioSource source;
-    public AudioMixer main, music, fx;
+    public AudioSource battleMusic, menuMusic;
     public AudioClip gameThemeMusic;
 
     private void Awake()
@@ -24,10 +25,62 @@ public class SoundManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        GameManager.OnGameStateChange += GameManagerOnGameStateChange;
+        SceneManager.sceneLoaded += SceneManagerOnSceneLoaded;
     }
 
-    public void PlayGameThemeMusic()
+    private void SceneManagerOnSceneLoaded(Scene scene, LoadSceneMode loadMode)
     {
-        source.PlayOneShot(gameThemeMusic);
+        if (battleMusic == null || menuMusic == null || battleMusic.enabled == false || menuMusic.enabled == false)
+        {
+            return;
+        }
+
+            switch (scene.buildIndex)
+        {
+            case 0:
+                battleMusic.Stop();
+                menuMusic.Play();
+                break;
+            case 1:
+                menuMusic.Stop();
+                break;
+        }
+    }
+
+    private void GameManagerOnGameStateChange(GameState state)
+    {
+        if (battleMusic == null || menuMusic == null || battleMusic.enabled == false || menuMusic.enabled == false)
+        {
+            return;
+        }
+
+        switch (state)
+        {
+            case GameState.Cinematics:
+                break;
+            case GameState.Combat:
+                battleMusic.Play();
+                menuMusic.Pause();
+                break;
+            case GameState.Pause:
+                battleMusic.Pause();
+                menuMusic.Play();
+                break;
+            case GameState.Vicory:
+                battleMusic.Stop();
+                menuMusic.Play();
+                break;
+            case GameState.Lose:
+                battleMusic.Stop();
+                menuMusic.Play();
+                break;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        GameManager.OnGameStateChange -= GameManagerOnGameStateChange;
     }
 }

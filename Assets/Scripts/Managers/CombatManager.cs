@@ -1,38 +1,23 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using TMPro;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class CombatManager : MonoBehaviour
 {
 
-    public GameObject timerProgressBar;
-    public GameObject timerMultiplierProgressBar;
+    public GameObject timerProgressBar, timerMultiplierProgressBar, winZone;
 
     public UnitManager unitManager;
 
-    public int startGenerateUnit;
-    public int unitIncremental;
-    public int secondsToGenerate;
+    public int startGenerateUnit, unitIncremental, secondsToGenerate;
 
-    public float multiplierTime;
-    public float combatTime;
+    public float multiplierTime, combatTime;
 
     private int generateIteration;
 
-    private bool multiplierActive;
+    private bool multiplierActive, timerPause;
 
-    private float actualTime;
-    private float acumulatedMultiplierTime;
-    private float previousTimes;
-    private float previousTimesNonMultiplied;
-    private float remainingTime;
-    private float beginBattleTime;
-    private float timerSpeed;
-    private float comboMp = 1;
+    private float actualTime, acumulatedMultiplierTime, previousTimes, previousTimesNonMultiplied, remainingTime, beginBattleTime, timerSpeed, comboMp = 1;
 
     protected int cSHelp = 0;
 
@@ -44,13 +29,16 @@ public class CombatManager : MonoBehaviour
 
     private void GameManagerOnGameStateChange(GameState state)
     {
-        if(state == GameState.Combat)
+        switch (state)
         {
-            CutPreviousTimer();
-        } 
-        else if (state == GameState.Pause) 
-        {
-            acumulatedMultiplierTime = actualTime;
+            case GameState.Combat:
+                CutPreviousTimer();
+                break;
+            case GameState.Pause:
+                acumulatedMultiplierTime = actualTime;
+                break;
+            case GameState.Vicory:
+                break;
         }
     }
 
@@ -70,7 +58,10 @@ public class CombatManager : MonoBehaviour
     {
         if (GameManager.Instance.state == GameState.Combat)
         {
-            ManageBattleTime();
+            if (!timerPause)
+            {
+                ManageBattleTime();
+            }
             ManageLoseCondition();
             ManageWinCondition();
         }
@@ -80,6 +71,26 @@ public class CombatManager : MonoBehaviour
     {
         unitManager.GenerateUnits(startGenerateUnit + unitIncremental * generateIteration);
         generateIteration++;
+    }
+    private void HandleCombatInputs()
+    {
+        if (Input.GetButtonDown("Cancel"))
+        {
+            GameManager.Instance.UpdateGameState(GameState.Pause);
+        }
+    }
+
+    void KillAllEnemies()
+    {
+        foreach(EnemyMovement enemy in FindObjectsOfType<EnemyMovement>())
+        {
+            enemy.Die();
+        }
+    }
+
+    void OpenWinZone()
+    {
+        winZone.SetActive(true);
     }
 
     #region State conditions
@@ -107,7 +118,9 @@ public class CombatManager : MonoBehaviour
     {
         if (remainingTime <= 0)
         {
-            GameManager.Instance.UpdateGameState(GameState.Vicory);
+            PauseTimer();
+            KillAllEnemies();
+            OpenWinZone();
         }
     }
     #endregion
@@ -182,38 +195,13 @@ public class CombatManager : MonoBehaviour
         timerProgressBar.GetComponent<ProgressBar>().GetCurrentFill();
         timerProgressBar.GetComponent<ProgressBar>().SetText(sTime);
     }
+
+    void PauseTimer()
+    {
+        timerPause = true;
+    }
     #endregion
 
-    private void HandleCombatInputs()
-    {
-        if (Input.GetButtonDown("Cancel"))
-        {
-            GameManager.Instance.UpdateGameState(GameState.Pause);
-        }
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            for (int i = 0; i < GameObject.Find("Players").transform.childCount; i++)
-            {
-                GameObject.Find("Players").transform.GetChild(i).GetComponent<Player>().GetDamage(20);
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            MultiplyTimeSpeed(1.25f);
-        }
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            MultiplyTimeSpeed(1.5f);
-        }
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            MultiplyTimeSpeed(1.75f);
-        }
-        if (Input.GetKeyDown(KeyCode.V))
-        {
-            MultiplyTimeSpeed(2);
-        }
-    }
     #region Sistema de combos
     public void ComboSistem(bool hit)
     {

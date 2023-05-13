@@ -27,8 +27,8 @@ public class GameManager : MonoBehaviour
 
         switch (newState)
         {
-            case GameState.Dialogs:
-                HandleDialogs();
+            case GameState.Cinematics:
+                HandleCinematic();
                 break;
             case GameState.Combat:
                 HandleCombat();
@@ -49,39 +49,35 @@ public class GameManager : MonoBehaviour
         OnGameStateChange?.Invoke(newState);
     }
 
-    private void HandleDialogs()
+    private void HandleCinematic()
     {
         Debug.Log("Handle Dialogs");
     }
 
     private void HandleCombat()
     {
-        Debug.Log("Handle Combat");
         Time.timeScale = 1f;
     }
 
     private void HandlePause()
     {
-        Debug.Log("Handle Pause");
         Time.timeScale = 0f;
     }
 
     private void HandleVictory()
     {
-        Debug.Log("Handle Victory");
         Time.timeScale = 1f;
     }
 
     private void HandleLose()
     {
-        Debug.Log("Handle Lose");
         Time.timeScale = 1f;
     }
 }
 
 public enum GameState
 {
-    Dialogs,
+    Cinematics,
     Combat,
     Pause,
     Vicory,

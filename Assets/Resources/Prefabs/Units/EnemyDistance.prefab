@@ -164,9 +164,9 @@ MonoBehaviour:
   health: 50
   damage: 20
   distanceToPlayer: 0
+  audioSource: {fileID: 1589246139129536207}
   attackSound: {fileID: 8300000, guid: de1a89a0efdba10489d68f60f333aca2, type: 3}
   throwSound: {fileID: 8300000, guid: db0fe5d1cbd549f46948b45663587420, type: 3}
-  audioSource: {fileID: 1589246139129536207}
   maxDistance: 8
 --- !u!114 &6377769181141655034
 MonoBehaviour:
@@ -192,7 +192,7 @@ AudioSource:
   m_GameObject: {fileID: 5037429430027693209}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 24300002, guid: 171328065fddb9e4692693d5acc3394c, type: 2}
+  OutputAudioMixerGroup: {fileID: -7064156734941427663, guid: a9eb0ba15aaf57642bd13b014311f131, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
