@@ -12,7 +12,7 @@ public class SoundManager : MonoBehaviour
 
     public static SoundManager instance;
 
-    public AudioSource battleMusic, menuMusic;
+    public AudioSource battleMusic, menuMusic, FXSource;
     public AudioClip gameThemeMusic;
 
     private void Awake()
@@ -77,6 +77,11 @@ public class SoundManager : MonoBehaviour
                 menuMusic.Play();
                 break;
         }
+    }
+
+    public void PlayOneShot(AudioClip audioClip)
+    {
+        FXSource.PlayOneShot(audioClip);
     }
 
     private void OnDestroy()

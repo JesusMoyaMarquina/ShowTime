@@ -5,8 +5,10 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ButtonHoverScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class ButtonHoverScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
+    public AudioClip buttonHover, buttonPress, buttonDisabled;
+
     Animator animator;
     Button button;
 
@@ -21,7 +23,9 @@ public class ButtonHoverScript : MonoBehaviour, IPointerEnterHandler, IPointerEx
     {
         if (button.interactable)
         {
+            SoundManager.instance.PlayOneShot(buttonHover);
             animator.SetBool("isHover", true);
+
         }
     }
 
@@ -30,6 +34,17 @@ public class ButtonHoverScript : MonoBehaviour, IPointerEnterHandler, IPointerEx
         if (button.interactable)
         {
             animator.SetBool("isHover", false);
+        }
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (button.interactable)
+        {
+            SoundManager.instance.PlayOneShot(buttonPress);
+        } else
+        {
+            SoundManager.instance.PlayOneShot(buttonDisabled);
         }
     }
 }

@@ -406,6 +406,18 @@ PrefabInstance:
       propertyPath: m_AnchorMin.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7026412676333316401, guid: e3ea6308ca8f3084a8d0cf5b3b4be2e6, type: 3}
+      propertyPath: buttonHover
+      value: 
+      objectReference: {fileID: 8300000, guid: e20e2b443eb69e04684734a7d844e122, type: 3}
+    - target: {fileID: 7026412676333316401, guid: e3ea6308ca8f3084a8d0cf5b3b4be2e6, type: 3}
+      propertyPath: buttonPress
+      value: 
+      objectReference: {fileID: 8300000, guid: da67fb9a30e67464396ee2b979164c05, type: 3}
+    - target: {fileID: 7026412676333316401, guid: e3ea6308ca8f3084a8d0cf5b3b4be2e6, type: 3}
+      propertyPath: buttonDisabled
+      value: 
+      objectReference: {fileID: 8300000, guid: 2d68144795ba3d94d8f9c4de8f3b8388, type: 3}
     - target: {fileID: 7026412676333316404, guid: e3ea6308ca8f3084a8d0cf5b3b4be2e6, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -522,6 +534,18 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7026412677643579761, guid: e3ea6308ca8f3084a8d0cf5b3b4be2e6, type: 3}
+      propertyPath: buttonHover
+      value: 
+      objectReference: {fileID: 8300000, guid: e20e2b443eb69e04684734a7d844e122, type: 3}
+    - target: {fileID: 7026412677643579761, guid: e3ea6308ca8f3084a8d0cf5b3b4be2e6, type: 3}
+      propertyPath: buttonPress
+      value: 
+      objectReference: {fileID: 8300000, guid: da67fb9a30e67464396ee2b979164c05, type: 3}
+    - target: {fileID: 7026412677643579761, guid: e3ea6308ca8f3084a8d0cf5b3b4be2e6, type: 3}
+      propertyPath: buttonDisabled
+      value: 
+      objectReference: {fileID: 8300000, guid: 2d68144795ba3d94d8f9c4de8f3b8388, type: 3}
     - target: {fileID: 7026412678003153392, guid: e3ea6308ca8f3084a8d0cf5b3b4be2e6, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -823,6 +847,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52fcf6e7337096f4cb67d3f16143a15b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttonHover: {fileID: 8300000, guid: e20e2b443eb69e04684734a7d844e122, type: 3}
+  buttonPress: {fileID: 8300000, guid: da67fb9a30e67464396ee2b979164c05, type: 3}
+  buttonDisabled: {fileID: 8300000, guid: 2d68144795ba3d94d8f9c4de8f3b8388, type: 3}
 --- !u!1 &666423783
 GameObject:
   m_ObjectHideFlags: 0
@@ -1728,6 +1755,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52fcf6e7337096f4cb67d3f16143a15b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttonHover: {fileID: 8300000, guid: e20e2b443eb69e04684734a7d844e122, type: 3}
+  buttonPress: {fileID: 8300000, guid: da67fb9a30e67464396ee2b979164c05, type: 3}
+  buttonDisabled: {fileID: 8300000, guid: 2d68144795ba3d94d8f9c4de8f3b8388, type: 3}
 --- !u!1 &1510559117
 GameObject:
   m_ObjectHideFlags: 0
@@ -1884,6 +1914,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52fcf6e7337096f4cb67d3f16143a15b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttonHover: {fileID: 8300000, guid: e20e2b443eb69e04684734a7d844e122, type: 3}
+  buttonPress: {fileID: 8300000, guid: da67fb9a30e67464396ee2b979164c05, type: 3}
+  buttonDisabled: {fileID: 8300000, guid: 2d68144795ba3d94d8f9c4de8f3b8388, type: 3}
 --- !u!1 &1624280369
 GameObject:
   m_ObjectHideFlags: 0
@@ -1963,6 +1996,18 @@ PrefabInstance:
       propertyPath: settingsMenu
       value: 
       objectReference: {fileID: 510478447}
+    - target: {fileID: 4524143306756508565, guid: d2dddb37a116d8646921cf07fc432f8f, type: 3}
+      propertyPath: buttonHover
+      value: 
+      objectReference: {fileID: 8300000, guid: e20e2b443eb69e04684734a7d844e122, type: 3}
+    - target: {fileID: 4524143306756508565, guid: d2dddb37a116d8646921cf07fc432f8f, type: 3}
+      propertyPath: buttonPress
+      value: 
+      objectReference: {fileID: 8300000, guid: da67fb9a30e67464396ee2b979164c05, type: 3}
+    - target: {fileID: 4524143306756508565, guid: d2dddb37a116d8646921cf07fc432f8f, type: 3}
+      propertyPath: buttonDisabled
+      value: 
+      objectReference: {fileID: 8300000, guid: 2d68144795ba3d94d8f9c4de8f3b8388, type: 3}
     - target: {fileID: 4524143307520922749, guid: d2dddb37a116d8646921cf07fc432f8f, type: 3}
       propertyPath: m_Name
       value: KeyBindingMenu
@@ -2051,6 +2096,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4524143308388531460, guid: d2dddb37a116d8646921cf07fc432f8f, type: 3}
+      propertyPath: buttonHover
+      value: 
+      objectReference: {fileID: 8300000, guid: e20e2b443eb69e04684734a7d844e122, type: 3}
+    - target: {fileID: 4524143308388531460, guid: d2dddb37a116d8646921cf07fc432f8f, type: 3}
+      propertyPath: buttonPress
+      value: 
+      objectReference: {fileID: 8300000, guid: da67fb9a30e67464396ee2b979164c05, type: 3}
+    - target: {fileID: 4524143308388531460, guid: d2dddb37a116d8646921cf07fc432f8f, type: 3}
+      propertyPath: buttonDisabled
+      value: 
+      objectReference: {fileID: 8300000, guid: 2d68144795ba3d94d8f9c4de8f3b8388, type: 3}
     - target: {fileID: 6871729578586401410, guid: d2dddb37a116d8646921cf07fc432f8f, type: 3}
       propertyPath: m_fontSize
       value: 40
@@ -2737,6 +2794,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52fcf6e7337096f4cb67d3f16143a15b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttonHover: {fileID: 8300000, guid: e20e2b443eb69e04684734a7d844e122, type: 3}
+  buttonPress: {fileID: 8300000, guid: da67fb9a30e67464396ee2b979164c05, type: 3}
+  buttonDisabled: {fileID: 8300000, guid: 2d68144795ba3d94d8f9c4de8f3b8388, type: 3}
 --- !u!95 &2108000723
 Animator:
   serializedVersion: 4
