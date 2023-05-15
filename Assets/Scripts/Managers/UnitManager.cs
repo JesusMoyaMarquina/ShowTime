@@ -27,12 +27,6 @@ public class UnitManager : MonoBehaviour
 
         bool addExtra = false;
 
-        if (maxMeleePercentage == 0 && minRangedPercentage == 0)
-        {
-            maxMeleePercentage = 70;
-            minRangedPercentage = 30;
-        }
-
         float totalUnitsPercentage = maxMeleePercentage + minRangedPercentage;
 
         meleeUnitPercentage = Random.Range(minMeleePercentage / totalUnitsPercentage, maxMeleePercentage / totalUnitsPercentage);

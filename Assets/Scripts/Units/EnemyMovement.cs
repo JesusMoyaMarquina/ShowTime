@@ -34,8 +34,8 @@ public abstract class EnemyMovement : MonoBehaviour
     private Vector3 enemyPos;
 
     //Stats variables
+    public bool hitted;
     public float health;
-    private bool hitted;
     private bool alive;
 
     //Mocked basic attack variables

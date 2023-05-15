@@ -26,7 +26,7 @@ public class PlayerAttackScript : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Enemy"))
+        if (collision.CompareTag("Enemy") && !collision.GetComponent<EnemyMovement>().hitted)
         {
             collision.GetComponent<EnemyMovement>().GetDamage(player.executedAttack.GetDamage());
             CombatManager.instance.ComboSistem(true);

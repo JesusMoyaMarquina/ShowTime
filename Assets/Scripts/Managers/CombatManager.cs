@@ -129,7 +129,7 @@ public class CombatManager : MonoBehaviour
     {
         if (remainingTime <= 0)
         {
-            PauseTimer();
+            StopUI();
             KillAllEnemies();
             OpenWinZone();
         }
@@ -160,13 +160,10 @@ public class CombatManager : MonoBehaviour
         acumulatedMultiplierTime = 0;
         if (multiplier > 1)
         {
-            timerMultiplierProgressBar.gameObject.SetActive(true);
             timerMultiplierProgressBar.GetComponent<ProgressBar>().SetText($"x{multiplier}");
-            multiplierActive = true;
         } else
         {
-            timerMultiplierProgressBar.gameObject.SetActive(false);
-            multiplierActive = false;
+            timerMultiplierProgressBar.GetComponent<ProgressBar>().SetText($"");
         }
     }
 
@@ -183,6 +180,19 @@ public class CombatManager : MonoBehaviour
         actualTime = (realBattleTime - previousTimesNonMultiplied) * timerSpeed;
         remainingTime = combatTime - (actualTime + previousTimes);
 
+        //Manage hits text
+        if (cSHelp > 0)
+        {
+            timerMultiplierProgressBar.gameObject.SetActive(true);
+            multiplierActive = true;
+            hitsText.GetComponent<TextMeshProUGUI>().text = $"Hits {cSHelp}";
+            hitsText.SetActive(true);
+        }
+        else
+        {
+            hitsText.SetActive(false);
+        }
+
         //Manage multiplier time
         if (multiplierActive && multiplierTime - actualTime - acumulatedMultiplierTime >= 0)
         {
@@ -193,16 +203,6 @@ public class CombatManager : MonoBehaviour
         else if (multiplierActive && multiplierTime - actualTime - acumulatedMultiplierTime < 0)
         {
             ComboSistem(false);
-        }
-
-        //Manage hits text
-        if (cSHelp >= 2)
-        {
-            hitsText.GetComponent<TextMeshProUGUI>().text = $"Hits {cSHelp}";
-            hitsText.SetActive(true);
-        } else
-        {
-            hitsText.SetActive(false);
         }
 
 
@@ -217,9 +217,12 @@ public class CombatManager : MonoBehaviour
         timerProgressBar.GetComponent<ProgressBar>().SetText(sTime);
     }
 
-    void PauseTimer()
+    void StopUI()
     {
         timerPause = true;
+        timerMultiplierProgressBar.GetComponent<ProgressBar>().current = 0;
+        timerMultiplierProgressBar.GetComponent<ProgressBar>().GetCurrentFill();
+        ComboSistem(false);
     }
     #endregion
 
@@ -228,8 +231,9 @@ public class CombatManager : MonoBehaviour
     {
         if (hit)
         {
-            if (cSHelp % comboToMultiply == 0)
+            if ((cSHelp + 1) % comboToMultiply == 0)
             {
+                print("entro");
                 cSHelp++;
                 comboMp += timeMultiplier / 100;
                 MultiplyTimeSpeed(comboMp);
@@ -242,6 +246,8 @@ public class CombatManager : MonoBehaviour
 
         if (!hit)
         {
+            timerMultiplierProgressBar.gameObject.SetActive(false);
+            multiplierActive = false;
             cSHelp = 0;
             comboMp = 1f;
             MultiplyTimeSpeed(1);
