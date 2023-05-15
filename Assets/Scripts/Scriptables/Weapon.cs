@@ -4,19 +4,26 @@ using UnityEngine;
 
 public abstract class Weapon : MonoBehaviour
 {
+    protected WeaponType weaponType;
     protected bool isInCD;
 
-    public abstract Attack Hit(Vector2 playerDir, string attackName);
+    public abstract Attack Hit(string attackName, int attackCount);
 
-    public void Hit(Vector2 playerDir, float tiempoCD, float atkMng)
+    public void Hit(float tiempoCD, float atkMng)
     {
-        Magnetismo(playerDir, atkMng);
+        Magnetismo(atkMng);
         StartCoroutine(TiempoCD(tiempoCD));
     }
 
-    private void Magnetismo(Vector2 playerDir, float atkMng)
+    public bool IsInCD()
     {
-        Vector2.MoveTowards(transform.position, playerDir, atkMng);
+        return isInCD;
+    }
+
+    private void Magnetismo(float atkMng)
+    {
+        int direction = GetComponent<SpriteRenderer>().flipX ? 1 : -1;
+        GetComponent<Rigidbody2D>().AddForce(new Vector2(atkMng * direction, 0), ForceMode2D.Force);
     }
 
     IEnumerator TiempoCD(float tiempoCD)
@@ -25,4 +32,9 @@ public abstract class Weapon : MonoBehaviour
         yield return new WaitForSeconds(tiempoCD);
         isInCD = false;
     }
+}
+
+public enum WeaponType
+{
+    Fist = 0
 }

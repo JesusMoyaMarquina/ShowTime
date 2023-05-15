@@ -5,20 +5,25 @@ using UnityEngine;
 
 public class Fist : Weapon
 {
-    public List<Attack> attacks = new List<Attack>();
+    public float[] MngList;
 
-    protected float atkMng = 10;
+    private void Awake()
+    {
+        weaponType = WeaponType.Fist;
+    }
+
+    public List<Attack> attacks = new List<Attack>();
 
     Attack executedAttack = null;
 
     override
-    public Attack Hit(Vector2 playerDir, string attackName)
+    public Attack Hit(string attackName, int attackCount)
     {
         executedAttack = attacks.Find(o => o.GetAttackName() == attackName);
 
         if (!isInCD)
         {
-            Hit(playerDir, executedAttack.GetCD(), atkMng);
+            Hit(executedAttack.GetCD(), MngList[attackCount]);
             executedAttack.ActivateCollider();
         }
 

@@ -249,6 +249,7 @@ public class CombatManager : MonoBehaviour
             multiplierActive = false;
             cSHelp = 0;
             comboMp = 1f;
+            hitsText.SetActive(false);
             MultiplyTimeSpeed(1);
         }
     }

@@ -51,6 +51,7 @@ public class Player : MonoBehaviour
     private string executeAttackName;
 
     //Combo system
+    private Weapon currentWeapon;
     public Attack executedAttack;
     private Queue<string> inputQueue;
 
@@ -96,6 +97,7 @@ public class Player : MonoBehaviour
         //Attack
         attacking = false;
         executedAttack = null;
+        currentWeapon = GetComponent<Fist>();
     }
 
     private void GameManagerOnGameStateChange(GameState state)
@@ -155,7 +157,7 @@ public class Player : MonoBehaviour
             }
         }
 
-        if (inputQueue.Count >= 0 && inputQueue.Count <= 2 && !attacking && !hitted)
+        if (inputQueue.Count >= 0 && inputQueue.Count <= 2 && !attacking && !hitted && !currentWeapon.IsInCD())
         {
             if (playerInput.actions["SoftHit"].triggered)
             {
@@ -348,7 +350,7 @@ public class Player : MonoBehaviour
     }
     #endregion
 
-    #region atack
+    #region attack
     public void SetAttackingFalse()
     {
         attacking = false;
@@ -365,17 +367,7 @@ public class Player : MonoBehaviour
 
     private void Attack(string attackName)
     {
-        Weapon weapon;
-
-        //Default = Fist
-        switch (actualWeapon) 
-        {
-            default:
-                weapon = GetComponent<Fist>();
-                break;
-        }
-
-        executedAttack = weapon.Hit(direction, attackName);
+        executedAttack = currentWeapon.Hit(attackName, inputQueue.Count - 1);
     }
     #endregion
 }

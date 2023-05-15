@@ -893,6 +893,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffcff1a3018f1d14a812d3355b4b2f4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MngList:
+  - 500
+  - 750
+  - 1000
   attacks:
   - attackName: SoftAttack
     damage: 20
@@ -1755,6 +1759,10 @@ PrefabInstance:
     - target: {fileID: 7026412676992851197, guid: e3ea6308ca8f3084a8d0cf5b3b4be2e6, type: 3}
       propertyPath: m_Name
       value: SettingsMenu
+      objectReference: {fileID: 0}
+    - target: {fileID: 7026412676992851197, guid: e3ea6308ca8f3084a8d0cf5b3b4be2e6, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7026412677396523239, guid: e3ea6308ca8f3084a8d0cf5b3b4be2e6, type: 3}
       propertyPath: m_AnchorMax.x
@@ -3366,7 +3374,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 959315142}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1025.9661, y: 553.78015, z: 2.4131882}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

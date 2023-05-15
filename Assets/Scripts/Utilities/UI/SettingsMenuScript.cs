@@ -12,6 +12,7 @@ public class SettingsMenuScript : MonoBehaviour
     //Keys
     public const string RESOLUTION_KEY = "resolution";
     public const string GRAPHICS_KEY = "graphics";
+    public const string SAVED_KEY = "saved";
 
     //Audios
     public AudioMixer mainAudioMixer;
@@ -52,6 +53,7 @@ public class SettingsMenuScript : MonoBehaviour
         PlayerPrefs.SetFloat(SoundManager.FX_KEY, FXVolumeSlider.value);
         PlayerPrefs.SetInt(RESOLUTION_KEY, resolutionDropdown.value);
         PlayerPrefs.SetInt(GRAPHICS_KEY, graphicsDropdown.value);
+        PlayerPrefs.SetInt(SAVED_KEY, 1);
     }
 
     public void Return()
@@ -140,10 +142,13 @@ public class SettingsMenuScript : MonoBehaviour
 
     void LoadParams()
     {
-        mainVolumeSlider.value = PlayerPrefs.GetFloat(SoundManager.MAIN_KEY);
-        musicVolumeSlider.value = PlayerPrefs.GetFloat(SoundManager.MUSIC_KEY);
-        FXVolumeSlider.value = PlayerPrefs.GetFloat(SoundManager.FX_KEY);
-        resolutionDropdown.value = PlayerPrefs.GetInt(RESOLUTION_KEY);
-        graphicsDropdown.value = PlayerPrefs.GetInt(GRAPHICS_KEY);
+        if (PlayerPrefs.GetInt(SAVED_KEY) == 1)
+        {
+            mainVolumeSlider.value = PlayerPrefs.GetFloat(SoundManager.MAIN_KEY);
+            musicVolumeSlider.value = PlayerPrefs.GetFloat(SoundManager.MUSIC_KEY);
+            FXVolumeSlider.value = PlayerPrefs.GetFloat(SoundManager.FX_KEY);
+            resolutionDropdown.value = PlayerPrefs.GetInt(RESOLUTION_KEY);
+            graphicsDropdown.value = PlayerPrefs.GetInt(GRAPHICS_KEY);
+        }
     }
 }

@@ -14,10 +14,12 @@ public class Attack
     {
         return attackName;
     }
+
     public float GetDamage()
     {
         return damage;
     }
+
     public float GetCD()
     {
         return cd;
