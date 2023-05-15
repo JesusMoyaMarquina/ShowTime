@@ -17,7 +17,7 @@ public class CombatManager : MonoBehaviour
 
     public int comboToMultiply;
 
-    public float timeMultiplier;
+    public float timeAndScoreMultiplier;
 
     private int generateIteration;
 
@@ -202,7 +202,7 @@ public class CombatManager : MonoBehaviour
         }
         else if (multiplierActive && multiplierTime - actualTime - acumulatedMultiplierTime < 0)
         {
-            ComboSistem(false);
+            ComboSystem(false);
         }
 
 
@@ -222,19 +222,19 @@ public class CombatManager : MonoBehaviour
         timerPause = true;
         timerMultiplierProgressBar.GetComponent<ProgressBar>().current = 0;
         timerMultiplierProgressBar.GetComponent<ProgressBar>().GetCurrentFill();
-        ComboSistem(false);
+        ComboSystem(false);
     }
     #endregion
 
-    #region Sistema de combos
-    public void ComboSistem(bool hit)
+    #region combo system
+    public void ComboSystem(bool hit)
     {
         if (hit)
         {
             if ((cSHelp + 1) % comboToMultiply == 0)
             {
                 cSHelp++;
-                comboMp += timeMultiplier / 100;
+                comboMp += timeAndScoreMultiplier / 100;
                 MultiplyTimeSpeed(comboMp);
             }
             else
@@ -254,4 +254,9 @@ public class CombatManager : MonoBehaviour
         }
     }
     #endregion
+
+    #region score system
+
+    #endregion
+
 }
