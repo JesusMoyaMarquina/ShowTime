@@ -25,7 +25,7 @@ public class Attack
 
     public void ActivateCollider()
     {
-        if (!collider.activeSelf)
+        if (collider != null && !collider.activeSelf)
         {
             collider.SetActive(true);
             if (collider.GetComponent<BoxCollider2D>() != null)
@@ -41,7 +41,7 @@ public class Attack
 
     public void DeactivateCollider()
     {
-        if (collider.activeSelf)
+        if (collider != null && collider.activeSelf)
         {
             if (collider.GetComponent<BoxCollider2D>() != null)
             {
