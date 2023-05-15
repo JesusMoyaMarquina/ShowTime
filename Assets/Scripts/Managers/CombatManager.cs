@@ -233,7 +233,6 @@ public class CombatManager : MonoBehaviour
         {
             if ((cSHelp + 1) % comboToMultiply == 0)
             {
-                print("entro");
                 cSHelp++;
                 comboMp += timeMultiplier / 100;
                 MultiplyTimeSpeed(comboMp);
