@@ -6,6 +6,9 @@ public class WinZoneScript : MonoBehaviour
 {
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        GameManager.Instance.UpdateGameState(GameState.Vicory);
+        if (collision.CompareTag("Player"))
+        {
+            GameManager.Instance.UpdateGameState(GameState.Vicory);
+        }
     }
 }
