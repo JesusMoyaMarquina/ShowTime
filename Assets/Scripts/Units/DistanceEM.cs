@@ -27,9 +27,12 @@ public class DistanceEM : EnemyMovement
     }
 
     public override void Attacking()
+    {}
+
+    public void ThrowAttack()
     {
         arrow = GetComponent<ObjectPool>().GetPooledObject();
-        
+
         if (arrow != null)
         {
             arrow.transform.SetPositionAndRotation(new Vector3(transform.position.x, transform.position.y, 0), Quaternion.identity);

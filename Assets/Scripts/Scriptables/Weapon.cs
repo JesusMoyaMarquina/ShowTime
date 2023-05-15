@@ -6,8 +6,7 @@ public abstract class Weapon : MonoBehaviour
 {
     protected bool isInCD;
 
-    public abstract void SoftHit(Vector2 playerDir, int attackInCombo);
-    public abstract void StrongHit(Vector2 playerDir, int attackInCombo);
+    public abstract Attack Hit(Vector2 playerDir, string attackName);
 
     public void Hit(Vector2 playerDir, float tiempoCD, float atkMng)
     {

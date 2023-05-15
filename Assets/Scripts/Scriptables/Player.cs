@@ -48,8 +48,10 @@ public class Player : MonoBehaviour
     protected float atkMng = 10;
 
     private bool attacking;
+    private string executeAttackName;
 
     //Combo system
+    public Attack executedAttack;
     private Queue<string> inputQueue;
 
     private void Awake()
@@ -93,6 +95,7 @@ public class Player : MonoBehaviour
 
         //Attack
         attacking = false;
+        executedAttack = null;
     }
 
     private void GameManagerOnGameStateChange(GameState state)
@@ -126,6 +129,11 @@ public class Player : MonoBehaviour
         CameraFollowUp();
     }
 
+    public Vector2 GetDirection()
+    {
+        return direction;
+    }
+
     private void PlayerMovement()
     {
         if (!alive) return;
@@ -147,7 +155,7 @@ public class Player : MonoBehaviour
             }
         }
 
-        if (inputQueue.Count >= 0 && inputQueue.Count <= 2 && !attacking)
+        if (inputQueue.Count >= 0 && inputQueue.Count <= 2 && !attacking && !hitted)
         {
             if (playerInput.actions["SoftHit"].triggered)
             {
@@ -155,9 +163,13 @@ public class Player : MonoBehaviour
                 attacking = true;
 
                 inputQueue.Enqueue("softHit");
-                ShoftAttack();
                 CancelInvoke(nameof(QuitarAccion));
                 Invoke(nameof(QuitarAccion), 2);
+
+                if (inputQueue.Count < 3)
+                {
+                    Attack("SoftAttack");
+                }
 
                 anim.SetBool("attacking", attacking);
                 anim.SetTrigger("softAttack");
@@ -169,9 +181,13 @@ public class Player : MonoBehaviour
                 attacking = true;
 
                 inputQueue.Enqueue("strongHit");
-                StrongAttack();
                 CancelInvoke(nameof(QuitarAccion));
                 Invoke(nameof(QuitarAccion), 2);
+
+                if(inputQueue.Count < 3)
+                {
+                    Attack("StrongAttack");
+                }
 
                 anim.SetBool("attacking", attacking);
                 anim.SetTrigger("strongAttack");
@@ -184,27 +200,35 @@ public class Player : MonoBehaviour
             switch ((actionList[0], actionList[1], actionList[2]))
             {
                 case ("softHit", "softHit", "softHit"):
+                    Attack("SoftSoftSoftCombo");
                     anim.SetInteger("finish", 0);
                     break;
                 case ("softHit", "strongHit", "softHit"):
+                    Attack("SoftStrongSoftCombo");
                     anim.SetInteger("finish", 1);
                     break;
                 case ("strongHit", "softHit", "softHit"):
+                    Attack("StrongSoftSoftCombo");
                     anim.SetInteger("finish", 2);
                     break;
                 case ("strongHit", "strongHit", "softHit"):
+                    Attack("StrongStrongSoftCombo");
                     anim.SetInteger("finish", 3);
                     break;
                 case ("softHit", "softHit", "strongHit"):
+                    Attack("SoftSoftStrongCombo");
                     anim.SetInteger("finish", 0);
                     break;
                 case ("softHit", "strongHit", "strongHit"):
+                    Attack("SoftStrongStrongCombo");
                     anim.SetInteger("finish", 1);
                     break;
                 case ("strongHit", "softHit", "strongHit"):
+                    Attack("StrongSoftStrongCombo");
                     anim.SetInteger("finish", 2);
                     break;
                 case ("strongHit", "strongHit", "strongHit"):
+                    Attack("StrongStrongStrongCombo");
                     anim.SetInteger("finish", 3);
                     break;
             }
@@ -277,8 +301,16 @@ public class Player : MonoBehaviour
         playerHealthBar.GetComponent<EntityProgressBar>().GetCurrentFill();
     }
 
+    private void CancelAttack()
+    {
+        SetAttackingFalse();
+        DeactivateAttackCollider();
+    }
+
     private void DamageAnimation()
     {
+        CancelAttack();
+
         if (currentHealth <= 0)
         {
             currentHealth = 0;
@@ -323,7 +355,12 @@ public class Player : MonoBehaviour
         anim.SetBool("attacking", false);
     }
 
-    private void ShoftAttack()
+    public void DeactivateAttackCollider()
+    {
+        executedAttack.DeactivateCollider();
+    }
+
+    private void Attack(string attackName)
     {
         Weapon weapon;
 
@@ -335,22 +372,7 @@ public class Player : MonoBehaviour
                 break;
         }
 
-        weapon.SoftHit(direction, inputQueue.Count);
-    }
-
-    private void StrongAttack()
-    {
-        Weapon weapon;
-
-        //Default = Fist
-        switch (actualWeapon)
-        {
-            default:
-                weapon = GetComponent<Fist>();
-                break;
-        }
-
-        weapon.StrongHit(direction, inputQueue.Count);
+        executedAttack = weapon.Hit(direction, attackName);
     }
     #endregion
 }

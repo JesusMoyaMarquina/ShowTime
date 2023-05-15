@@ -161,7 +161,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 6
   minDistance: 1
-  health: 60
+  health: 70
   damage: 30
   distanceToPlayer: 0
   audioSource: {fileID: -1758514401157523288}

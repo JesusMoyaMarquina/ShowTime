@@ -5,45 +5,23 @@ using UnityEngine;
 
 public class Fist : Weapon
 {
-    public float[] softCD = new float[3];
-    public float[] strongCD = new float[3];
-    public float[] softDamages = new float[3];
-    public float[] strongDamages = new float[3];
-    public GameObject[] colliders;
+    public List<Attack> attacks = new List<Attack>();
 
     protected float atkMng = 10;
 
-    private float actualDmg = 0;
+    Attack executedAttack = null;
 
     override
-    public void SoftHit(Vector2 playerDir, int attackInCombo)
+    public Attack Hit(Vector2 playerDir, string attackName)
     {
-        attackInCombo = attackInCombo - 1;
+        executedAttack = attacks.Find(o => o.GetAttackName() == attackName);
 
         if (!isInCD)
         {
-            Hit(playerDir, softCD[attackInCombo], atkMng);
-            actualDmg = softDamages[attackInCombo];
+            Hit(playerDir, executedAttack.GetCD(), atkMng);
+            executedAttack.ActivateCollider();
         }
-    }
 
-    override
-    public void StrongHit(Vector2 playerDir, int attackInCombo)
-    {
-        attackInCombo = attackInCombo - 1;
-
-        if (!isInCD)
-        {
-            Hit(playerDir, strongCD[attackInCombo], atkMng);
-            actualDmg = strongDamages[attackInCombo];
-        }
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Enemy"))
-        {
-            collision.GetComponent<EnemyMovement>().GetDamage(actualDmg);
-        }
+        return executedAttack;
     }
 }
