@@ -29,6 +29,7 @@ public class PlayerAttackScript : MonoBehaviour
         if (collision.CompareTag("Enemy"))
         {
             collision.GetComponent<EnemyMovement>().GetDamage(player.executedAttack.GetDamage());
+            CombatManager.instance.ComboSistem(true);
         }
     }
 }

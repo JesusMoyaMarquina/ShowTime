@@ -1,17 +1,23 @@
 using System;
 using System.Collections;
+using TMPro;
 using UnityEngine;
 
 public class CombatManager : MonoBehaviour
 {
+    public static CombatManager instance;
 
-    public GameObject timerProgressBar, timerMultiplierProgressBar, winZone;
+    public GameObject timerProgressBar, timerMultiplierProgressBar, hitsText, winZone;
 
     public UnitManager unitManager;
 
     public int startGenerateUnit, unitIncremental, secondsToGenerate;
 
     public float multiplierTime, combatTime;
+
+    public int comboToMultiply;
+
+    public float timeMultiplier;
 
     private int generateIteration;
 
@@ -20,6 +26,11 @@ public class CombatManager : MonoBehaviour
     private float actualTime, acumulatedMultiplierTime, previousTimes, previousTimesNonMultiplied, remainingTime, beginBattleTime, timerSpeed, comboMp = 1;
 
     protected int cSHelp = 0;
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
     private void Start()
     {
@@ -181,7 +192,17 @@ public class CombatManager : MonoBehaviour
         }
         else if (multiplierActive && multiplierTime - actualTime - acumulatedMultiplierTime < 0)
         {
-            MultiplyTimeSpeed(1);
+            ComboSistem(false);
+        }
+
+        //Manage hits text
+        if (cSHelp >= 2)
+        {
+            hitsText.GetComponent<TextMeshProUGUI>().text = $"Hits {cSHelp}";
+            hitsText.SetActive(true);
+        } else
+        {
+            hitsText.SetActive(false);
         }
 
 
@@ -205,37 +226,26 @@ public class CombatManager : MonoBehaviour
     #region Sistema de combos
     public void ComboSistem(bool hit)
     {
-        StartCoroutine(ComboCD());
-
-        if (hit == true)
+        if (hit)
         {
-            StopCoroutine(ComboCD());
-
-            if (cSHelp == 10)
+            if (cSHelp % comboToMultiply == 0)
             {
-                cSHelp = 0;
-                comboMp += 0.1f;
+                cSHelp++;
+                comboMp += timeMultiplier / 100;
                 MultiplyTimeSpeed(comboMp);
             }
             else
             {
                 cSHelp++;
             }
-
-            StartCoroutine(ComboCD());
         }
 
-        if (hit != true)
+        if (!hit)
         {
+            cSHelp = 0;
+            comboMp = 1f;
             MultiplyTimeSpeed(1);
         }
-    }
-
-    IEnumerator ComboCD()
-    {
-        yield return new WaitForSeconds(10);
-
-        ComboSistem(false);
     }
     #endregion
 }
