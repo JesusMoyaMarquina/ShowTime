@@ -35,11 +35,11 @@ public abstract class EnemyMovement : MonoBehaviour
 
     //Stats variables
     public bool hitted;
-    public float health;
+    public float totalHealth;
+    private float currentHealth;
     private bool alive;
 
     //Mocked basic attack variables
-    public float damage;
     protected bool attacking;
     protected float lastAttack;
     private float attackCooldown;
@@ -55,6 +55,7 @@ public abstract class EnemyMovement : MonoBehaviour
         players = GameObject.FindGameObjectsWithTag("Player");
         alive = true;
         attackCooldown = 3f;
+        currentHealth = totalHealth;
     }
 
     void Update()
@@ -185,8 +186,8 @@ public abstract class EnemyMovement : MonoBehaviour
         {
             return;
         }
-        
-        health -= damage;
+
+        currentHealth -= damage;
 
         CheckDeadCondition();
 
@@ -198,9 +199,14 @@ public abstract class EnemyMovement : MonoBehaviour
             anim.SetBool("hitted", hitted);
     }
 
+    public bool isAlive()
+    {
+        return alive;
+    }
+
     public void Die()
     {
-        health = 0;
+        currentHealth = 0;
         CheckDeadCondition();
     }
 
@@ -220,11 +226,11 @@ public abstract class EnemyMovement : MonoBehaviour
     private void CheckDeadCondition()
     {
 
-        if (health <= 0)
+        if (currentHealth <= 0)
         {
             cc.enabled = false;
             rb.constraints = RigidbodyConstraints2D.FreezeAll;
-            health = 0;
+            currentHealth = 0;
             alive = false;
             anim.SetBool("alive", alive);
         }

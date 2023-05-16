@@ -4,15 +4,30 @@ using UnityEngine;
 
 public abstract class Weapon : MonoBehaviour
 {
+    public int lifeSteal;
+
     protected WeaponType weaponType;
     protected bool isInCD;
+
+    private void Awake()
+    {
+        isInCD = false;
+    }
 
     public abstract Attack Hit(string attackName, int attackCount);
 
     public void Hit(float tiempoCD, float atkMng)
     {
         Magnetismo(atkMng);
-        StartCoroutine(TiempoCD(tiempoCD));
+        if (tiempoCD > 0)
+        {
+            StartCoroutine(TiempoCD(tiempoCD));
+        }
+    }
+
+    public float GetLifeSteal()
+    {
+        return lifeSteal;
     }
 
     public bool IsInCD()

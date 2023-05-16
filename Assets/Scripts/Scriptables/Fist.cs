@@ -21,11 +21,8 @@ public class Fist : Weapon
     {
         executedAttack = attacks.Find(o => o.GetAttackName() == attackName);
 
-        if (!isInCD)
-        {
-            Hit(executedAttack.GetCD(), MngList[attackCount]);
-            executedAttack.ActivateCollider();
-        }
+        Hit(executedAttack.GetCD(), MngList[attackCount]);
+        executedAttack.ActivateCollider();
 
         return executedAttack;
     }

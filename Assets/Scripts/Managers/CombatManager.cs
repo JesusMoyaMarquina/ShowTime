@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -7,25 +8,47 @@ public class CombatManager : MonoBehaviour
 {
     public static CombatManager instance;
 
-    public GameObject timerProgressBar, timerMultiplierProgressBar, hitsText, winZone;
-
+    #region Unit variables
     public UnitManager unitManager;
 
     public int startGenerateUnit, unitIncremental, secondsToGenerate;
 
-    public float multiplierTime, combatTime;
-
-    public int comboToMultiply;
-
-    public float timeAndScoreMultiplier;
-
     private int generateIteration;
+    #endregion
+
+    #region Timer variables
+    public GameObject timerProgressBar, timerMultiplierProgressBar;
+
+    public float multiplierTime, combatTime;
 
     private bool multiplierActive, timerPause;
 
-    private float actualTime, acumulatedMultiplierTime, previousTimes, previousTimesNonMultiplied, remainingTime, beginBattleTime, timerSpeed, comboMp = 1;
+    private float actualTime, acumulatedMultiplierTime, previousTimes, previousTimesNonMultiplied, remainingTime, beginBattleTime, timerSpeed;
+    #endregion
+
+    #region Combo variables
+    public GameObject hitsText;
+
+    public float timerMultiplyPercentage, maximumMultiplier;
+
+    public int comboToMultiply;
+
+    private float comboMp = 1;
 
     protected int cSHelp = 0;
+    #endregion
+
+    #region Game state variables
+    public GameObject winZone;
+    #endregion
+
+    #region Score variables
+    public GameObject totalScoreText;
+
+    public float baseScorePerCombo;
+
+    private List<Score> scores = new List<Score>();
+    #endregion
 
     private void Awake()
     {
@@ -49,6 +72,7 @@ public class CombatManager : MonoBehaviour
                 acumulatedMultiplierTime = actualTime;
                 break;
             case GameState.Vicory:
+                FillScoreUI();
                 break;
         }
     }
@@ -63,6 +87,18 @@ public class CombatManager : MonoBehaviour
                 GenerateUnits();
             }
         }
+    }
+
+    private void FillScoreUI()
+    {
+        float totalScore = 0;
+
+        foreach (Score score in scores)
+        {
+            totalScore += score.GetTotalScore();
+        }
+
+        totalScoreText.GetComponent<TextMeshProUGUI>().text = $"Total Score: {totalScore}";
     }
 
     private void FixedUpdate()
@@ -83,6 +119,7 @@ public class CombatManager : MonoBehaviour
         unitManager.GenerateUnits(startGenerateUnit + unitIncremental * generateIteration);
         generateIteration++;
     }
+
     private void HandleCombatInputs()
     {
         if (Input.GetButtonDown("Cancel"))
@@ -91,7 +128,7 @@ public class CombatManager : MonoBehaviour
         }
     }
 
-    void KillAllEnemies()
+    private void KillAllEnemies()
     {
         foreach(EnemyMovement enemy in FindObjectsOfType<EnemyMovement>())
         {
@@ -99,7 +136,7 @@ public class CombatManager : MonoBehaviour
         }
     }
 
-    void OpenWinZone()
+    private void OpenWinZone()
     {
         winZone.SetActive(true);
     }
@@ -231,10 +268,10 @@ public class CombatManager : MonoBehaviour
     {
         if (hit)
         {
-            if ((cSHelp + 1) % comboToMultiply == 0)
+            if ((cSHelp + 1) % comboToMultiply == 0 && comboMp < maximumMultiplier)
             {
                 cSHelp++;
-                comboMp += timeAndScoreMultiplier / 100;
+                comboMp += timerMultiplyPercentage / 100;
                 MultiplyTimeSpeed(comboMp);
             }
             else
@@ -245,18 +282,60 @@ public class CombatManager : MonoBehaviour
 
         if (!hit)
         {
+            //Add score
+            AddHitScore(cSHelp, comboMp);
+
+            //Hide UI
             timerMultiplierProgressBar.gameObject.SetActive(false);
             multiplierActive = false;
+            hitsText.SetActive(false);
+
+            //ResetVatiables
             cSHelp = 0;
             comboMp = 1f;
-            hitsText.SetActive(false);
+
+            //Reset multiplier
             MultiplyTimeSpeed(1);
         }
     }
     #endregion
 
     #region score system
+    public void AddHitScore(int hits, float multiplier = 1)
+    {
+        AddScore(Mathf.FloorToInt(hits / comboToMultiply) * baseScorePerCombo, "Hits", multiplier);
+    }
 
+    public void AddKillScore(float fscore = 0)
+    {
+        AddScore(fscore, "Kills", comboMp);
+    }
+
+    private void AddScore(float fscore = 0, string title = "Hits", float multiplier = 1)
+    {
+        Score score = scores.Find(o => o.multiplier == multiplier && o.title == title);
+
+        if (score == null)
+        {
+            scores.Add(score = new Score());
+            score.multiplier = multiplier;
+            score.title = title;
+        }
+
+        score.score += fscore;
+
+    }
     #endregion
 
+    class Score
+    {
+        public string title = "Hits";
+        public float multiplier = 1;
+        public float score = 0;
+
+        public float GetTotalScore()
+        {
+            return score * multiplier;
+        }
+    }
 }

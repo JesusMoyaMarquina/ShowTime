@@ -45,8 +45,6 @@ public class Player : MonoBehaviour
     protected float[] tiempoCD = new float[2];
     protected float[] damageDeal = new float[2];
 
-    protected float atkMng = 10;
-
     private bool attacking;
     private string executeAttackName;
 
@@ -157,7 +155,7 @@ public class Player : MonoBehaviour
             }
         }
 
-        if (inputQueue.Count >= 0 && inputQueue.Count <= 2 && !attacking && !hitted && !currentWeapon.IsInCD())
+        if (inputQueue.Count >= 0 && inputQueue.Count <= 2 && !attacking && !hitted)
         {
             if (playerInput.actions["SoftHit"].triggered)
             {
@@ -196,42 +194,64 @@ public class Player : MonoBehaviour
             }
         }
 
+        if (currentWeapon.IsInCD())
+        {
+            QuitarAccion();
+        }
+
         if (inputQueue.Count == 3)
         {
             List<string> actionList = inputQueue.ToList();
+
             switch ((actionList[0], actionList[1], actionList[2]))
             {
                 case ("softHit", "softHit", "softHit"):
+
                     Attack("SoftSoftSoftCombo");
                     anim.SetInteger("finish", 0);
+
                     break;
                 case ("softHit", "strongHit", "softHit"):
+
                     Attack("SoftStrongSoftCombo");
                     anim.SetInteger("finish", 1);
+
                     break;
                 case ("strongHit", "softHit", "softHit"):
+
                     Attack("StrongSoftSoftCombo");
                     anim.SetInteger("finish", 2);
+
                     break;
                 case ("strongHit", "strongHit", "softHit"):
+
                     Attack("StrongStrongSoftCombo");
                     anim.SetInteger("finish", 3);
+
                     break;
                 case ("softHit", "softHit", "strongHit"):
+
                     Attack("SoftSoftStrongCombo");
                     anim.SetInteger("finish", 0);
+
                     break;
                 case ("softHit", "strongHit", "strongHit"):
+
                     Attack("SoftStrongStrongCombo");
                     anim.SetInteger("finish", 1);
+
                     break;
                 case ("strongHit", "softHit", "strongHit"):
+
                     Attack("StrongSoftStrongCombo");
                     anim.SetInteger("finish", 2);
+
                     break;
                 case ("strongHit", "strongHit", "strongHit"):
+
                     Attack("StrongStrongStrongCombo");
                     anim.SetInteger("finish", 3);
+
                     break;
             }
             QuitarAccion();
@@ -291,9 +311,25 @@ public class Player : MonoBehaviour
     #endregion
 
     #region stats functions
+
+    public void Heal(float heal)
+    {
+        print(heal);
+        if (currentHealth + heal < maxHealth)
+        {
+            currentHealth += heal;
+        } else
+        {
+            currentHealth = maxHealth;
+        }
+
+        playerHealthBar.GetComponent<EntityProgressBar>().current = currentHealth;
+        playerHealthBar.GetComponent<EntityProgressBar>().GetCurrentFill();
+    }
+
     public void GetDamage(float damage)
     {
-        if (isInmortal || isDashing) return;
+        if (isInmortal || isDashing || damage < 0) return;
 
         currentHealth -= damage;
 
