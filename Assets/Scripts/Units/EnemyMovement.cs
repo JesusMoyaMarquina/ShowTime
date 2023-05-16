@@ -222,6 +222,7 @@ public abstract class EnemyMovement : MonoBehaviour
     }
 
     public abstract void SetAttackingFalse();
+    public abstract void AddScore();
 
     private void CheckDeadCondition()
     {
@@ -233,6 +234,7 @@ public abstract class EnemyMovement : MonoBehaviour
             currentHealth = 0;
             alive = false;
             anim.SetBool("alive", alive);
+            AddScore();
         }
     }
     #endregion

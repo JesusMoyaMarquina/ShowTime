@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -43,8 +44,6 @@ public class CombatManager : MonoBehaviour
     #endregion
 
     #region Score variables
-    public GameObject totalScoreText;
-
     public float baseScorePerCombo;
 
     private List<Score> scores = new List<Score>();
@@ -91,19 +90,11 @@ public class CombatManager : MonoBehaviour
 
     public List<Score> GetScores()
     {
-        return scores;
+        return scores.OrderBy(o => o.multiplier).ToList(); ;
     }
 
     private void FillScoreUI()
     {
-        float totalScore = 0;
-
-        foreach (Score score in scores)
-        {
-            totalScore += score.GetTotalScore();
-        }
-
-        totalScoreText.GetComponent<TextMeshProUGUI>().text = $"Total Score: {totalScore}";
     }
 
     private void FixedUpdate()
@@ -213,6 +204,7 @@ public class CombatManager : MonoBehaviour
     {
         previousTimes += actualTime;
         previousTimesNonMultiplied += actualTime / timerSpeed;
+        actualTime = 0;
     }
 
     private void ManageBattleTime()
@@ -236,13 +228,14 @@ public class CombatManager : MonoBehaviour
         }
 
         //Manage multiplier time
-        if (multiplierActive && multiplierTime - actualTime - acumulatedMultiplierTime >= 0)
+        float multiplierTimerTime = multiplierTime - (actualTime) - acumulatedMultiplierTime;
+        if (multiplierActive && multiplierTimerTime >= 0)
         {
             timerMultiplierProgressBar.GetComponent<ProgressBar>().maximum = multiplierTime;
-            timerMultiplierProgressBar.GetComponent<ProgressBar>().current = multiplierTime - actualTime - acumulatedMultiplierTime;
+            timerMultiplierProgressBar.GetComponent<ProgressBar>().current = multiplierTimerTime;
             timerMultiplierProgressBar.GetComponent<ProgressBar>().GetCurrentFill();
         }
-        else if (multiplierActive && multiplierTime - actualTime - acumulatedMultiplierTime < 0)
+        else if (multiplierActive && multiplierTimerTime < 0)
         {
             ComboSystem(false);
         }
@@ -277,12 +270,12 @@ public class CombatManager : MonoBehaviour
             {
                 cSHelp++;
                 comboMp += timerMultiplyPercentage / 100;
-                MultiplyTimeSpeed(comboMp);
             }
             else
             {
                 cSHelp++;
             }
+            MultiplyTimeSpeed(comboMp);
         }
 
         if (!hit)
@@ -308,15 +301,16 @@ public class CombatManager : MonoBehaviour
     #region score system
     public void AddHitScore(int hits, float multiplier = 1)
     {
-        AddScore(Mathf.FloorToInt(hits / comboToMultiply) * baseScorePerCombo, "Hits", multiplier);
+        AddScore(Mathf.FloorToInt(hits / comboToMultiply) * baseScorePerCombo, "Hits", multiplier, hits);
     }
 
     public void AddKillScore(float fscore = 0)
     {
+        print("entro");
         AddScore(fscore, "Kills", comboMp);
     }
 
-    private void AddScore(float fscore = 0, string title = "Hits", float multiplier = 1)
+    private void AddScore(float fscore = 0, string title = "Hits", float multiplier = 1, int numberOf = 1)
     {
         Score score = scores.Find(o => o.multiplier == multiplier && o.title == title);
 
@@ -328,6 +322,7 @@ public class CombatManager : MonoBehaviour
         }
 
         score.score += fscore;
+        score.numberOf += numberOf;
 
     }
     #endregion

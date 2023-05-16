@@ -314,7 +314,6 @@ public class Player : MonoBehaviour
 
     public void Heal(float heal)
     {
-        print(heal);
         if (currentHealth + heal < maxHealth)
         {
             currentHealth += heal;

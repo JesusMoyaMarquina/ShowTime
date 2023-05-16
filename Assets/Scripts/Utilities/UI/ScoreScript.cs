@@ -1,18 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class ScoreScript : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public TextMeshProUGUI titleTMP;
+    public TextMeshProUGUI baseScoreTMP;
+    public TextMeshProUGUI totalScoreTMP;
 
-    // Update is called once per frame
-    void Update()
+    public void Inicialize(string title, string multiplier, string baseScore, string totalScore, string numberOf)
     {
-        
+        titleTMP.text = $"{title} x{multiplier}";
+        baseScoreTMP.text = $"{numberOf} = {baseScore}";
+        totalScoreTMP.text = totalScore;
     }
 }

@@ -34,7 +34,7 @@ public class MeleEM : EnemyMovement
         }
     }
 
-    public void AddScore()
+    public override void AddScore()
     {
         CombatManager.instance.AddKillScore(score);
     }

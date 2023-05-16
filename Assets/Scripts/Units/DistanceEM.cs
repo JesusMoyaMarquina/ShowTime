@@ -31,7 +31,7 @@ public class DistanceEM : EnemyMovement
     public override void Attacking()
     { }
 
-    public void AddScore()
+    public override void AddScore()
     {
         CombatManager.instance.AddKillScore(score);
     }

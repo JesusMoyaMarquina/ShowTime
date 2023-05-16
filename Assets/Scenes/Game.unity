@@ -1632,7 +1632,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 341976155}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3332,6 +3332,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96c5abadf8c999247a9a64e4c101a05b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scoreList: {fileID: 1613488608}
+  scorePanel: {fileID: 3045108477945867478, guid: b1b04630319c74d48b0d4925fa012915, type: 3}
+  totalScoreText: {fileID: 341976155}
 --- !u!4 &901131870 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7787846795857698413, guid: 18a5144501cd0c44cadebe2837c878c3, type: 3}
@@ -6158,7 +6161,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1613488609}
   m_Layer: 0
-  m_Name: Content
+  m_Name: ScoreList
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8298,6 +8301,10 @@ PrefabInstance:
       propertyPath: totalScoreText
       value: 
       objectReference: {fileID: 341976155}
+    - target: {fileID: 7787846795857698412, guid: 18a5144501cd0c44cadebe2837c878c3, type: 3}
+      propertyPath: baseScorePerHit
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 7787846795857698412, guid: 18a5144501cd0c44cadebe2837c878c3, type: 3}
       propertyPath: comboToMultiply
       value: 5
