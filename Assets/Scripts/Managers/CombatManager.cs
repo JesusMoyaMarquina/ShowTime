@@ -89,6 +89,11 @@ public class CombatManager : MonoBehaviour
         }
     }
 
+    public List<Score> GetScores()
+    {
+        return scores;
+    }
+
     private void FillScoreUI()
     {
         float totalScore = 0;
@@ -326,16 +331,4 @@ public class CombatManager : MonoBehaviour
 
     }
     #endregion
-
-    class Score
-    {
-        public string title = "Hits";
-        public float multiplier = 1;
-        public float score = 0;
-
-        public float GetTotalScore()
-        {
-            return score * multiplier;
-        }
-    }
 }
