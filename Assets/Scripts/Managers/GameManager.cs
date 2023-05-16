@@ -33,6 +33,8 @@ public class GameManager : MonoBehaviour
             case GameState.Combat:
                 HandleCombat();
                 break;
+            case GameState.CombatFinished:
+                break;
             case GameState.Pause:
                 HandlePause();
                 break;
@@ -79,6 +81,7 @@ public enum GameState
 {
     Cinematics,
     Combat,
+    CombatFinished,
     Pause,
     Vicory,
     Lose

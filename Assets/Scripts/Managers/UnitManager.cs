@@ -8,7 +8,6 @@ public class UnitManager : MonoBehaviour
     public GameObject rangedUnit;
     public GameObject unitContaner;
     public GameObject[] spawnAreas;
-    public int minMeleePercentage, maxMeleePercentage, minRangedPercentage;
     public float meleeUnitPercentage, rangedUnitPercentage;
 
     // Start is called before the first frame update
@@ -27,21 +26,17 @@ public class UnitManager : MonoBehaviour
 
         bool addExtra = false;
 
-        float totalUnitsPercentage = maxMeleePercentage + minRangedPercentage;
-
-        meleeUnitPercentage = Random.Range(minMeleePercentage / totalUnitsPercentage, maxMeleePercentage / totalUnitsPercentage);
-        rangedUnitPercentage = 1 - meleeUnitPercentage;
-
         if (numberOfUnits / spawnAreas.Length * spawnAreas.Length < numberOfUnits)
         {
             addExtra = true;
         }
 
+        int areaSpawnUnits = Mathf.CeilToInt((float) numberOfUnits / spawnAreas.Length);
+        int meleeUnitsToSpawn = Mathf.RoundToInt(areaSpawnUnits * meleeUnitPercentage);
+        int rangedUnitsToSpawn = Mathf.RoundToInt(areaSpawnUnits * rangedUnitPercentage);
+
         foreach (GameObject area in spawnAreas)
         {
-            int areaSpawnUnits = numberOfUnits / spawnAreas.Length;
-            int meleeUnitsToSpawn = Mathf.RoundToInt(areaSpawnUnits * meleeUnitPercentage);
-            int rangedUnitsToSpawn = Mathf.RoundToInt(areaSpawnUnits * rangedUnitPercentage);
 
             while (meleeUnitsToSpawn > 0) 
             {
@@ -64,13 +59,21 @@ public class UnitManager : MonoBehaviour
             }
         }
 
-        if (addExtra){
+        if (addExtra && meleeUnitsToSpawn > 0 || rangedUnitsToSpawn > 0)
+        {
             GameObject area = spawnAreas[spawnAreas.Length - 1];
 
             float spawnXPos = Random.Range(-area.transform.localScale.x / 2, area.transform.localScale.x / 2) + area.transform.position.x;
             float spawnYPos = Random.Range(-area.transform.localScale.y / 2, area.transform.localScale.y / 2) + area.transform.position.y;
 
-            Instantiate(meleeUnit, new Vector3(spawnXPos, spawnYPos, 0), Quaternion.identity, unitContaner.transform);
+            if (meleeUnitsToSpawn < rangedUnitsToSpawn)
+            {
+                Instantiate(meleeUnit, new Vector3(spawnXPos, spawnYPos, 0), Quaternion.identity, unitContaner.transform);
+            }
+            else
+            {
+                Instantiate(rangedUnit, new Vector3(spawnXPos, spawnYPos, 0), Quaternion.identity, unitContaner.transform);
+            }
         }
     }
 

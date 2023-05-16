@@ -151,4 +151,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   launchSpeed: 20
   distance: 15
-  damage: 10
+  damage: 15

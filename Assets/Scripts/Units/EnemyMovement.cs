@@ -33,13 +33,15 @@ public abstract class EnemyMovement : MonoBehaviour
     protected float distance;
     private Vector3 enemyPos;
 
+    protected bool knockbacked;
+
     //Stats variables
     public bool hitted;
-    public float health;
+    public float totalHealth;
+    private float currentHealth;
     private bool alive;
 
     //Mocked basic attack variables
-    public float damage;
     protected bool attacking;
     protected float lastAttack;
     private float attackCooldown;
@@ -53,8 +55,10 @@ public abstract class EnemyMovement : MonoBehaviour
         anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         players = GameObject.FindGameObjectsWithTag("Player");
+        knockbacked = false;
         alive = true;
         attackCooldown = 3f;
+        currentHealth = totalHealth;
     }
 
     void Update()
@@ -72,6 +76,14 @@ public abstract class EnemyMovement : MonoBehaviour
         direction = new Vector2(nearPlayer.transform.position.x - enemyPos.x, nearPlayer.transform.position.y - enemyPos.y);
 
         Tracking();
+    }
+
+    public void Knockback(float knockbackForce, Vector2 direction)
+    {
+        attacking = false;
+        knockbacked = true;
+
+        rb.AddForce(direction * knockbackForce, ForceMode2D.Force);
     }
 
     public GameObject FindNearPlayer()
@@ -140,7 +152,7 @@ public abstract class EnemyMovement : MonoBehaviour
 
     public void SetAnimation()
     {
-        if ((attacking || hitted) && Vector2.Distance(rb.position, position) > 0.5f)
+        if (attacking || hitted && Vector2.Distance(rb.position, position) > 0.5f)
         {
             rb.constraints = RigidbodyConstraints2D.FreezeAll;
             return;
@@ -156,7 +168,12 @@ public abstract class EnemyMovement : MonoBehaviour
                 break;
         }
 
-        if (inMovementRange)
+        if (knockbacked == true)
+        {
+            rb.mass = 1;
+            rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        }
+        else if (inMovementRange)
         {
             rb.mass = 1;
             rb.constraints = RigidbodyConstraints2D.None | RigidbodyConstraints2D.FreezeRotation;
@@ -185,8 +202,8 @@ public abstract class EnemyMovement : MonoBehaviour
         {
             return;
         }
-        
-        health -= damage;
+
+        currentHealth -= damage;
 
         CheckDeadCondition();
 
@@ -198,9 +215,15 @@ public abstract class EnemyMovement : MonoBehaviour
             anim.SetBool("hitted", hitted);
     }
 
+    public bool isAlive()
+    {
+        return alive;
+    }
+
     public void Die()
     {
-        health = 0;
+        rb.constraints = RigidbodyConstraints2D.FreezeAll;
+        currentHealth = 0;
         CheckDeadCondition();
     }
 
@@ -212,19 +235,21 @@ public abstract class EnemyMovement : MonoBehaviour
     public void SetHittedFalse()
     {
         hitted = false;
+        knockbacked = false;
         anim.SetBool("hitted", hitted);
     }
 
     public abstract void SetAttackingFalse();
+    public abstract void AddScore();
 
     private void CheckDeadCondition()
     {
 
-        if (health <= 0)
+        if (currentHealth <= 0)
         {
             cc.enabled = false;
             rb.constraints = RigidbodyConstraints2D.FreezeAll;
-            health = 0;
+            currentHealth = 0;
             alive = false;
             anim.SetBool("alive", alive);
         }

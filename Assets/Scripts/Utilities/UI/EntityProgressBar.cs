@@ -16,6 +16,10 @@ public class EntityProgressBar : MonoBehaviour
         {
             progressMask.fillAmount = previousCurrent / maximum;
             previousCurrent -= progressSpeed;
+        } else
+        {
+            progressMask.fillAmount = previousCurrent / maximum;
+            previousCurrent += progressSpeed;
         }
     }
 

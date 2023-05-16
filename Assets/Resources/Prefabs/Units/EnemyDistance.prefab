@@ -103,9 +103,9 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.005, y: 0.005}
+  m_Offset: {x: 0.004999995, y: 0.41080981}
   serializedVersion: 2
-  m_Radius: 0.2
+  m_Radius: 0.46520752
 --- !u!50 &5037429430027693205
 Rigidbody2D:
   serializedVersion: 4
@@ -161,13 +161,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 6
   minDistance: 5
-  health: 40
-  damage: 20
+  hitted: 0
+  totalHealth: 35
   distanceToPlayer: 0
   audioSource: {fileID: 1589246139129536207}
   attackSound: {fileID: 8300000, guid: de1a89a0efdba10489d68f60f333aca2, type: 3}
   throwSound: {fileID: 8300000, guid: db0fe5d1cbd549f46948b45663587420, type: 3}
   maxDistance: 8
+  score: 200
 --- !u!114 &6377769181141655034
 MonoBehaviour:
   m_ObjectHideFlags: 0

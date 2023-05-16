@@ -12,6 +12,8 @@ public class DistanceEM : EnemyMovement
     private bool inMinRange;
     private GameObject arrow;
 
+    public float score;
+
     public override void Tracking()
     {
         inMinRange = distance > minDistance;
@@ -27,7 +29,12 @@ public class DistanceEM : EnemyMovement
     }
 
     public override void Attacking()
-    {}
+    { }
+
+    public override void AddScore()
+    {
+        CombatManager.instance.AddKillScore(score);
+    }
 
     public void ThrowAttack()
     {

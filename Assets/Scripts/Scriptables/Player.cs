@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Linq;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -29,6 +30,8 @@ public class Player : MonoBehaviour
 
     //Stats variables
     public float maxHealth;
+    public float knockbackForce;
+    private Vector2 damageDirection;
     private bool hitted;
     private bool alive;
     private float currentHealth;
@@ -45,10 +48,14 @@ public class Player : MonoBehaviour
     protected float[] tiempoCD = new float[2];
     protected float[] damageDeal = new float[2];
 
-    protected float atkMng = 10;
-
     private bool attacking;
     private string executeAttackName;
+
+    //Abilities
+    private GameObject fistComboProgressBar, dashProgressBar;
+
+    private float dashCooldownTime;
+    private float executedAttackCD, totalExecutedAttackTime;
 
     //Combo system
     private Weapon currentWeapon;
@@ -81,6 +88,9 @@ public class Player : MonoBehaviour
         currentHealth = maxHealth;
         inmortalityTime = 1f;
 
+        //Abilities
+        dashCooldownTime = 0;
+
         //Atack Stats
         atkDist[0] = new Vector2();
         atkDist[1] = new Vector2();
@@ -104,6 +114,14 @@ public class Player : MonoBehaviour
     {
         if (state == GameState.Combat)
         {
+            //Abilities
+            fistComboProgressBar = GameObject.Find("FistRadialDownProgressBarWithImage");
+            dashProgressBar = GameObject.Find("DashRadialDownProgressBarWithImage");
+            totalExecutedAttackTime = 0;
+            SetDashProgressBarToMaximum();
+            SetFistProgressBarToMaximum(1);
+
+            //Health
             playerHealthBar = GameObject.Find("PlayerHealthProgressBar");
             playerHealthBar.GetComponent<EntityProgressBar>().maximum = maxHealth;
             playerHealthBar.GetComponent<EntityProgressBar>().current = currentHealth;
@@ -114,11 +132,14 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        if (!(GameManager.Instance.state == GameState.Combat))
+        if (!(GameManager.Instance.state == GameState.Combat) && !(GameManager.Instance.state == GameState.CombatFinished))
         {
             rb.constraints = RigidbodyConstraints2D.FreezeAll;
             anim.SetFloat("speed", 0);
             return;
+        } else
+        {
+            rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         }
 
         PlayerMovement();
@@ -140,6 +161,8 @@ public class Player : MonoBehaviour
     {
         if (!alive) return;
 
+        UpdateProgressBars();
+
         movement = playerInput.actions["Move"].ReadValue<Vector2>();
 
         PlayerVelocity();
@@ -157,7 +180,7 @@ public class Player : MonoBehaviour
             }
         }
 
-        if (inputQueue.Count >= 0 && inputQueue.Count <= 2 && !attacking && !hitted && !currentWeapon.IsInCD())
+        if (inputQueue.Count >= 0 && inputQueue.Count <= 2 && !attacking && !hitted)
         {
             if (playerInput.actions["SoftHit"].triggered)
             {
@@ -196,42 +219,64 @@ public class Player : MonoBehaviour
             }
         }
 
+        if (currentWeapon.IsInCD())
+        {
+            QuitarAccion();
+        }
+
         if (inputQueue.Count == 3)
         {
             List<string> actionList = inputQueue.ToList();
+
             switch ((actionList[0], actionList[1], actionList[2]))
             {
                 case ("softHit", "softHit", "softHit"):
+
                     Attack("SoftSoftSoftCombo");
                     anim.SetInteger("finish", 0);
+
                     break;
                 case ("softHit", "strongHit", "softHit"):
+
                     Attack("SoftStrongSoftCombo");
                     anim.SetInteger("finish", 1);
+
                     break;
                 case ("strongHit", "softHit", "softHit"):
+
                     Attack("StrongSoftSoftCombo");
                     anim.SetInteger("finish", 2);
+
                     break;
                 case ("strongHit", "strongHit", "softHit"):
+
                     Attack("StrongStrongSoftCombo");
                     anim.SetInteger("finish", 3);
+
                     break;
                 case ("softHit", "softHit", "strongHit"):
+
                     Attack("SoftSoftStrongCombo");
                     anim.SetInteger("finish", 0);
+
                     break;
                 case ("softHit", "strongHit", "strongHit"):
+
                     Attack("SoftStrongStrongCombo");
                     anim.SetInteger("finish", 1);
+
                     break;
                 case ("strongHit", "softHit", "strongHit"):
+
                     Attack("StrongSoftStrongCombo");
                     anim.SetInteger("finish", 2);
+
                     break;
                 case ("strongHit", "strongHit", "strongHit"):
+
                     Attack("StrongStrongStrongCombo");
                     anim.SetInteger("finish", 3);
+
                     break;
             }
             QuitarAccion();
@@ -279,6 +324,7 @@ public class Player : MonoBehaviour
     {
         isDashing = false;
         anim.SetBool("isDashing", isDashing);
+        dashCooldownTime = 2 + Time.time - CombatManager.instance.beginBattleTime;
         StartCoroutine(DashCooldown());
     }
 
@@ -291,9 +337,26 @@ public class Player : MonoBehaviour
     #endregion
 
     #region stats functions
-    public void GetDamage(float damage)
+
+    public void Heal(float heal)
     {
-        if (isInmortal || isDashing) return;
+        if (currentHealth + heal < maxHealth)
+        {
+            currentHealth += heal;
+        } else
+        {
+            currentHealth = maxHealth;
+        }
+
+        playerHealthBar.GetComponent<EntityProgressBar>().current = currentHealth;
+        playerHealthBar.GetComponent<EntityProgressBar>().GetCurrentFill();
+    }
+
+    public void GetDamage(float damage, Vector2 damageDirection)
+    {
+        if (isInmortal || isDashing || damage < 0) return;
+
+        this.damageDirection = damageDirection;
 
         currentHealth -= damage;
 
@@ -324,6 +387,7 @@ public class Player : MonoBehaviour
         {
             if (!attacking)
             {
+                rb.AddForce(damageDirection * knockbackForce, ForceMode2D.Force);
                 hitted = true;
                 anim.SetBool("hitted", hitted);
             }
@@ -368,6 +432,85 @@ public class Player : MonoBehaviour
     private void Attack(string attackName)
     {
         executedAttack = currentWeapon.Hit(attackName, inputQueue.Count - 1);
+        if (executedAttack.GetCD() > 0)
+        {
+            SetFistProgressBarToMaximum(executedAttack.GetCD());
+            executedAttackCD = executedAttack.GetCD() + Time.time - CombatManager.instance.beginBattleTime;
+            totalExecutedAttackTime = executedAttack.GetCD();
+        }
+    }
+    #endregion
+
+    #region Abilities graphic management
+    private void UpdateProgressBars()
+    {
+        float actualDashCooldownTime;
+        if (dashCooldownTime > 0)
+        {
+            actualDashCooldownTime = 2 - (dashCooldownTime - (Time.time - CombatManager.instance.beginBattleTime));
+            UpdateDashCooldownBar(actualDashCooldownTime);
+        }
+        else
+        {
+            actualDashCooldownTime = 0;
+        }
+
+        if (actualDashCooldownTime >= 2)
+        {
+            dashCooldownTime = 0;
+            SetDashProgressBarToMaximum();
+        }
+
+        float actualExecutedAttackCD;
+        if (executedAttackCD > 0)
+        {
+            actualExecutedAttackCD = totalExecutedAttackTime - (executedAttackCD - (Time.time - CombatManager.instance.beginBattleTime));
+            UpdateFistCooldownBar(actualExecutedAttackCD);
+        }
+        else
+        {
+            actualExecutedAttackCD = 0;
+        }
+
+        if (actualExecutedAttackCD >= totalExecutedAttackTime && totalExecutedAttackTime > 0)
+        {
+            executedAttackCD = 0;
+            SetFistProgressBarToMaximum(totalExecutedAttackTime);
+        }
+    }
+
+    private void SetDashProgressBarToMaximum()
+    {
+        SetProgressBarToMaximum(dashProgressBar, 2);
+    }
+
+    private void UpdateDashCooldownBar(float current)
+    {
+        UpdateProgressBar(dashProgressBar, current);
+    }
+    public void SetFistProgressBarToMaximum(float maximum)
+    {
+        SetProgressBarToMaximum(fistComboProgressBar, maximum);
+    }
+
+    private void UpdateFistCooldownBar(float current)
+    {
+        UpdateProgressBar(fistComboProgressBar, current);
+    }
+
+    private void SetProgressBarToMaximum(GameObject progressBarGO, float maximum = 1)
+    {
+        ProgressBar progressBar = progressBarGO.GetComponent<ProgressBar>();
+        progressBar.maximum = maximum;
+        progressBar.current = 0;
+        progressBar.GetCurrentFill();
+    }
+
+    private void UpdateProgressBar(GameObject progressBarGO, float current)
+    {
+        ProgressBar progressBar = progressBarGO.GetComponent<ProgressBar>();
+        progressBar.current = current;
+        progressBar.GetCurrentFill();
     }
     #endregion
 }

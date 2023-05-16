@@ -11,6 +11,8 @@ public class MeleEM : EnemyMovement
     public AudioSource audioSource;
     public AudioClip attackSound;
 
+    public float score;
+
     private GameObject sharp;
 
     public override void Tracking()
@@ -30,6 +32,11 @@ public class MeleEM : EnemyMovement
             sharp.SetActive(true);
             sharp.GetComponent<MeleAttack>().Launch(nearPlayer, minDistance, SetDirection(true));
         }
+    }
+
+    public override void AddScore()
+    {
+        CombatManager.instance.AddKillScore(score);
     }
 
     public override void SetAttackingFalse()

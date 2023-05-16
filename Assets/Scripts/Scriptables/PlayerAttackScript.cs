@@ -6,10 +6,12 @@ public class PlayerAttackScript : MonoBehaviour
 {
     public Vector3 leftPosition, rightPosition;
     private Player player;
+    private Weapon weapon;
 
     private void Awake()
     {
         player = transform.parent.GetComponentInParent<Player>();
+        weapon = GetComponentInParent<Weapon>();
     }
 
     private void OnEnable()
@@ -26,10 +28,20 @@ public class PlayerAttackScript : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Enemy") && !collision.GetComponent<EnemyMovement>().hitted)
+        EnemyMovement enemy = collision.GetComponent<EnemyMovement>();
+        if (enemy != null && !enemy.hitted && enemy.isAlive())
         {
-            collision.GetComponent<EnemyMovement>().GetDamage(player.executedAttack.GetDamage());
-            CombatManager.instance.ComboSistem(true);
+            enemy.Knockback(weapon.knockbackForce, player.GetComponent<SpriteRenderer>().flipX ? Vector2.right : Vector2.left);
+
+            enemy.GetDamage(player.executedAttack.GetDamage());
+
+            CombatManager.instance.ComboSystem(true);
+
+            if (!enemy.isAlive())
+            {
+                enemy.AddScore();
+                player.Heal(enemy.totalHealth * (weapon.GetLifeSteal() / 100));
+            }
         }
     }
 }
