@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Linq;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -29,6 +30,8 @@ public class Player : MonoBehaviour
 
     //Stats variables
     public float maxHealth;
+    public float knockbackForce;
+    private Vector2 damageDirection;
     private bool hitted;
     private bool alive;
     private float currentHealth;
@@ -47,6 +50,12 @@ public class Player : MonoBehaviour
 
     private bool attacking;
     private string executeAttackName;
+
+    //Abilities
+    private GameObject fistComboProgressBar, dashProgressBar;
+
+    private float dashCooldownTime;
+    private float executedAttackCD, totalExecutedAttackTime;
 
     //Combo system
     private Weapon currentWeapon;
@@ -79,6 +88,9 @@ public class Player : MonoBehaviour
         currentHealth = maxHealth;
         inmortalityTime = 1f;
 
+        //Abilities
+        dashCooldownTime = 0;
+
         //Atack Stats
         atkDist[0] = new Vector2();
         atkDist[1] = new Vector2();
@@ -102,6 +114,14 @@ public class Player : MonoBehaviour
     {
         if (state == GameState.Combat)
         {
+            //Abilities
+            fistComboProgressBar = GameObject.Find("FistRadialDownProgressBarWithImage");
+            dashProgressBar = GameObject.Find("DashRadialDownProgressBarWithImage");
+            totalExecutedAttackTime = 0;
+            SetDashProgressBarToMaximum();
+            SetFistProgressBarToMaximum(1);
+
+            //Health
             playerHealthBar = GameObject.Find("PlayerHealthProgressBar");
             playerHealthBar.GetComponent<EntityProgressBar>().maximum = maxHealth;
             playerHealthBar.GetComponent<EntityProgressBar>().current = currentHealth;
@@ -112,11 +132,14 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        if (!(GameManager.Instance.state == GameState.Combat))
+        if (!(GameManager.Instance.state == GameState.Combat) && !(GameManager.Instance.state == GameState.CombatFinished))
         {
             rb.constraints = RigidbodyConstraints2D.FreezeAll;
             anim.SetFloat("speed", 0);
             return;
+        } else
+        {
+            rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         }
 
         PlayerMovement();
@@ -137,6 +160,8 @@ public class Player : MonoBehaviour
     private void PlayerMovement()
     {
         if (!alive) return;
+
+        UpdateProgressBars();
 
         movement = playerInput.actions["Move"].ReadValue<Vector2>();
 
@@ -299,6 +324,7 @@ public class Player : MonoBehaviour
     {
         isDashing = false;
         anim.SetBool("isDashing", isDashing);
+        dashCooldownTime = 2 + Time.time - CombatManager.instance.beginBattleTime;
         StartCoroutine(DashCooldown());
     }
 
@@ -326,9 +352,11 @@ public class Player : MonoBehaviour
         playerHealthBar.GetComponent<EntityProgressBar>().GetCurrentFill();
     }
 
-    public void GetDamage(float damage)
+    public void GetDamage(float damage, Vector2 damageDirection)
     {
         if (isInmortal || isDashing || damage < 0) return;
+
+        this.damageDirection = damageDirection;
 
         currentHealth -= damage;
 
@@ -359,6 +387,7 @@ public class Player : MonoBehaviour
         {
             if (!attacking)
             {
+                rb.AddForce(damageDirection * knockbackForce, ForceMode2D.Force);
                 hitted = true;
                 anim.SetBool("hitted", hitted);
             }
@@ -403,6 +432,85 @@ public class Player : MonoBehaviour
     private void Attack(string attackName)
     {
         executedAttack = currentWeapon.Hit(attackName, inputQueue.Count - 1);
+        if (executedAttack.GetCD() > 0)
+        {
+            SetFistProgressBarToMaximum(executedAttack.GetCD());
+            executedAttackCD = executedAttack.GetCD() + Time.time - CombatManager.instance.beginBattleTime;
+            totalExecutedAttackTime = executedAttack.GetCD();
+        }
+    }
+    #endregion
+
+    #region Abilities graphic management
+    private void UpdateProgressBars()
+    {
+        float actualDashCooldownTime;
+        if (dashCooldownTime > 0)
+        {
+            actualDashCooldownTime = 2 - (dashCooldownTime - (Time.time - CombatManager.instance.beginBattleTime));
+            UpdateDashCooldownBar(actualDashCooldownTime);
+        }
+        else
+        {
+            actualDashCooldownTime = 0;
+        }
+
+        if (actualDashCooldownTime >= 2)
+        {
+            dashCooldownTime = 0;
+            SetDashProgressBarToMaximum();
+        }
+
+        float actualExecutedAttackCD;
+        if (executedAttackCD > 0)
+        {
+            actualExecutedAttackCD = totalExecutedAttackTime - (executedAttackCD - (Time.time - CombatManager.instance.beginBattleTime));
+            UpdateFistCooldownBar(actualExecutedAttackCD);
+        }
+        else
+        {
+            actualExecutedAttackCD = 0;
+        }
+
+        if (actualExecutedAttackCD >= totalExecutedAttackTime && totalExecutedAttackTime > 0)
+        {
+            executedAttackCD = 0;
+            SetFistProgressBarToMaximum(totalExecutedAttackTime);
+        }
+    }
+
+    private void SetDashProgressBarToMaximum()
+    {
+        SetProgressBarToMaximum(dashProgressBar, 2);
+    }
+
+    private void UpdateDashCooldownBar(float current)
+    {
+        UpdateProgressBar(dashProgressBar, current);
+    }
+    public void SetFistProgressBarToMaximum(float maximum)
+    {
+        SetProgressBarToMaximum(fistComboProgressBar, maximum);
+    }
+
+    private void UpdateFistCooldownBar(float current)
+    {
+        UpdateProgressBar(fistComboProgressBar, current);
+    }
+
+    private void SetProgressBarToMaximum(GameObject progressBarGO, float maximum = 1)
+    {
+        ProgressBar progressBar = progressBarGO.GetComponent<ProgressBar>();
+        progressBar.maximum = maximum;
+        progressBar.current = 0;
+        progressBar.GetCurrentFill();
+    }
+
+    private void UpdateProgressBar(GameObject progressBarGO, float current)
+    {
+        ProgressBar progressBar = progressBarGO.GetComponent<ProgressBar>();
+        progressBar.current = current;
+        progressBar.GetCurrentFill();
     }
     #endregion
 }

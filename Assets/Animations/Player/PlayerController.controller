@@ -90,6 +90,9 @@ AnimatorStateTransition:
     m_ConditionEvent: speed
     m_EventTreshold: 0.1
   - m_ConditionMode: 2
+    m_ConditionEvent: isDashing
+    m_EventTreshold: 0
+  - m_ConditionMode: 2
     m_ConditionEvent: hitted
     m_EventTreshold: 0
   - m_ConditionMode: 2

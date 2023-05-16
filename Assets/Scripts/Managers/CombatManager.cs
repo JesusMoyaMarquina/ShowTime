@@ -20,11 +20,11 @@ public class CombatManager : MonoBehaviour
     #region Timer variables
     public GameObject timerProgressBar, timerMultiplierProgressBar;
 
-    public float multiplierTime, combatTime;
+    public float multiplierTime, combatTime, beginBattleTime;
 
     private bool multiplierActive, timerPause;
 
-    private float actualTime, acumulatedMultiplierTime, previousTimes, previousTimesNonMultiplied, remainingTime, beginBattleTime, timerSpeed;
+    private float actualTime, acumulatedMultiplierTime, previousTimes, previousTimesNonMultiplied, remainingTime, timerSpeed;
     #endregion
 
     #region Combo variables
@@ -67,11 +67,13 @@ public class CombatManager : MonoBehaviour
             case GameState.Combat:
                 CutPreviousTimer();
                 break;
+            case GameState.CombatFinished:
+                FillScoreUI();
+                break;
             case GameState.Pause:
                 acumulatedMultiplierTime = actualTime;
                 break;
             case GameState.Vicory:
-                FillScoreUI();
                 break;
         }
     }
@@ -162,6 +164,7 @@ public class CombatManager : MonoBehaviour
     {
         if (remainingTime <= 0)
         {
+            GameManager.Instance.UpdateGameState(GameState.CombatFinished);
             StopUI();
             KillAllEnemies();
             OpenWinZone();
@@ -301,12 +304,14 @@ public class CombatManager : MonoBehaviour
     #region score system
     public void AddHitScore(int hits, float multiplier = 1)
     {
-        AddScore(Mathf.FloorToInt(hits / comboToMultiply) * baseScorePerCombo, "Hits", multiplier, hits);
+        if (hits > 0)
+        {
+            AddScore(hits * baseScorePerCombo, "Hits", multiplier, hits);
+        }
     }
 
     public void AddKillScore(float fscore = 0)
     {
-        print("entro");
         AddScore(fscore, "Kills", comboMp);
     }
 
@@ -323,7 +328,6 @@ public class CombatManager : MonoBehaviour
 
         score.score += fscore;
         score.numberOf += numberOf;
-
     }
     #endregion
 }

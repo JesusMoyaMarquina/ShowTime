@@ -5,6 +5,7 @@ using UnityEngine;
 public abstract class Weapon : MonoBehaviour
 {
     public int lifeSteal;
+    public float knockbackForce;
 
     protected WeaponType weaponType;
     protected bool isInCD;
@@ -37,8 +38,8 @@ public abstract class Weapon : MonoBehaviour
 
     private void Magnetismo(float atkMng)
     {
-        int direction = GetComponent<SpriteRenderer>().flipX ? 1 : -1;
-        GetComponent<Rigidbody2D>().AddForce(new Vector2(atkMng * direction, 0), ForceMode2D.Force);
+        Vector2 direction = GetComponent<SpriteRenderer>().flipX ? Vector2.right : Vector2.left;
+        GetComponent<Rigidbody2D>().AddForce(direction * atkMng, ForceMode2D.Force);
     }
 
     IEnumerator TiempoCD(float tiempoCD)

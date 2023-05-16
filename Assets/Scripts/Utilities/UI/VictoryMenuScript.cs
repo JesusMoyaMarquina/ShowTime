@@ -9,9 +9,71 @@ public class VictoryMenuScript : MonoBehaviour
     public GameObject scorePanel;
     public GameObject totalScoreText;
 
+    public float timeBetweenScorePanel;
+    public float totalScoreIncremental;
+
+    public int countFPS = 30;
+    public float duration = 0.5f;
+    private float totalScore = 0;
+
+    private Coroutine CountingCoroutine;
+
     private void Awake()
     {
         GameManager.OnGameStateChange += GameManagerOnGameStateChange;
+    }
+
+    private void UpdateText(float newTotalScore) 
+    {
+        if (CountingCoroutine != null)
+        {
+            StopCoroutine(CountingCoroutine);
+        }
+        CountingCoroutine = StartCoroutine(CountText(newTotalScore));
+    }
+
+    private IEnumerator CountText(float newTotalScore)
+    {
+        float previousTotalScore = totalScore;
+        float stepAmount;
+
+        stepAmount = (newTotalScore - previousTotalScore) / (countFPS + duration);
+
+        if(previousTotalScore < newTotalScore)
+        {
+            while(previousTotalScore < newTotalScore)
+            {
+                previousTotalScore += stepAmount;
+                if(previousTotalScore > newTotalScore)
+                {
+                    previousTotalScore = newTotalScore;
+                }
+
+                totalScoreText.GetComponent<TextMeshProUGUI>().text = $"Total Score: {string.Format("{0:0.00}", previousTotalScore)}";
+
+                yield return new WaitForSeconds(1f / countFPS);
+            }
+        } 
+        else
+        {
+            while (previousTotalScore > newTotalScore)
+            {
+                previousTotalScore += stepAmount;
+                if (previousTotalScore < newTotalScore)
+                {
+                    previousTotalScore = newTotalScore;
+                }
+
+                totalScoreText.GetComponent<TextMeshProUGUI>().text = $"Total Score: {string.Format("{0:0.00}", previousTotalScore)}";
+
+                yield return new WaitForSeconds(1f / countFPS);
+            }
+        }
+    }
+
+    private void OnDestroy()
+    {
+        GameManager.OnGameStateChange -= GameManagerOnGameStateChange;
     }
 
     private void GameManagerOnGameStateChange(GameState state)
@@ -19,6 +81,10 @@ public class VictoryMenuScript : MonoBehaviour
         switch (state)
         {
             case GameState.Vicory:
+                if (!gameObject.activeSelf)
+                {
+                    gameObject.SetActive(true);
+                }
                 StartCoroutine(ScoreLoad());
                 break;
         }
@@ -32,7 +98,7 @@ public class VictoryMenuScript : MonoBehaviour
 
     IEnumerator ScoreLoad()
     {
-        float totalScore = 0;
+        float newTotalScore = 0;
 
         List<Score> scores = CombatManager.instance.GetScores();
 
@@ -48,11 +114,14 @@ public class VictoryMenuScript : MonoBehaviour
             Score score = scores[i];
             actualScorePanel.GetComponent<ScoreScript>().Inicialize(score.title, score.multiplier.ToString(), score.score.ToString(), score.GetTotalScore().ToString(), score.numberOf.ToString());
 
-            yield return new WaitForSeconds(0.5f);
+            newTotalScore += score.GetTotalScore();
 
-            totalScore += score.GetTotalScore();
+            //Resize container
+            scoreList.GetComponent<RectTransform>().sizeDelta = new Vector2(scoreList.GetComponent<RectTransform>().sizeDelta.x, scorePanel.transform.GetComponent<RectTransform>().sizeDelta.y * scores.Count);
+        
+            yield return new WaitForSeconds(timeBetweenScorePanel);
         }
 
-        totalScoreText.GetComponent<TextMeshProUGUI>().text = $"Total Score: {totalScore}";
+        UpdateText(newTotalScore);
     }
 }
