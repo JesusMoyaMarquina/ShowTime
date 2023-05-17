@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     public GameState state;
+    public GameState previousGameState;
 
     public static event Action<GameState> OnGameStateChange;
 
@@ -23,6 +24,7 @@ public class GameManager : MonoBehaviour
 
     public void UpdateGameState(GameState newState)
     {
+        previousGameState = state;
         state = newState;
 
         switch (newState)
@@ -34,6 +36,7 @@ public class GameManager : MonoBehaviour
                 HandleCombat();
                 break;
             case GameState.CombatFinished:
+                HandleCombatFinished();
                 break;
             case GameState.Pause:
                 HandlePause();
@@ -53,26 +56,43 @@ public class GameManager : MonoBehaviour
 
     private void HandleCinematic()
     {
-        Debug.Log("Handle Dialogs");
+        print("HandleCinematic");
+        Cursor.lockState = CursorLockMode.Locked;
+        Time.timeScale = 1f;
     }
 
     private void HandleCombat()
     {
+        print("HandleCombat");
+        Cursor.lockState = CursorLockMode.Locked;
+        Time.timeScale = 1f;
+    }
+
+    private void HandleCombatFinished()
+    {
+        print("HandleCombatFinished");
+        Cursor.lockState = CursorLockMode.Locked;
         Time.timeScale = 1f;
     }
 
     private void HandlePause()
     {
+        print("HandlePause");
+        Cursor.lockState = CursorLockMode.None;
         Time.timeScale = 0f;
     }
 
     private void HandleVictory()
     {
+        print("HandleVictory");
+        Cursor.lockState = CursorLockMode.None;
         Time.timeScale = 1f;
     }
 
     private void HandleLose()
     {
+        print("HandleLose");
+        Cursor.lockState = CursorLockMode.None;
         Time.timeScale = 1f;
     }
 }

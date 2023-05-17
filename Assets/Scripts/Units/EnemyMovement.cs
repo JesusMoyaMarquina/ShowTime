@@ -83,7 +83,7 @@ public abstract class EnemyMovement : MonoBehaviour
         attacking = false;
         knockbacked = true;
 
-        rb.AddForce(direction * knockbackForce, ForceMode2D.Force);
+        rb.AddForce(direction.normalized * knockbackForce * rb.mass, ForceMode2D.Impulse);
     }
 
     public GameObject FindNearPlayer()
@@ -109,6 +109,10 @@ public abstract class EnemyMovement : MonoBehaviour
 
     public void Translation()
     {
+        if (knockbacked) return;
+
+        print("not knockbacked");
+
         if (inMovementRange)
         {
             if (hitted || attacking) return;
@@ -117,7 +121,6 @@ public abstract class EnemyMovement : MonoBehaviour
             transform.LookAt(targetPos);
             rb.velocity = direction * speed;
             transform.rotation = Quaternion.identity;
-            //rb.constraints = RigidbodyConstraints2D.FreezeAll;
         }
         else
         {

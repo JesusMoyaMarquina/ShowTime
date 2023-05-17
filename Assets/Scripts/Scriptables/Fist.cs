@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class Fist : Weapon
 {
-    public float[] MngList;
 
     private void Awake()
     {

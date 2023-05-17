@@ -31,7 +31,7 @@ public class PlayerAttackScript : MonoBehaviour
         EnemyMovement enemy = collision.GetComponent<EnemyMovement>();
         if (enemy != null && !enemy.hitted && enemy.isAlive())
         {
-            enemy.Knockback(weapon.knockbackForce, player.GetComponent<SpriteRenderer>().flipX ? Vector2.right : Vector2.left);
+            enemy.Knockback(weapon.MngList[player.inputQueue.Count], player.GetComponent<SpriteRenderer>().flipX ? Vector2.right : Vector2.left);
 
             enemy.GetDamage(player.executedAttack.GetDamage());
 

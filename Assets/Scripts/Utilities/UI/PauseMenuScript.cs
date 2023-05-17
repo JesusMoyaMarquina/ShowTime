@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PauseMenuScript : MonoBehaviour
@@ -50,7 +48,7 @@ public class PauseMenuScript : MonoBehaviour
 
     public void ResumeGame()
     {
-        GameManager.Instance.UpdateGameState(GameState.Combat);
+        GameManager.Instance.UpdateGameState(GameManager.Instance.previousGameState);
     }
 
     public void ReturnToMainMenu()

@@ -80,10 +80,11 @@ public class CombatManager : MonoBehaviour
 
     void Update()
     {
-        if (GameManager.Instance.state == GameState.Combat)
+        if (GameManager.Instance.state == GameState.Combat || GameManager.Instance.state == GameState.CombatFinished)
         {
             HandleCombatInputs();
-            if ((int)(Math.Ceiling(remainingTime)) == combatTime - secondsToGenerate * generateIteration || remainingTime == combatTime)
+            print(remainingTime);
+            if (Mathf.CeilToInt(remainingTime) == combatTime - secondsToGenerate * generateIteration || remainingTime == combatTime)
             {
                 GenerateUnits();
             }

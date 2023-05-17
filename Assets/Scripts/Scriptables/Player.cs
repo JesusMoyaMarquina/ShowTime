@@ -15,7 +15,10 @@ public class Player : MonoBehaviour
     private Animator anim;
     private SpriteRenderer spriteRenderer;
     private PlayerInput playerInput;
-    private int actualWeapon;
+
+    //AudioVariables
+    private AudioSource audioSource;
+    public AudioClip stepFX, softAttackFX, strongAttackFX;
 
     //Color variables
     private Color baseColor;
@@ -37,6 +40,7 @@ public class Player : MonoBehaviour
     private float currentHealth;
     private float inmortalityTime;
     private float startInmortalTime;
+    private bool knockbacked;
     private bool isInmortal;
 
     private GameObject playerHealthBar;
@@ -60,7 +64,7 @@ public class Player : MonoBehaviour
     //Combo system
     private Weapon currentWeapon;
     public Attack executedAttack;
-    private Queue<string> inputQueue;
+    public Queue<string> inputQueue;
 
     private void Awake()
     {
@@ -71,7 +75,7 @@ public class Player : MonoBehaviour
         anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         playerInput = GetComponent<PlayerInput>();
-        actualWeapon = 0;
+        audioSource = GetComponent<AudioSource>();
 
         //Start direction
         direction = new Vector2(0, -1 * speed);
@@ -180,7 +184,148 @@ public class Player : MonoBehaviour
             }
         }
 
-        if (inputQueue.Count >= 0 && inputQueue.Count <= 2 && !attacking && !hitted)
+        HandleAttack();
+    }
+
+    void QuitarAccion()
+    {
+        inputQueue.Clear();
+    }
+
+    #region Movement functions
+    private void CameraFollowUp() => Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -10);
+
+    private void PlayerVelocity()
+    {
+        if (knockbacked || attacking) return;
+
+        Vector2 pDirection = isDashing ? direction / 10 : movement.normalized;
+        float pSpeed = isDashing ? speed * 2 : hitted ? speed / 2 : speed;
+
+        rb.velocity = pDirection * pSpeed;
+    }
+
+    private void PlayerDirection()
+    {
+        if (isDashing || knockbacked) return;
+
+        if (rb.velocity.x != 0)
+            direction = rb.velocity;
+
+        spriteRenderer.flipX = direction.x > 0;
+        
+        anim.SetFloat("speed", rb.velocity.magnitude);
+    }
+
+    private void PlayerDash()
+    {
+        if (attacking || hitted) return;
+
+        isDashing = true;
+        anim.SetBool("isDashing", isDashing);
+        anim.SetFloat("speed", rb.velocity.magnitude);
+    }
+
+    private void StopDashing()
+    {
+        isDashing = false;
+        anim.SetBool("isDashing", isDashing);
+        dashCooldownTime = 2 + Time.time - CombatManager.instance.beginBattleTime;
+        StartCoroutine(DashCooldown());
+    }
+
+    IEnumerator DashCooldown()
+    {
+        isDashInCooldown = true;
+        yield return new WaitForSeconds(2);
+        isDashInCooldown = false;
+    }
+    #endregion
+
+    #region Stats functions
+
+    public void Heal(float heal)
+    {
+        if (currentHealth + heal < maxHealth)
+        {
+            currentHealth += heal;
+        } else
+        {
+            currentHealth = maxHealth;
+        }
+
+        playerHealthBar.GetComponent<EntityProgressBar>().current = currentHealth;
+        playerHealthBar.GetComponent<EntityProgressBar>().GetCurrentFill();
+    }
+
+    public void GetDamage(float damage, Vector2 damageDirection)
+    {
+        if (isInmortal || isDashing || damage < 0) return;
+
+        this.damageDirection = damageDirection;
+
+        currentHealth -= damage;
+
+        DamageAnimation();
+
+        playerHealthBar.GetComponent<EntityProgressBar>().current = currentHealth;
+        playerHealthBar.GetComponent<EntityProgressBar>().GetCurrentFill();
+    }
+
+    private void CancelAttack()
+    {
+        SetAttackingFalse();
+        DeactivateAttackCollider();
+    }
+
+    private void DamageAnimation()
+    {
+        CancelAttack();
+
+        if (currentHealth <= 0)
+        {
+            currentHealth = 0;
+            alive = false;
+            rb.velocity = Vector2.zero;
+            anim.SetBool("alive", alive);
+        }
+        else
+        {
+            if (!attacking)
+            {
+                rb.AddForce(damageDirection * knockbackForce, ForceMode2D.Impulse);
+                knockbacked = true;
+                hitted = true;
+                anim.SetBool("hitted", hitted);
+            }
+            startInmortalTime = Time.time;
+            isInmortal = true;
+            spriteRenderer.color = hitColor;
+        }
+    }
+
+    public void SetActiveFalse()
+    {
+        gameObject.SetActive(false);
+    }
+
+    public void SetHittedFalse()
+    {
+        hitted = false;
+        knockbacked = false;
+        anim.SetBool("hitted", hitted);
+    }
+
+    public bool isAlive()
+    {
+        return alive;
+    }
+    #endregion
+
+    #region Attack functions
+    private void HandleAttack()
+    {
+        if (inputQueue.Count >= 0 && inputQueue.Count <= 2 && !attacking && !hitted && !isDashing)
         {
             if (playerInput.actions["SoftHit"].triggered)
             {
@@ -194,6 +339,7 @@ public class Player : MonoBehaviour
                 if (inputQueue.Count < 3)
                 {
                     Attack("SoftAttack");
+                    PlaySoftAttackFX();
                 }
 
                 anim.SetBool("attacking", attacking);
@@ -209,9 +355,10 @@ public class Player : MonoBehaviour
                 CancelInvoke(nameof(QuitarAccion));
                 Invoke(nameof(QuitarAccion), 2);
 
-                if(inputQueue.Count < 3)
+                if (inputQueue.Count < 3)
                 {
                     Attack("StrongAttack");
+                    PlayStrongAttackFX();
                 }
 
                 anim.SetBool("attacking", attacking);
@@ -281,142 +428,12 @@ public class Player : MonoBehaviour
             }
             QuitarAccion();
         }
+
     }
 
-    void QuitarAccion()
-    {
-        inputQueue.Clear();
-    }
-
-    #region movement functions
-    private void CameraFollowUp() => Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -10);
-
-    private void PlayerVelocity()
-    {
-        Vector2 pDirection = isDashing ? direction / 10 : movement.normalized;
-        float pSpeed = isDashing ? speed * 2 : attacking || hitted ? speed / 2 : speed;
-
-        rb.velocity = pDirection * pSpeed;
-    }
-
-    private void PlayerDirection()
-    {
-        if (isDashing || attacking) return;
-
-        if (rb.velocity.x != 0)
-            direction = rb.velocity;
-
-        spriteRenderer.flipX = direction.x > 0;
-        
-        anim.SetFloat("speed", rb.velocity.magnitude);
-    }
-
-    private void PlayerDash()
-    {
-        if (attacking || hitted) return;
-
-        isDashing = true;
-        anim.SetBool("isDashing", isDashing);
-        anim.SetFloat("speed", rb.velocity.magnitude);
-    }
-
-    private void StopDashing()
-    {
-        isDashing = false;
-        anim.SetBool("isDashing", isDashing);
-        dashCooldownTime = 2 + Time.time - CombatManager.instance.beginBattleTime;
-        StartCoroutine(DashCooldown());
-    }
-
-    IEnumerator DashCooldown()
-    {
-        isDashInCooldown = true;
-        yield return new WaitForSeconds(2);
-        isDashInCooldown = false;
-    }
-    #endregion
-
-    #region stats functions
-
-    public void Heal(float heal)
-    {
-        if (currentHealth + heal < maxHealth)
-        {
-            currentHealth += heal;
-        } else
-        {
-            currentHealth = maxHealth;
-        }
-
-        playerHealthBar.GetComponent<EntityProgressBar>().current = currentHealth;
-        playerHealthBar.GetComponent<EntityProgressBar>().GetCurrentFill();
-    }
-
-    public void GetDamage(float damage, Vector2 damageDirection)
-    {
-        if (isInmortal || isDashing || damage < 0) return;
-
-        this.damageDirection = damageDirection;
-
-        currentHealth -= damage;
-
-        DamageAnimation();
-
-        playerHealthBar.GetComponent<EntityProgressBar>().current = currentHealth;
-        playerHealthBar.GetComponent<EntityProgressBar>().GetCurrentFill();
-    }
-
-    private void CancelAttack()
-    {
-        SetAttackingFalse();
-        DeactivateAttackCollider();
-    }
-
-    private void DamageAnimation()
-    {
-        CancelAttack();
-
-        if (currentHealth <= 0)
-        {
-            currentHealth = 0;
-            alive = false;
-            rb.velocity = Vector2.zero;
-            anim.SetBool("alive", alive);
-        }
-        else
-        {
-            if (!attacking)
-            {
-                rb.AddForce(damageDirection * knockbackForce, ForceMode2D.Force);
-                hitted = true;
-                anim.SetBool("hitted", hitted);
-            }
-            startInmortalTime = Time.time;
-            isInmortal = true;
-            spriteRenderer.color = hitColor;
-        }
-    }
-
-    public void SetActiveFalse()
-    {
-        gameObject.SetActive(false);
-    }
-
-    public void SetHittedFalse()
-    {
-        hitted = false;
-        anim.SetBool("hitted", hitted);
-    }
-
-    public bool isAlive()
-    {
-        return alive;
-    }
-    #endregion
-
-    #region attack
     public void SetAttackingFalse()
     {
+        print("a");
         attacking = false;
         anim.SetBool("attacking", false);
     }
@@ -512,5 +529,24 @@ public class Player : MonoBehaviour
         progressBar.current = current;
         progressBar.GetCurrentFill();
     }
+    #endregion
+
+    #region Sound management
+    public void PlayStepFX()
+    {
+        audioSource.PlayOneShot(stepFX);
+    }
+
+    private void PlaySoftAttackFX()
+    {
+        audioSource.PlayOneShot(softAttackFX);
+    }
+
+    private void PlayStrongAttackFX()
+    {
+        audioSource.PlayOneShot(strongAttackFX);
+    }
+
+
     #endregion
 }

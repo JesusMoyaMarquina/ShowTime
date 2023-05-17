@@ -119,8 +119,8 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
+  m_LinearDrag: 35
+  m_AngularDrag: 0
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
@@ -162,7 +162,7 @@ MonoBehaviour:
   speed: 6
   minDistance: 5
   hitted: 0
-  totalHealth: 35
+  totalHealth: 1000000
   distanceToPlayer: 0
   audioSource: {fileID: 1589246139129536207}
   attackSound: {fileID: 8300000, guid: de1a89a0efdba10489d68f60f333aca2, type: 3}
