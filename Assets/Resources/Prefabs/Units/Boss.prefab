@@ -10,14 +10,14 @@ GameObject:
   m_Component:
   - component: {fileID: 5037429430027693208}
   - component: {fileID: 5037429430027693207}
-  - component: {fileID: 50180745004207341}
   - component: {fileID: 5037429430027693205}
   - component: {fileID: 5037429430027693211}
-  - component: {fileID: 5892606983111386611}
-  - component: {fileID: 6377769181141655034}
-  - component: {fileID: 1589246139129536207}
-  m_Layer: 7
-  m_Name: EnemyDistance
+  - component: {fileID: -2563101376177450938}
+  - component: {fileID: 3025578673720806773}
+  - component: {fileID: -1758514401157523288}
+  - component: {fileID: -3024020600051969732}
+  m_Layer: 0
+  m_Name: Boss
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,7 +32,7 @@ Transform:
   m_GameObject: {fileID: 5037429430027693209}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 10.36, y: -1, z: 3.5332098}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -80,7 +80,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: 6084859605308855041, guid: 9c447c54c8e0416e9446cadb88c48fd3, type: 3}
-  m_Color: {r: 1, g: 0.6544963, b: 0, a: 1}
+  m_Color: {r: 0.72510576, g: 0, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -90,22 +90,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!58 &50180745004207341
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5037429430027693209}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.004999995, y: 0.41080981}
-  serializedVersion: 2
-  m_Radius: 0.46520752
 --- !u!50 &5037429430027693205
 Rigidbody2D:
   serializedVersion: 4
@@ -137,7 +121,7 @@ Animator:
   m_GameObject: {fileID: 5037429430027693209}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 0d259d04a86b81b4fa31c6cbc60a9d2a, type: 2}
+  m_Controller: {fileID: 9100000, guid: c8941695b412cd342ab97be0068fa46b, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -147,7 +131,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &5892606983111386611
+--- !u!114 &-2563101376177450938
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -156,22 +140,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 5037429430027693209}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 765cf038549b1554f9d01d0b7a04a5f4, type: 3}
+  m_Script: {fileID: 11500000, guid: aca753796757e8143b7ef0800e0d8897, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 6
-  minDistance: 5
+  speed: 12
+  minDistance: 2
   hitted: 0
   stunned: 0
-  totalHealth: 35
+  totalHealth: 500
   distanceToPlayer: 0
-  audioSource: {fileID: 1589246139129536207}
+  audioSource: {fileID: -1758514401157523288}
   stepFX: {fileID: 0}
-  attackFX: {fileID: 8300000, guid: de1a89a0efdba10489d68f60f333aca2, type: 3}
-  score: 200
-  throwSound: {fileID: 8300000, guid: db0fe5d1cbd549f46948b45663587420, type: 3}
-  maxDistance: 8
---- !u!114 &6377769181141655034
+  attackFX: {fileID: 8300000, guid: 015af240af7fe4746bd5dd267b6719b3, type: 3}
+  score: 1000
+  bossAttack: {fileID: 0}
+--- !u!114 &3025578673720806773
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -183,10 +166,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b940fa4b0b75db4f901b1fe4689140b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectToPool: {fileID: 1393277690351578813, guid: 64b5729b664677140bb7200c90faaa41, type: 3}
+  objectToPool: {fileID: 1393277690351578813, guid: 3f0a8c472e2835b4282b2e0ab29c5edf, type: 3}
   amountToPool: 1
   pooledObjects: []
---- !u!82 &1589246139129536207
+--- !u!82 &-1758514401157523288
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -282,3 +265,29 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!61 &-3024020600051969732
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5037429430027693209}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0.32434323}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.1}
+    oldSize: {x: 2.7692308, y: 2.3076923}
+    newSize: {x: 2.7692308, y: 2.3076923}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.6785188, y: 0.6182926}
+  m_EdgeRadius: 0

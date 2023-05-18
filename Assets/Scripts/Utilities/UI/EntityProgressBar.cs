@@ -12,6 +12,8 @@ public class EntityProgressBar : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (progressMask == null) return;
+
         if (previousCurrent >= current) 
         {
             progressMask.fillAmount = previousCurrent / maximum;

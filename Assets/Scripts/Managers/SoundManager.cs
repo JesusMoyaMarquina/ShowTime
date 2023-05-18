@@ -13,7 +13,6 @@ public class SoundManager : MonoBehaviour
     public static SoundManager instance;
 
     public AudioSource battleMusic, menuMusic, FXSource;
-    public AudioClip gameThemeMusic;
 
     private void Awake()
     {
@@ -61,6 +60,14 @@ public class SoundManager : MonoBehaviour
             case GameState.Cinematics:
                 break;
             case GameState.Combat:
+                battleMusic.Play();
+                menuMusic.Pause();
+                break;
+            case GameState.BossCombat:
+                battleMusic.Play();
+                menuMusic.Pause();
+                break;
+            case GameState.CombatFinished:
                 battleMusic.Play();
                 menuMusic.Pause();
                 break;

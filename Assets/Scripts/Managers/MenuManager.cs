@@ -39,13 +39,7 @@ public class MenuManager : MonoBehaviour
     {
         victoryMenu.SetActive(state == GameState.Vicory);
         loseMenu.SetActive(state == GameState.Lose);
-        if(GameManager.Instance.state != GameState.Combat && GameManager.Instance.state != GameState.CombatFinished)
-        {
-            gameUI?.SetActive(false);
-        } else
-        {
-            gameUI?.SetActive(true);
-        }
+        gameUI?.SetActive(GameManager.Instance.isInCombat);
     }
 
     private void SetVariableMenus()

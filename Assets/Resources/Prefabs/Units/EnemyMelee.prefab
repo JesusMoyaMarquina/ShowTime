@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 3025578673720806773}
   - component: {fileID: -1758514401157523288}
   m_Layer: 6
-  m_Name: EnemyMele
+  m_Name: EnemyMelee
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -162,10 +162,12 @@ MonoBehaviour:
   speed: 6
   minDistance: 1
   hitted: 0
-  totalHealth: 1000000
+  stunned: 0
+  totalHealth: 70
   distanceToPlayer: 0
   audioSource: {fileID: -1758514401157523288}
-  attackSound: {fileID: 8300000, guid: be5519fddb36a5848ad96908ebf04327, type: 3}
+  stepFX: {fileID: 0}
+  attackFX: {fileID: 8300000, guid: be5519fddb36a5848ad96908ebf04327, type: 3}
   score: 150
 --- !u!114 &3025578673720806773
 MonoBehaviour:

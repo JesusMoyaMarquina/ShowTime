@@ -7,13 +7,12 @@ public class UnitManager : MonoBehaviour
 
     public int generateUnit, unitIncremental;
     private int previousGenerateUnit;
-    public GameObject meleeUnit;
-    public GameObject rangedUnit;
+    public GameObject meleeUnit, rangedUnit, bossUnit;
     public GameObject unitContaner;
+    public GameObject bossSpawnPoint;
     public GameObject[] spawnAreas;
     public float meleeUnitPercentage, rangedUnitPercentage;
 
-    // Start is called before the first frame update
     void Start()
     {
         GetSpawnAreas();
@@ -53,11 +52,6 @@ public class UnitManager : MonoBehaviour
 
     public void GenerateUnits()
     {
-        if(GameManager.Instance.state != GameState.Combat) 
-        {
-            return;
-        }
-
         previousGenerateUnit = generateUnit;
 
         if (spawnAreas.Length <= 0)
@@ -100,7 +94,7 @@ public class UnitManager : MonoBehaviour
                 generateUnit--;
             }
 
-            if (addExtra)
+            if (addExtra && generateUnit > 0)
             {
                 float spawnXPos = Random.Range(-area.transform.localScale.x / 2, area.transform.localScale.x / 2) + area.transform.position.x;
                 float spawnYPos = Random.Range(-area.transform.localScale.y / 2, area.transform.localScale.y / 2) + area.transform.position.y;
@@ -118,6 +112,11 @@ public class UnitManager : MonoBehaviour
         }
 
         generateUnit = previousGenerateUnit;
+    }
+
+    public GameObject GenerateBoss()
+    {
+        return Instantiate(bossUnit, new Vector3(bossSpawnPoint.transform.position.x, bossSpawnPoint.transform.position.y, 0), Quaternion.identity, unitContaner.transform);
     }
 
     private void GetSpawnAreas()

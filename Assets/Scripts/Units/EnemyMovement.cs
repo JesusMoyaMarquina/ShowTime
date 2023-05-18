@@ -8,27 +8,21 @@ using UnityEngine.UIElements;
 
 public abstract class EnemyMovement : MonoBehaviour
 {
-
     //General variables
     protected Rigidbody2D rb;
-    private CircleCollider2D cc;
+    protected CircleCollider2D cc;
     protected Animator anim;
-    private SpriteRenderer spriteRenderer;
-    private CombatManager CombatMng;
+    protected SpriteRenderer spriteRenderer;
 
     //Movement variables
     public float speed;
     protected Vector2 direction;
-    private Vector2 movement;
-    private bool isDash;
-    private bool isDashing;
-    private bool isDashInCooldown;
 
     private Vector2 position;
     public float minDistance;
     protected bool inMovementRange;
 
-    private GameObject[] players;
+    protected GameObject[] players;
     protected GameObject nearPlayer;
     protected float distance;
     private Vector3 enemyPos;
@@ -36,17 +30,24 @@ public abstract class EnemyMovement : MonoBehaviour
     protected bool knockbacked;
 
     //Stats variables
-    public bool hitted;
+    public bool hitted, stunned;
     public float totalHealth;
-    private float currentHealth;
-    private bool alive;
+    protected float currentHealth;
+    protected bool alive;
 
     //Mocked basic attack variables
     protected bool attacking;
     protected float lastAttack;
-    private float attackCooldown;
+    protected float attackCooldown;
 
     public float distanceToPlayer;
+
+    //Audio variables
+    public AudioSource audioSource;
+    public AudioClip stepFX, attackFX;
+
+    //Score variables
+    public float score;
 
     void Start()
     {
@@ -80,6 +81,11 @@ public abstract class EnemyMovement : MonoBehaviour
 
     public void Knockback(float knockbackForce, Vector2 direction)
     {
+        if(GetType() == typeof(BossAttack))
+        {
+            return;
+        }
+
         attacking = false;
         knockbacked = true;
         rb.velocity = Vector2.zero;
@@ -104,12 +110,11 @@ public abstract class EnemyMovement : MonoBehaviour
         return auxPlayer;
     }
 
-
-
     public abstract void Tracking();
+
     public abstract void Attacking();
 
-    public void Translation()
+    public virtual void Translation()
     {
         if (knockbacked)
         {
@@ -201,14 +206,16 @@ public abstract class EnemyMovement : MonoBehaviour
         anim.SetBool("isMoving", inMovementRange);
     }
 
-    #region stats functions
-    public void GetDamage(float damage)
+    IEnumerator SetStunned(float seconds)
     {
-        if (isDashing)
-        {
-            return;
-        }
+        stunned = true;
+        yield return new WaitForSeconds(seconds);
+        stunned = false;
+    }
 
+    #region stats functions
+    public virtual void GetDamage(float damage)
+    {
         currentHealth -= damage;
 
         CheckDeadCondition();
@@ -240,26 +247,47 @@ public abstract class EnemyMovement : MonoBehaviour
 
     public void SetHittedFalse()
     {
+
         hitted = false;
         knockbacked = false;
-        SetAttackingFalse();
         anim.SetBool("hitted", hitted);
+        if (!(GetType() == typeof(BossAttack)))
+            SetAttackingFalse();
     }
 
     public abstract void SetAttackingFalse();
     public abstract void AddScore();
 
-    private void CheckDeadCondition()
+    protected void CheckDeadCondition()
     {
 
         if (currentHealth <= 0)
         {
-            cc.enabled = false;
-            rb.constraints = RigidbodyConstraints2D.FreezeAll;
+            if (!(GetType() == typeof(BossAttack)))
+            {
+                cc.enabled = false;
+                rb.constraints = RigidbodyConstraints2D.FreezeAll;
+            } else
+            {
+                CombatManager.instance.ReduceBossesToKill();
+            }
+
             currentHealth = 0;
             alive = false;
             anim.SetBool("alive", alive);
         }
+    }
+    #endregion
+
+    #region Audio management
+    public void PlayAttackFX()
+    {
+        audioSource.PlayOneShot(attackFX);
+    }
+
+    public void PlayStepFX()
+    {
+        audioSource.PlayOneShot(stepFX);
     }
     #endregion
 }

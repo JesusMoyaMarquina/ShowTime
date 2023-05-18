@@ -4,18 +4,22 @@ using UnityEngine;
 
 public class DistanceEM : EnemyMovement
 {
-    public AudioSource audioSource;
-    public AudioClip attackSound, throwSound;
+    public AudioClip throwSound;
 
     public float maxDistance;
     private bool inMaxRange;
     private bool inMinRange;
     private GameObject arrow;
 
-    public float score;
-
     public override void Tracking()
     {
+        if (stunned)
+        {
+            rb.mass = 1;
+            rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+            return;
+        }
+
         inMinRange = distance > minDistance;
         inMaxRange = distance <= maxDistance;
 
@@ -33,7 +37,7 @@ public class DistanceEM : EnemyMovement
 
     public override void AddScore()
     {
-        CombatManager.instance.AddKillScore(score);
+        CombatManager.instance.AddKillScore(score, "Ranged");
     }
 
     public void ThrowAttack()
@@ -53,11 +57,6 @@ public class DistanceEM : EnemyMovement
         lastAttack = Time.time;
         attacking = false;
         anim.SetBool("attacking", attacking);
-    }
-
-    public void PlayAttackFX()
-    {
-        audioSource.PlayOneShot(attackSound);
     }
 
     public void PlayThrowFX()

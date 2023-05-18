@@ -136,7 +136,7 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        if (!(GameManager.Instance.state == GameState.Combat) && !(GameManager.Instance.state == GameState.CombatFinished))
+        if (!GameManager.Instance.isInCombat)
         {
             rb.constraints = RigidbodyConstraints2D.FreezeAll;
             anim.SetFloat("speed", 0);

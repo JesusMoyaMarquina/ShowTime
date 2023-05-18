@@ -8,15 +8,17 @@ using UnityEngine.UIElements;
 
 public class MeleEM : EnemyMovement
 {
-    public AudioSource audioSource;
-    public AudioClip attackSound;
-
-    public float score;
-
     private GameObject sharp;
 
     public override void Tracking()
     {
+        if (stunned)
+        {
+            rb.mass = 1;
+            rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+            return;
+        }
+
         inMovementRange = distance > minDistance;
         Translation();
         SetAnimation();
@@ -36,7 +38,7 @@ public class MeleEM : EnemyMovement
 
     public override void AddScore()
     {
-        CombatManager.instance.AddKillScore(score);
+        CombatManager.instance.AddKillScore(score, "Melee");
     }
 
     public override void SetAttackingFalse()
@@ -45,10 +47,5 @@ public class MeleEM : EnemyMovement
         attacking = false;
         if (sharp != null) sharp.GetComponent<MeleAttack>().DestroyObject();
         anim.SetBool("attacking", attacking);
-    }
-
-    public void PlayAttackFX()
-    {
-        audioSource.PlayOneShot(attackSound);
     }
 }
