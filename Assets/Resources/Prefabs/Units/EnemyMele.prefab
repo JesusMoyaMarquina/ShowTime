@@ -120,7 +120,7 @@ Rigidbody2D:
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 35
-  m_AngularDrag: 0
+  m_AngularDrag: 35
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
@@ -162,7 +162,7 @@ MonoBehaviour:
   speed: 6
   minDistance: 1
   hitted: 0
-  totalHealth: 70
+  totalHealth: 1000000
   distanceToPlayer: 0
   audioSource: {fileID: -1758514401157523288}
   attackSound: {fileID: 8300000, guid: be5519fddb36a5848ad96908ebf04327, type: 3}

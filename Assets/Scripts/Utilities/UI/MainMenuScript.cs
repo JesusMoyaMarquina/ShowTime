@@ -12,8 +12,7 @@ public class MainMenuScript : MonoBehaviour
 
     public void StartGame()
     {
-        MenuManager.isPaused = false;
-        SceneManager.LoadScene("Game");
+        MenuManager.Instance.OpenDifficulty();
     }
 
     public void QuitGame()

@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class UnitManager : MonoBehaviour
 {
+
+    public int generateUnit, unitIncremental;
+    private int previousGenerateUnit;
     public GameObject meleeUnit;
     public GameObject rangedUnit;
     public GameObject unitContaner;
@@ -14,11 +17,49 @@ public class UnitManager : MonoBehaviour
     void Start()
     {
         GetSpawnAreas();
+        GetDifficulty();
         unitContaner = GameObject.Find("Units");
     }
 
-    public void GenerateUnits(int numberOfUnits)
+    private void GetDifficulty()
     {
+        if (SelectDifficultyScript.Instance != null)
+        {
+            print(SelectDifficultyScript.Instance.GetDifficulty());
+            switch (SelectDifficultyScript.Instance.GetDifficulty())
+            {
+                case 0:
+                    generateUnit = 3;
+                    unitIncremental = 0;
+                    break;
+                case 1:
+                    generateUnit = 3;
+                    unitIncremental = 3;
+                    break;
+                case 2:
+                    generateUnit = 6;
+                    unitIncremental = 4;
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    public void IncrementUntinsToGenerate()
+    {
+        generateUnit += unitIncremental;
+    }
+
+    public void GenerateUnits()
+    {
+        if(GameManager.Instance.state != GameState.Combat) 
+        {
+            return;
+        }
+
+        previousGenerateUnit = generateUnit;
+
         if (spawnAreas.Length <= 0)
         {
             return;
@@ -28,16 +69,16 @@ public class UnitManager : MonoBehaviour
 
         foreach (GameObject area in spawnAreas)
         {
-            float areaSpawnUnits = (float) numberOfUnits / spawnAreas.Length;
-            int meleeUnitsToSpawn = Mathf.FloorToInt(areaSpawnUnits * meleeUnitPercentage);
-            int rangedUnitsToSpawn = Mathf.FloorToInt(areaSpawnUnits * rangedUnitPercentage);
+            float areaSpawnUnits = (float) generateUnit / spawnAreas.Length;
+            int meleeUnitsToSpawn = Mathf.RoundToInt(areaSpawnUnits * meleeUnitPercentage);
+            int rangedUnitsToSpawn = Mathf.RoundToInt(areaSpawnUnits * rangedUnitPercentage);
 
-            if (!addExtra && areaSpawnUnits - meleeUnitsToSpawn - rangedUnitsToSpawn > 0)
+            if (areaSpawnUnits - meleeUnitsToSpawn - rangedUnitsToSpawn > 0)
             {
                 addExtra = true;
             }
 
-            while (meleeUnitsToSpawn > 0) 
+            while (meleeUnitsToSpawn > 0 && generateUnit > 0) 
             {
                 float spawnXPos = Random.Range(- area.transform.localScale.x / 2, area.transform.localScale.x / 2) + area.transform.position.x;
                 float spawnYPos = Random.Range(- area.transform.localScale.y / 2, area.transform.localScale.y / 2) + area.transform.position.y;
@@ -45,9 +86,10 @@ public class UnitManager : MonoBehaviour
                 Instantiate(meleeUnit, new Vector3(spawnXPos, spawnYPos, 0), Quaternion.identity, unitContaner.transform);
 
                 meleeUnitsToSpawn--;
+                generateUnit--;
             }
 
-            while(rangedUnitsToSpawn > 0)
+            while(rangedUnitsToSpawn > 0 && generateUnit > 0)
             {
                 float spawnXPos = Random.Range(- area.transform.localScale.x / 2, area.transform.localScale.x / 2) + area.transform.position.x;
                 float spawnYPos = Random.Range(- area.transform.localScale.y / 2, area.transform.localScale.y / 2) + area.transform.position.y;
@@ -55,25 +97,27 @@ public class UnitManager : MonoBehaviour
                 Instantiate(rangedUnit, new Vector3(spawnXPos, spawnYPos, 0), Quaternion.identity, unitContaner.transform);
 
                 rangedUnitsToSpawn--;
+                generateUnit--;
+            }
+
+            if (addExtra)
+            {
+                float spawnXPos = Random.Range(-area.transform.localScale.x / 2, area.transform.localScale.x / 2) + area.transform.position.x;
+                float spawnYPos = Random.Range(-area.transform.localScale.y / 2, area.transform.localScale.y / 2) + area.transform.position.y;
+
+                if (meleeUnitPercentage > rangedUnitPercentage)
+                {
+                    Instantiate(meleeUnit, new Vector3(spawnXPos, spawnYPos, 0), Quaternion.identity, unitContaner.transform);
+                }
+                else
+                {
+                    Instantiate(rangedUnit, new Vector3(spawnXPos, spawnYPos, 0), Quaternion.identity, unitContaner.transform);
+                }
+                generateUnit--;
             }
         }
 
-        if (addExtra)
-        {
-            GameObject area = spawnAreas[spawnAreas.Length - 1];
-
-            float spawnXPos = Random.Range(-area.transform.localScale.x / 2, area.transform.localScale.x / 2) + area.transform.position.x;
-            float spawnYPos = Random.Range(-area.transform.localScale.y / 2, area.transform.localScale.y / 2) + area.transform.position.y;
-
-            if (meleeUnitPercentage > rangedUnitPercentage)
-            {
-                Instantiate(meleeUnit, new Vector3(spawnXPos, spawnYPos, 0), Quaternion.identity, unitContaner.transform);
-            }
-            else
-            {
-                Instantiate(rangedUnit, new Vector3(spawnXPos, spawnYPos, 0), Quaternion.identity, unitContaner.transform);
-            }
-        }
+        generateUnit = previousGenerateUnit;
     }
 
     private void GetSpawnAreas()

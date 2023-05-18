@@ -8,7 +8,7 @@ public class MenuManager : MonoBehaviour
 
     //Canvases
     public GameObject principalSceneMenu;
-    public GameObject settingsMenu, keybindsMenu;
+    public GameObject settingsMenu, keybindsMenu, selectDifficultyMenu;
     private GameObject victoryMenu, loseMenu, mainMenu, pauseMenu, gameUI;
 
     //State
@@ -82,6 +82,10 @@ public class MenuManager : MonoBehaviour
         {
             keybindsMenu?.SetActive(false);
         }
+        if(selectDifficultyMenu != null)
+        {
+            selectDifficultyMenu?.SetActive(false);
+        }
     }
 
     public IEnumerator CloseMenuDelay()
@@ -103,6 +107,12 @@ public class MenuManager : MonoBehaviour
     {
         principalSceneMenu?.SetActive(false);
         FindObjectOfType<SettingsMenuScript>(true).gameObject.SetActive(true);
+    }
+
+    public void OpenDifficulty()
+    {
+        principalSceneMenu?.SetActive(false);
+        FindObjectOfType<SelectDifficultyScript>(true).gameObject.SetActive(true);
     }
     #endregion
 }

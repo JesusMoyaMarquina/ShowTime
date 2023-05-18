@@ -16,11 +16,11 @@ public abstract class Weapon : MonoBehaviour
         isInCD = false;
     }
 
-    public abstract Attack Hit(string attackName, int attackCount);
+    public abstract Attack Hit(string attackName, int attackCount, Rigidbody2D playerRB);
 
-    public void Hit(float tiempoCD, float atkMng)
+    public void Hit(float tiempoCD, float atkMng, Rigidbody2D playerRB)
     {
-        Magnetismo(atkMng);
+        Magnetismo(atkMng, playerRB);
         if (tiempoCD > 0)
         {
             StartCoroutine(TiempoCD(tiempoCD));
@@ -37,10 +37,10 @@ public abstract class Weapon : MonoBehaviour
         return isInCD;
     }
 
-    private void Magnetismo(float atkMng)
+    private void Magnetismo(float atkMng, Rigidbody2D playerRB)
     {
         Vector2 direction = GetComponent<SpriteRenderer>().flipX ? Vector2.right : Vector2.left;
-        GetComponent<Rigidbody2D>().AddForce(direction.normalized * atkMng, ForceMode2D.Impulse);
+        playerRB.AddForce(direction * atkMng * playerRB.mass, ForceMode2D.Impulse);
     }
 
     IEnumerator TiempoCD(float tiempoCD)

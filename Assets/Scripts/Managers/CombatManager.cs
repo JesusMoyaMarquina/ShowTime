@@ -12,7 +12,7 @@ public class CombatManager : MonoBehaviour
     #region Unit variables
     public UnitManager unitManager;
 
-    public int startGenerateUnit, unitIncremental, secondsToGenerate;
+    public int secondsToGenerate;
 
     private int generateIteration;
     #endregion
@@ -83,8 +83,7 @@ public class CombatManager : MonoBehaviour
         if (GameManager.Instance.state == GameState.Combat || GameManager.Instance.state == GameState.CombatFinished)
         {
             HandleCombatInputs();
-            print(remainingTime);
-            if (Mathf.CeilToInt(remainingTime) == combatTime - secondsToGenerate * generateIteration || remainingTime == combatTime)
+            if (Mathf.CeilToInt(remainingTime) == combatTime - secondsToGenerate * generateIteration || remainingTime == combatTime && GameManager.Instance.state == GameState.Combat)
             {
                 GenerateUnits();
             }
@@ -115,7 +114,8 @@ public class CombatManager : MonoBehaviour
 
     private void GenerateUnits()
     {
-        unitManager.GenerateUnits(startGenerateUnit + unitIncremental * generateIteration);
+        unitManager.GenerateUnits();
+        unitManager.IncrementUntinsToGenerate();
         generateIteration++;
     }
 

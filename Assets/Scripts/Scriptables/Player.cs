@@ -114,24 +114,24 @@ public class Player : MonoBehaviour
         currentWeapon = GetComponent<Fist>();
     }
 
+    private void Start()
+    {
+        //Abilities
+        fistComboProgressBar = GameObject.Find("FistRadialDownProgressBarWithImage");
+        dashProgressBar = GameObject.Find("DashRadialDownProgressBarWithImage");
+        SetDashProgressBarToMaximum();
+        SetFistProgressBarToMaximum(1);
+
+        //Health
+        playerHealthBar = GameObject.Find("PlayerHealthProgressBar");
+        playerHealthBar.GetComponent<EntityProgressBar>().maximum = maxHealth;
+        playerHealthBar.GetComponent<EntityProgressBar>().current = currentHealth;
+        playerHealthBar.GetComponent<EntityProgressBar>().previousCurrent = currentHealth;
+        playerHealthBar.GetComponent<EntityProgressBar>().GetCurrentFill();
+    }
+
     private void GameManagerOnGameStateChange(GameState state)
     {
-        if (state == GameState.Combat)
-        {
-            //Abilities
-            fistComboProgressBar = GameObject.Find("FistRadialDownProgressBarWithImage");
-            dashProgressBar = GameObject.Find("DashRadialDownProgressBarWithImage");
-            totalExecutedAttackTime = 0;
-            SetDashProgressBarToMaximum();
-            SetFistProgressBarToMaximum(1);
-
-            //Health
-            playerHealthBar = GameObject.Find("PlayerHealthProgressBar");
-            playerHealthBar.GetComponent<EntityProgressBar>().maximum = maxHealth;
-            playerHealthBar.GetComponent<EntityProgressBar>().current = currentHealth;
-            playerHealthBar.GetComponent<EntityProgressBar>().previousCurrent = currentHealth;
-            playerHealthBar.GetComponent<EntityProgressBar>().GetCurrentFill();
-        }
     }
 
     void Update()
@@ -200,14 +200,14 @@ public class Player : MonoBehaviour
         if (knockbacked || attacking) return;
 
         Vector2 pDirection = isDashing ? direction / 10 : movement.normalized;
-        float pSpeed = isDashing ? speed * 2 : hitted ? speed / 2 : speed;
+        float pSpeed = isDashing ? speed * 1.2f : hitted ? speed / 2 : speed;
 
         rb.velocity = pDirection * pSpeed;
     }
 
     private void PlayerDirection()
     {
-        if (isDashing || knockbacked) return;
+        if (isDashing || knockbacked || attacking) return;
 
         if (rb.velocity.x != 0)
             direction = rb.velocity;
@@ -293,7 +293,7 @@ public class Player : MonoBehaviour
         {
             if (!attacking)
             {
-                rb.AddForce(damageDirection * knockbackForce, ForceMode2D.Impulse);
+                rb.AddForce(damageDirection * knockbackForce * rb.mass, ForceMode2D.Impulse);
                 knockbacked = true;
                 hitted = true;
                 anim.SetBool("hitted", hitted);
@@ -433,7 +433,6 @@ public class Player : MonoBehaviour
 
     public void SetAttackingFalse()
     {
-        print("a");
         attacking = false;
         anim.SetBool("attacking", false);
     }
@@ -446,9 +445,15 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void StopMgn()
+    {
+        rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+        rb.velocity = Vector3.zero;
+    }
+
     private void Attack(string attackName)
     {
-        executedAttack = currentWeapon.Hit(attackName, inputQueue.Count - 1);
+        executedAttack = currentWeapon.Hit(attackName, inputQueue.Count - 1, rb);
         if (executedAttack.GetCD() > 0)
         {
             SetFistProgressBarToMaximum(executedAttack.GetCD());

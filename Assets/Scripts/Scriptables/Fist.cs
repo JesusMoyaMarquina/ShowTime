@@ -16,11 +16,11 @@ public class Fist : Weapon
     Attack executedAttack = null;
 
     override
-    public Attack Hit(string attackName, int attackCount)
+    public Attack Hit(string attackName, int attackCount, Rigidbody2D playerRB)
     {
         executedAttack = attacks.Find(o => o.GetAttackName() == attackName);
 
-        Hit(executedAttack.GetCD(), MngList[attackCount]);
+        Hit(executedAttack.GetCD(), MngList[attackCount], playerRB);
         executedAttack.ActivateCollider();
 
         return executedAttack;

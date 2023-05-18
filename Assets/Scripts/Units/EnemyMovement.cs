@@ -82,8 +82,10 @@ public abstract class EnemyMovement : MonoBehaviour
     {
         attacking = false;
         knockbacked = true;
+        rb.velocity = Vector2.zero;
 
-        rb.AddForce(direction.normalized * knockbackForce * rb.mass, ForceMode2D.Impulse);
+        rb.mass = 1;
+        rb.AddForce(direction * knockbackForce * rb.mass, ForceMode2D.Impulse);
     }
 
     public GameObject FindNearPlayer()
@@ -109,9 +111,12 @@ public abstract class EnemyMovement : MonoBehaviour
 
     public void Translation()
     {
-        if (knockbacked) return;
-
-        print("not knockbacked");
+        if (knockbacked)
+        {
+            rb.mass = 1;
+            rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+            return; 
+        }
 
         if (inMovementRange)
         {
@@ -121,6 +126,7 @@ public abstract class EnemyMovement : MonoBehaviour
             transform.LookAt(targetPos);
             rb.velocity = direction * speed;
             transform.rotation = Quaternion.identity;
+            SetAttackingFalse();
         }
         else
         {
@@ -155,6 +161,8 @@ public abstract class EnemyMovement : MonoBehaviour
 
     public void SetAnimation()
     {
+        if(knockbacked) return;
+
         if (attacking || hitted && Vector2.Distance(rb.position, position) > 0.5f)
         {
             rb.constraints = RigidbodyConstraints2D.FreezeAll;
@@ -171,12 +179,7 @@ public abstract class EnemyMovement : MonoBehaviour
                 break;
         }
 
-        if (knockbacked == true)
-        {
-            rb.mass = 1;
-            rb.constraints = RigidbodyConstraints2D.FreezeRotation;
-        }
-        else if (inMovementRange)
+        if (inMovementRange)
         {
             rb.mass = 1;
             rb.constraints = RigidbodyConstraints2D.None | RigidbodyConstraints2D.FreezeRotation;
@@ -239,6 +242,7 @@ public abstract class EnemyMovement : MonoBehaviour
     {
         hitted = false;
         knockbacked = false;
+        SetAttackingFalse();
         anim.SetBool("hitted", hitted);
     }
 
