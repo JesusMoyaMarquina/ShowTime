@@ -30,6 +30,8 @@ public class Player : MonoBehaviour
     private Vector2 movement;
     private bool isDashing;
     private bool isDashInCooldown;
+    private bool stunned;
+    private float stunnedTime;
 
     //Stats variables
     public float maxHealth;
@@ -68,8 +70,6 @@ public class Player : MonoBehaviour
 
     private void Awake()
     {
-        GameManager.OnGameStateChange += GameManagerOnGameStateChange;
-
         //Start player basics
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
@@ -110,6 +110,7 @@ public class Player : MonoBehaviour
 
         //Attack
         attacking = false;
+        stunned = false;
         executedAttack = null;
         currentWeapon = GetComponent<Fist>();
     }
@@ -130,13 +131,9 @@ public class Player : MonoBehaviour
         playerHealthBar.GetComponent<EntityProgressBar>().GetCurrentFill();
     }
 
-    private void GameManagerOnGameStateChange(GameState state)
-    {
-    }
-
     void Update()
     {
-        if (!GameManager.Instance.isInCombat)
+        if (!GameManager.Instance.isInCombat || stunned)
         {
             rb.constraints = RigidbodyConstraints2D.FreezeAll;
             anim.SetFloat("speed", 0);
@@ -226,7 +223,7 @@ public class Player : MonoBehaviour
         anim.SetFloat("speed", rb.velocity.magnitude);
     }
 
-    private void StopDashing()
+    public void StopDashing()
     {
         isDashing = false;
         anim.SetBool("isDashing", isDashing);
@@ -258,15 +255,17 @@ public class Player : MonoBehaviour
         playerHealthBar.GetComponent<EntityProgressBar>().GetCurrentFill();
     }
 
-    public void GetDamage(float damage, Vector2 damageDirection)
+    public void GetDamage(float damage, Vector2 damageDirection, float stunnedTime = 0, bool attackCancel = false, float force = 0)
     {
         if (isInmortal || isDashing || damage < 0) return;
 
         this.damageDirection = damageDirection;
 
+        this.stunnedTime = stunnedTime;
+
         currentHealth -= damage;
 
-        DamageAnimation();
+        DamageAnimation(attackCancel, force);
 
         playerHealthBar.GetComponent<EntityProgressBar>().current = currentHealth;
         playerHealthBar.GetComponent<EntityProgressBar>().GetCurrentFill();
@@ -278,7 +277,7 @@ public class Player : MonoBehaviour
         DeactivateAttackCollider();
     }
 
-    private void DamageAnimation()
+    private void DamageAnimation(bool attackCancel, float force)
     {
         CancelAttack();
 
@@ -291,9 +290,15 @@ public class Player : MonoBehaviour
         }
         else
         {
-            if (!attacking)
+            if (!attacking || !attackCancel)
             {
-                rb.AddForce(damageDirection * knockbackForce * rb.mass, ForceMode2D.Impulse);
+                if (force == 0)
+                {
+                    rb.AddForce(damageDirection * knockbackForce * rb.mass, ForceMode2D.Impulse);
+                } else
+                {
+                    rb.AddForce(damageDirection * force * rb.mass, ForceMode2D.Impulse);
+                }
                 knockbacked = true;
                 hitted = true;
                 anim.SetBool("hitted", hitted);
@@ -313,8 +318,22 @@ public class Player : MonoBehaviour
     {
         hitted = false;
         knockbacked = false;
+        if (stunnedTime > 0)
+        {
+            StartCoroutine(StunCoroutine(stunnedTime));
+        }
         anim.SetBool("hitted", hitted);
     }
+
+    IEnumerator StunCoroutine(float time)
+    {
+        stunned = true;
+        yield return new WaitForSeconds(time);
+        stunned = false;
+        stunnedTime = 0;
+    }
+
+
 
     public bool isAlive()
     {
@@ -460,6 +479,11 @@ public class Player : MonoBehaviour
             executedAttackCD = executedAttack.GetCD() + Time.time - CombatManager.instance.beginBattleTime;
             totalExecutedAttackTime = executedAttack.GetCD();
         }
+    }
+
+    public bool GetIsDashing()
+    {
+        return isDashing;
     }
     #endregion
 

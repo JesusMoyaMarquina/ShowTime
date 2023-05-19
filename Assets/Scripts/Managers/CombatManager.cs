@@ -94,7 +94,7 @@ public class CombatManager : MonoBehaviour
                 break;
             case GameState.Pause:
 
-                combatState = CombatState.combatFinished;
+                combatState = CombatState.pause;
                 acumulatedMultiplierTime = actualTime;
 
                 break;
@@ -227,6 +227,7 @@ public class CombatManager : MonoBehaviour
     {
         if (bossesToKill <= 0)
         {
+            StopUI();
             GameManager.Instance.UpdateGameState(GameState.CombatFinished);
         }
     }

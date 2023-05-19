@@ -67,7 +67,7 @@ public abstract class EnemyMovement : MonoBehaviour
         Movement();
     }
 
-    public void Movement()
+    public virtual void Movement()
     {
         if (!alive) return;
 
@@ -81,7 +81,7 @@ public abstract class EnemyMovement : MonoBehaviour
 
     public void Knockback(float knockbackForce, Vector2 direction)
     {
-        if(GetType() == typeof(BossAttack))
+        if(GetType() == typeof(BossEM))
         {
             return;
         }
@@ -184,17 +184,29 @@ public abstract class EnemyMovement : MonoBehaviour
                 break;
         }
 
-        if (inMovementRange)
+        if (inMovementRange && GetType() != typeof(BossEM))
         {
             rb.mass = 1;
             rb.constraints = RigidbodyConstraints2D.None | RigidbodyConstraints2D.FreezeRotation;
         }
-        else
+        else if (GetType() != typeof(BossEM))
         {
             rb.mass = 0.025f;
 
             rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
             
+            if (!hitted && (!attacking && Time.time > lastAttack + attackCooldown))
+            {
+                attacking = true;
+                Attacking();
+            }
+        } else if (inMovementRange)
+        {
+            rb.constraints = RigidbodyConstraints2D.None | RigidbodyConstraints2D.FreezeRotation;
+        } else
+        {
+            rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+
             if (!hitted && (!attacking && Time.time > lastAttack + attackCooldown))
             {
                 attacking = true;
@@ -251,7 +263,7 @@ public abstract class EnemyMovement : MonoBehaviour
         hitted = false;
         knockbacked = false;
         anim.SetBool("hitted", hitted);
-        if (!(GetType() == typeof(BossAttack)))
+        if (!(GetType() == typeof(BossEM)))
             SetAttackingFalse();
     }
 
@@ -263,7 +275,7 @@ public abstract class EnemyMovement : MonoBehaviour
 
         if (currentHealth <= 0)
         {
-            if (!(GetType() == typeof(BossAttack)))
+            if (!(GetType() == typeof(BossEM)))
             {
                 cc.enabled = false;
                 rb.constraints = RigidbodyConstraints2D.FreezeAll;

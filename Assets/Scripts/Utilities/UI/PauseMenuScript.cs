@@ -30,7 +30,7 @@ public class PauseMenuScript : MonoBehaviour
     {
         if (gameObject != null && gameObject.activeSelf && Input.GetButtonDown("Cancel") && !MenuManager.Instance.closeDelay)
         {
-            GameManager.Instance.UpdateGameState(GameState.Combat);
+            GameManager.Instance.UpdateGameState(GameManager.Instance.previousGameState);
         }
     }
 
