@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class BossEM : EnemyMovement
 {
     protected GameObject bossHealthBar;
 
+    private BoxCollider2D bc;
     private GameObject sharp;
     protected DrawAttackCast dashCast;
     public AudioClip bossAttack;
@@ -15,19 +17,19 @@ public class BossEM : EnemyMovement
     protected bool isDash;
     protected bool isDashing;
     protected bool isDashInCooldown;
+    private Vector2 dashAim;
 
     private void Start()
     {
         dashCast = GetComponent<DrawAttackCast>();
         rb = GetComponent<Rigidbody2D>();
-        cc = GetComponent<CircleCollider2D>();
+        bc = GetComponent<BoxCollider2D>();
         anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         players = GameObject.FindGameObjectsWithTag("Player");
         knockbacked = false;
         alive = true;
-        dashCoolDown = 10f;
-        attackCooldown = 3f;
+        attackCooldown = 1.5f;
         currentHealth = totalHealth;
 
         isDash = false;
@@ -44,6 +46,7 @@ public class BossEM : EnemyMovement
     public void GetDamage(float damage)
     {
         currentHealth -= damage;
+        PlayHittedFX();
 
         bossHealthBar.GetComponent<EntityProgressBar>().maximum = totalHealth;
         bossHealthBar.GetComponent<EntityProgressBar>().current = currentHealth;
@@ -108,7 +111,14 @@ public class BossEM : EnemyMovement
             return;
         }
 
-        if (!isDash && !isDashing && !isDashInCooldown && distance <= minimumDashDistance)
+        bool isPossibleDash = true;
+
+        if (isDash)
+        {
+            isPossibleDash = CheckPosibleDash();
+        }
+
+        if (!isDashing && !isDashInCooldown && distance <= minimumDashDistance && isPossibleDash && !isDash)
         {
             StartCoroutine(DashPreparation());
         }
@@ -116,7 +126,7 @@ public class BossEM : EnemyMovement
         if (isDash)
         {
             float percentage = (Time.time - dashChargeTime - dashPreparationTime) / dashPreparationTime + 1;
-            dashCast.UpdateDirection(new Vector2(transform.position.x, transform.position.y), direction, attackLine, percentage);
+            dashAim = dashCast.UpdateDirection(new Vector2(transform.position.x, transform.position.y), direction, attackLine, percentage);
             SetAttackingFalse();
         } else if (isDashing)
         {
@@ -128,6 +138,29 @@ public class BossEM : EnemyMovement
         {
             base.Translation();
         }
+    }
+
+    private bool CheckPosibleDash()
+    {
+        Vector2 lowerHitPosition = new Vector2(transform.position.x, transform.position.y);
+        Vector2 higherHitPosition = new Vector2(transform.position.x, transform.position.y + bc.size.y * transform.localScale.y);
+        Vector2 higherHitDirection = new Vector2(direction.x, direction.y - bc.size.y * transform.localScale.y + nearPlayer.GetComponent<BoxCollider2D>().size.y * nearPlayer.transform.localScale.y - 0.15f);
+        RaycastHit2D lowerHit = Physics2D.Raycast(lowerHitPosition, direction, Mathf.Infinity, ~LayerMask.GetMask(LayerMask.LayerToName(gameObject.layer)));
+        RaycastHit2D higherHit = Physics2D.Raycast(higherHitPosition, higherHitDirection, Mathf.Infinity, ~LayerMask.GetMask(LayerMask.LayerToName(gameObject.layer)));
+
+        if(!lowerHit.collider.CompareTag("Player") && !higherHit.collider.CompareTag("Player"))
+        {
+            CancelDash();
+            return false;
+        }
+        return true;
+    }
+
+    private void CancelDash()
+    {
+        isDash = false;
+        attackLine.enabled = false;
+        StopCoroutine(DashPreparation());
     }
 
     IEnumerator DashPreparation()
@@ -171,27 +204,21 @@ public class BossEM : EnemyMovement
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        if (!isDashing) return;
+        float collisionOffset = Mathf.Sqrt(Mathf.Pow(bc.size.x * transform.localScale.x, 2) + Mathf.Pow(bc.size.y * transform.localScale.y, 2));
+        if (!isDashing || (Vector2.Distance(transform.position, dashAim) > collisionOffset && !collision.collider.CompareTag("Player"))) return;
 
         rb.velocity = Vector2.zero;
         StopDashing();
 
         if (collision.collider.CompareTag("Map"))
         {
-            StartCoroutine(StunCoroutine(dashStunTime));
+            StartCoroutine(SetStunned(dashStunTime));
         } else if (collision.collider.CompareTag("Player"))
         {
             Player player = collision.collider.GetComponent<Player>();
             player.StopDashing();
             player.GetDamage(dashDamage, direction, dashStunTime, true, dashKnockbackForce);
         }
-    }
-
-    IEnumerator StunCoroutine(float time)
-    {
-        stunned = true;
-        yield return new WaitForSeconds(time);
-        stunned = false;
     }
 
 }

@@ -18,7 +18,7 @@ public class Player : MonoBehaviour
 
     //AudioVariables
     private AudioSource audioSource;
-    public AudioClip stepFX, softAttackFX, strongAttackFX;
+    public AudioClip stepFX, softAttackFX, strongAttackFX, finisherAttackFX;
 
     //Color variables
     private Color baseColor;
@@ -445,6 +445,7 @@ public class Player : MonoBehaviour
 
                     break;
             }
+            PlayFinisherFX();
             QuitarAccion();
         }
 
@@ -574,6 +575,11 @@ public class Player : MonoBehaviour
     private void PlayStrongAttackFX()
     {
         audioSource.PlayOneShot(strongAttackFX);
+    }
+
+    private void PlayFinisherFX()
+    {
+        audioSource.PlayOneShot(finisherAttackFX);
     }
 
 

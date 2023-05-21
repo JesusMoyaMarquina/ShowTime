@@ -130,7 +130,7 @@ public class CombatManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!timerPause)
+        if (!timerPause && GameManager.Instance.isInCombat)
         {
             ManageLoseCondition();
             ManageBattleTime();

@@ -12,7 +12,7 @@ public class SoundManager : MonoBehaviour
 
     public static SoundManager instance;
 
-    public AudioSource battleMusic, menuMusic, FXSource;
+    public AudioSource battleMusic, menuMusic, bossBattleMusic, battleFinishMusic, loseMusic, victoryMusic, FXSource;
 
     private void Awake()
     {
@@ -40,6 +40,11 @@ public class SoundManager : MonoBehaviour
         {
             case 0:
                 battleMusic.Stop();
+                menuMusic.Stop();
+                bossBattleMusic.Stop();
+                victoryMusic.Stop();
+                loseMusic.Stop();
+                battleFinishMusic.Stop();
                 menuMusic.Play();
                 break;
             case 1:
@@ -61,27 +66,45 @@ public class SoundManager : MonoBehaviour
                 break;
             case GameState.Combat:
                 battleMusic.Play();
-                menuMusic.Pause();
+                menuMusic.Stop();
+                bossBattleMusic.Stop();
+                victoryMusic.Stop();
+                loseMusic.Stop();
                 break;
             case GameState.BossCombat:
-                battleMusic.Play();
+                battleMusic.Stop();
                 menuMusic.Pause();
+                bossBattleMusic.Play();
                 break;
             case GameState.CombatFinished:
-                battleMusic.Play();
+                bossBattleMusic.Stop();
                 menuMusic.Pause();
+                battleFinishMusic.Play();
                 break;
             case GameState.Pause:
-                battleMusic.Pause();
+                if (GameManager.Instance.previousGameState == GameState.Combat)
+                {
+                    battleMusic.Pause();
+                }
+                else if (GameManager.Instance.previousGameState == GameState.BossCombat)
+                {
+                    bossBattleMusic.Pause();
+                }
                 menuMusic.Play();
                 break;
             case GameState.Vicory:
+                bossBattleMusic.Stop();
                 battleMusic.Stop();
-                menuMusic.Play();
+                battleFinishMusic.Stop();
+                menuMusic.Pause();
+                victoryMusic.Play();
                 break;
             case GameState.Lose:
+                bossBattleMusic.Stop();
+                battleFinishMusic.Stop();
                 battleMusic.Stop();
-                menuMusic.Play();
+                menuMusic.Pause();
+                loseMusic.Play();
                 break;
         }
     }

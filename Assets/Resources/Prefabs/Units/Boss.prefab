@@ -33,7 +33,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5037429430027693209}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 10.36, y: -1, z: 3.5332098}
+  m_LocalPosition: {x: 10.36, y: -0.983, z: 3.5332098}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -104,14 +104,14 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 2
+  m_Mass: 100000
   m_LinearDrag: 35
   m_AngularDrag: 35
   m_GravityScale: 0
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: b635440f00e7d1848a64624d96667add, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!95 &5037429430027693211
 Animator:
@@ -152,8 +152,9 @@ MonoBehaviour:
   totalHealth: 500
   distanceToPlayer: 0
   audioSource: {fileID: -1758514401157523288}
-  stepFX: {fileID: 0}
+  stepFX: {fileID: 8300000, guid: 6e4ddb40bf8c81a42a3632fb4813b4a9, type: 3}
   attackFX: {fileID: 8300000, guid: be5519fddb36a5848ad96908ebf04327, type: 3}
+  hittedFX: {fileID: 8300000, guid: 456efbda1a133f84c897f097204f44a4, type: 3}
   score: 1000
   bossAttack: {fileID: 0}
   attackLine: {fileID: -370279155021738748}
@@ -162,8 +163,8 @@ MonoBehaviour:
   minimumDashDistance: 8
   dashSpeed: 36
   dashStunTime: 1
-  dashDamage: 20
-  dashKnockbackForce: 10
+  dashDamage: 30
+  dashKnockbackForce: 4
   dashChargeTime: 0
 --- !u!114 &3025578673720806773
 MonoBehaviour:
@@ -301,7 +302,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 5037429430027693209}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: b635440f00e7d1848a64624d96667add, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0

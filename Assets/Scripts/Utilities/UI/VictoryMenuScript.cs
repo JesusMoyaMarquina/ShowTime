@@ -2,9 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class VictoryMenuScript : MonoBehaviour
 {
+    public GameObject ScoreScrollView;
     public GameObject scoreList;
     public GameObject scorePanel;
     public GameObject totalScoreText;
@@ -98,6 +100,7 @@ public class VictoryMenuScript : MonoBehaviour
 
     IEnumerator ScoreLoad()
     {
+        ScoreScrollView.GetComponent<ScrollRect>().vertical = false;
         float newTotalScore = 0;
 
         List<Score> scores = CombatManager.instance.GetScores();
@@ -122,6 +125,7 @@ public class VictoryMenuScript : MonoBehaviour
             yield return new WaitForSeconds(timeBetweenScorePanel);
         }
 
+        ScoreScrollView.GetComponent<ScrollRect>().vertical = true;
         UpdateText(newTotalScore);
     }
 }

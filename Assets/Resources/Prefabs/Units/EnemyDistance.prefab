@@ -99,7 +99,7 @@ CircleCollider2D:
   m_GameObject: {fileID: 5037429430027693209}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: b635440f00e7d1848a64624d96667add, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -122,7 +122,7 @@ Rigidbody2D:
   m_LinearDrag: 35
   m_AngularDrag: 35
   m_GravityScale: 0
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: b635440f00e7d1848a64624d96667add, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -166,8 +166,9 @@ MonoBehaviour:
   totalHealth: 35
   distanceToPlayer: 0
   audioSource: {fileID: 1589246139129536207}
-  stepFX: {fileID: 0}
+  stepFX: {fileID: 8300000, guid: 6e4ddb40bf8c81a42a3632fb4813b4a9, type: 3}
   attackFX: {fileID: 8300000, guid: de1a89a0efdba10489d68f60f333aca2, type: 3}
+  hittedFX: {fileID: 8300000, guid: 456efbda1a133f84c897f097204f44a4, type: 3}
   score: 200
   throwSound: {fileID: 8300000, guid: db0fe5d1cbd549f46948b45663587420, type: 3}
   maxDistance: 8

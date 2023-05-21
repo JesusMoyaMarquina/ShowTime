@@ -44,7 +44,7 @@ public abstract class EnemyMovement : MonoBehaviour
 
     //Audio variables
     public AudioSource audioSource;
-    public AudioClip stepFX, attackFX;
+    public AudioClip stepFX, attackFX, hittedFX;
 
     //Score variables
     public float score;
@@ -58,7 +58,7 @@ public abstract class EnemyMovement : MonoBehaviour
         players = GameObject.FindGameObjectsWithTag("Player");
         knockbacked = false;
         alive = true;
-        attackCooldown = 3f;
+        attackCooldown = 1.5f;
         currentHealth = totalHealth;
     }
 
@@ -69,7 +69,7 @@ public abstract class EnemyMovement : MonoBehaviour
 
     public virtual void Movement()
     {
-        if (!alive) return;
+        if (!alive || !GameManager.Instance.isInCombat) return;
 
         nearPlayer = FindNearPlayer();
 
@@ -218,7 +218,7 @@ public abstract class EnemyMovement : MonoBehaviour
         anim.SetBool("isMoving", inMovementRange);
     }
 
-    IEnumerator SetStunned(float seconds)
+    public IEnumerator SetStunned(float seconds)
     {
         stunned = true;
         yield return new WaitForSeconds(seconds);
@@ -229,6 +229,7 @@ public abstract class EnemyMovement : MonoBehaviour
     public virtual void GetDamage(float damage)
     {
         currentHealth -= damage;
+        PlayHittedFX();
 
         CheckDeadCondition();
 
@@ -300,6 +301,11 @@ public abstract class EnemyMovement : MonoBehaviour
     public void PlayStepFX()
     {
         audioSource.PlayOneShot(stepFX);
+    }
+
+    public void PlayHittedFX()
+    {
+        audioSource.PlayOneShot(hittedFX);
     }
     #endregion
 }
