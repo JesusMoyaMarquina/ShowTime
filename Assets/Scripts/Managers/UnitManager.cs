@@ -106,14 +106,10 @@ public class UnitManager : MonoBehaviour
                 if (meleeUnitPercentage >= rangedUnitPercentage)
                 {
                     Instantiate(meleeUnit, new Vector3(spawnXPos, spawnYPos, 0), Quaternion.identity, unitContaner.transform);
-                    rangedUnitPercentage = 1;
-                    meleeUnitPercentage = 0;
                 }
                 else if (meleeUnitPercentage < rangedUnitPercentage)
                 {
                     Instantiate(rangedUnit, new Vector3(spawnXPos, spawnYPos, 0), Quaternion.identity, unitContaner.transform);
-                    rangedUnitPercentage = 1;
-                    meleeUnitPercentage = 0;
                 }
                 addExtra = false;
                 unitToGenerate--;

@@ -25,7 +25,7 @@ public abstract class EnemyMovement : MonoBehaviour
     protected GameObject[] players;
     protected GameObject nearPlayer;
     protected float distance;
-    private Vector3 enemyPos;
+    protected Vector3 enemyPos;
 
     protected bool knockbacked;
 

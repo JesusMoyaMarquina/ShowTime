@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        UpdateGameState(GameState.Combat);
+        UpdateGameState(GameState.BossCombat);
     }
 
     public void UpdateGameState(GameState newState)

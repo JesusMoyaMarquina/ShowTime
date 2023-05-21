@@ -158,7 +158,7 @@ MonoBehaviour:
   score: 1000
   bossAttack: {fileID: 0}
   attackLine: {fileID: -370279155021738748}
-  dashPreparationTime: 2
+  dashPreparationTime: 5
   dashCoolDown: 5
   minimumDashDistance: 8
   dashSpeed: 36
@@ -306,7 +306,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.32434323}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.1}
