@@ -197,7 +197,7 @@ public class Player : MonoBehaviour
         if (knockbacked || attacking) return;
 
         Vector2 pDirection = isDashing ? direction / 10 : movement.normalized;
-        float pSpeed = isDashing ? speed * 1.2f : hitted ? speed / 2 : speed;
+        float pSpeed = isDashing ? speed : hitted ? speed / 2 : speed;
 
         rb.velocity = pDirection * pSpeed;
     }
@@ -257,7 +257,7 @@ public class Player : MonoBehaviour
 
     public void GetDamage(float damage, Vector2 damageDirection, float stunnedTime = 0, bool attackCancel = false, float force = 0)
     {
-        if (isInmortal || isDashing || damage < 0) return;
+        if (isInmortal || isDashing || damage < 0 || inputQueue.Count >= 3) return;
 
         this.damageDirection = damageDirection;
 
@@ -344,7 +344,7 @@ public class Player : MonoBehaviour
     #region Attack functions
     private void HandleAttack()
     {
-        if (inputQueue.Count >= 0 && inputQueue.Count <= 2 && !attacking && !hitted && !isDashing)
+        if (inputQueue.Count >= 0 && inputQueue.Count <= 2 && !attacking && !hitted && !isDashing && !currentWeapon.IsInNormalCD())
         {
             if (playerInput.actions["SoftHit"].triggered)
             {
@@ -473,8 +473,8 @@ public class Player : MonoBehaviour
 
     private void Attack(string attackName)
     {
-        executedAttack = currentWeapon.Hit(attackName, inputQueue.Count - 1, rb);
-        if (executedAttack.GetCD() > 0)
+        executedAttack = currentWeapon.Hit(attackName, inputQueue.Count - 1, rb, inputQueue.Last());
+        if (executedAttack.GetCD() > 0 && inputQueue.Count >= 3)
         {
             SetFistProgressBarToMaximum(executedAttack.GetCD());
             executedAttackCD = executedAttack.GetCD() + Time.time - CombatManager.instance.beginBattleTime;

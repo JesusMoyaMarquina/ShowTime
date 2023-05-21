@@ -37,6 +37,9 @@ public class Attack
             else if (collider.GetComponent<CircleCollider2D>() != null)
             {
                 collider.GetComponent<CircleCollider2D>().enabled = true;
+            } else if (collider.GetComponent<PolygonCollider2D>() != null)
+            {
+                collider.GetComponent<PolygonCollider2D>().enabled = true;
             }
         }
     }

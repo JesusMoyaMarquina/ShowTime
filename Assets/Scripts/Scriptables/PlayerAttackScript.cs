@@ -19,9 +19,11 @@ public class PlayerAttackScript : MonoBehaviour
         if (player.GetDirection().x > 0)
         {
             transform.localPosition = rightPosition;
+            transform.rotation = Quaternion.Euler(new Vector3(0, 180, 0));
         }
         else
         {
+            transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
             transform.localPosition = leftPosition;
         }
     }

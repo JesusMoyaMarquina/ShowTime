@@ -166,6 +166,9 @@ MonoBehaviour:
   dashDamage: 30
   dashKnockbackForce: 4
   dashChargeTime: 0
+  ignoreLayers:
+    serializedVersion: 2
+    m_Bits: 5120
 --- !u!114 &3025578673720806773
 MonoBehaviour:
   m_ObjectHideFlags: 0

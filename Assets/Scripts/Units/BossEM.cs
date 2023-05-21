@@ -14,6 +14,7 @@ public class BossEM : EnemyMovement
     public LineRenderer attackLine;
 
     public float dashPreparationTime, dashCoolDown, minimumDashDistance, dashSpeed, dashStunTime, dashDamage, dashKnockbackForce, dashChargeTime;
+    public LayerMask ignoreLayers;
     protected bool isDash;
     protected bool isDashing;
     protected bool isDashInCooldown;
@@ -60,9 +61,11 @@ public class BossEM : EnemyMovement
         hitted = false;
         anim.SetBool("hitted", hitted);
 
-        if (!attacking || isDashing)
+        if (!attacking && !isDashing && !isDash)
+        {
             hitted = true;
-        anim.SetBool("hitted", hitted);
+            anim.SetBool("hitted", hitted);
+        }
     }
 
     public override void AddScore()
@@ -143,37 +146,46 @@ public class BossEM : EnemyMovement
 
     private bool CheckPosibleDash()
     {
-        Vector2 rLowerHitPosition = new Vector2(transform.position.x + bc.size.x * transform.localScale.x / 2, transform.position.y - bc.size.y * transform.localScale.y / 2);
-        Vector2 lLowerHitPosition = new Vector2(transform.position.x - bc.size.x * transform.localScale.x / 2, transform.position.y - bc.size.y * transform.localScale.y / 2);
-        Vector2 rHigherHitPosition = new Vector2(transform.position.x + bc.size.x * transform.localScale.x / 2, transform.position.y + bc.size.y * transform.localScale.y / 2);
-        Vector2 lHigherHitPosition = new Vector2(transform.position.x - bc.size.x * transform.localScale.x / 2, transform.position.y + bc.size.y * transform.localScale.y / 2);
+        Vector2 rLowerHitPosition = new Vector2(transform.position.x + (bc.size.x + bc.offset.x), 
+                                                transform.position.y - (bc.size.y + bc.offset.y));
+        Vector2 lLowerHitPosition = new Vector2(transform.position.x - (bc.size.x + bc.offset.x), 
+                                                transform.position.y - (bc.size.y + bc.offset.y));
+        Vector2 rHigherHitPosition = new Vector2(transform.position.x + (bc.size.x + bc.offset.x), 
+                                                 transform.position.y + (bc.size.y + bc.offset.y));
+        Vector2 lHigherHitPosition = new Vector2(transform.position.x - (bc.size.x + bc.offset.x), 
+                                                 transform.position.y + (bc.size.y + bc.offset.y));
 
         BoxCollider2D pbc = nearPlayer.GetComponent<BoxCollider2D>();
 
-        Vector2 rLowerPlayerHitPosition = new Vector2(nearPlayer.transform.position.x - 0.1f + pbc.size.x * nearPlayer.transform.localScale.x / 2,
-                                                       nearPlayer.transform.position.y + 0.1f - pbc.size.y * nearPlayer.transform.localScale.y / 2);
-        Vector2 lLowerPlayerHitPosition = new Vector2(nearPlayer.transform.position.x + 0.1f - pbc.size.x * nearPlayer.transform.localScale.x / 2,
-                                                       nearPlayer.transform.position.y + 0.1f - pbc.size.y * nearPlayer.transform.localScale.y / 2);
-        Vector2 rHigherPlayerHitPosition = new Vector2(nearPlayer.transform.position.x - 0.1f + pbc.size.x * nearPlayer.transform.localScale.x / 2, 
-                                                       nearPlayer.transform.position.y - 0.1f + pbc.size.y * nearPlayer.transform.localScale.y / 2);
-        Vector2 lHigherPlayerHitPosition = new Vector2(nearPlayer.transform.position.x + 0.1f - pbc.size.x * nearPlayer.transform.localScale.x / 2,
-                                                       nearPlayer.transform.position.y - 0.1f + pbc.size.y * nearPlayer.transform.localScale.y / 2);
+        Vector2 rLowerPlayerHitPosition = new Vector2(nearPlayer.transform.position.x - 0.35f + (pbc.size.x + pbc.offset.x),
+                                                      nearPlayer.transform.position.y + 0.35f - (pbc.size.y + pbc.offset.y));
+        Vector2 lLowerPlayerHitPosition = new Vector2(nearPlayer.transform.position.x + 0.35f - (pbc.size.x + pbc.offset.x),
+                                                      nearPlayer.transform.position.y + 0.35f - (pbc.size.y + pbc.offset.y));
+        Vector2 rHigherPlayerHitPosition = new Vector2(nearPlayer.transform.position.x - 0.35f + (pbc.size.x + pbc.offset.x), 
+                                                       nearPlayer.transform.position.y - 0.35f + (pbc.size.y + pbc.offset.y));
+        Vector2 lHigherPlayerHitPosition = new Vector2(nearPlayer.transform.position.x + 0.35f - (pbc.size.x + pbc.offset.x),
+                                                       nearPlayer.transform.position.y - 0.35f + (pbc.size.y + pbc.offset.y));
 
         Vector2 rHigherHitDirection = new Vector2(rHigherPlayerHitPosition.x - rHigherHitPosition.x,
                                                   rHigherPlayerHitPosition.y - rHigherHitPosition.y);
         Vector2 lHigherHitDirection = new Vector2(lHigherPlayerHitPosition.x - lHigherHitPosition.x,
                                                   lHigherPlayerHitPosition.y - lHigherHitPosition.y);
         Vector2 rLowerHitDirection = new Vector2(rLowerPlayerHitPosition.x - rLowerHitPosition.x,
-                                                  rLowerPlayerHitPosition.y - rLowerHitPosition.y);
+                                                 rLowerPlayerHitPosition.y - rLowerHitPosition.y);
         Vector2 lLowerHitDirection = new Vector2(lLowerPlayerHitPosition.x - lLowerHitPosition.x,
-                                                  lLowerPlayerHitPosition.y - lLowerHitPosition.y);
+                                                 lLowerPlayerHitPosition.y - lLowerHitPosition.y);
 
-        RaycastHit2D rLowerHit = Physics2D.Raycast(rLowerHitPosition, rLowerHitDirection, Mathf.Infinity, ~LayerMask.GetMask(LayerMask.LayerToName(gameObject.layer)));
-        RaycastHit2D lLowerHit = Physics2D.Raycast(lLowerHitPosition, lLowerHitDirection, Mathf.Infinity, ~LayerMask.GetMask(LayerMask.LayerToName(gameObject.layer)));
-        RaycastHit2D rHigherHit = Physics2D.Raycast(rHigherHitPosition, rHigherHitDirection, Mathf.Infinity, ~LayerMask.GetMask(LayerMask.LayerToName(gameObject.layer)));
-        RaycastHit2D lHigherHit = Physics2D.Raycast(lHigherHitPosition, lHigherHitDirection, Mathf.Infinity, ~LayerMask.GetMask(LayerMask.LayerToName(gameObject.layer)));
+        RaycastHit2D rLowerHit = Physics2D.Raycast(rLowerHitPosition, rLowerHitDirection, Mathf.Infinity, ~ignoreLayers);
+        RaycastHit2D lLowerHit = Physics2D.Raycast(lLowerHitPosition, lLowerHitDirection, Mathf.Infinity, ~ignoreLayers);
+        RaycastHit2D rHigherHit = Physics2D.Raycast(rHigherHitPosition, rHigherHitDirection, Mathf.Infinity, ~ignoreLayers);
+        RaycastHit2D lHigherHit = Physics2D.Raycast(lHigherHitPosition, lHigherHitDirection, Mathf.Infinity, ~ignoreLayers);
 
-        if(!rLowerHit.collider.CompareTag("Player") || !lLowerHit.collider.CompareTag("Player") 
+        Debug.DrawLine(rLowerHitPosition, rLowerHit.point, Color.red);
+        Debug.DrawLine(lLowerHitPosition, lLowerHit.point, Color.red);
+        Debug.DrawLine(rHigherHitPosition, rHigherHit.point, Color.red);
+        Debug.DrawLine(lHigherHitPosition, lHigherHit.point, Color.red);
+
+        if (!rLowerHit.collider.CompareTag("Player") || !lLowerHit.collider.CompareTag("Player") 
             || !rHigherHit.collider.CompareTag("Player") || !lHigherHit.collider.CompareTag("Player"))
         {
             CancelDash();
@@ -184,6 +196,7 @@ public class BossEM : EnemyMovement
 
     private void CancelDash()
     {
+        print("a");
         isDash = false;
         attackLine.enabled = false;
         StopCoroutine(lastPreparateDashCoroutine);

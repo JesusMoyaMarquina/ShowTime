@@ -137,7 +137,7 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 1.6
+  - time: 1.5833334
     functionName: SetAttackingFalse
     data: 
     objectReferenceParameter: {fileID: 0}
