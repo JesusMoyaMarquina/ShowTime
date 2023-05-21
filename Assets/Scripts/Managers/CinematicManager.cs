@@ -5,7 +5,7 @@ using TMPro;
 
 public class CinematicManager : MonoBehaviour
 {
-    [SerializeField, TextArea(4, 6)] private string[] cinematic1Text;
+    [SerializeField, TextArea(4, 6)] private string[] cinematic1Text, cinematic2Text, cinematic3Text, cinematic4Text;
     [SerializeField] private GameObject dialogePanel;
     [SerializeField] private TMP_Text dialogeText;
 
@@ -13,63 +13,135 @@ public class CinematicManager : MonoBehaviour
 
     private bool dialogeStart;
     private int lineIndex;
+    private int CinematicNumber;
 
     [HideInInspector]public bool inCinematic;
 
-    public GameObject playerCim, robotCim, cinematicCanvas;
+    public GameObject playerCim, robotCim, bigEnemyCim, bossCim, cinematicCanvas;
 
     private void Start()
     {
         dialogePanel.SetActive(false);
         playerCim.SetActive(false);
         robotCim.SetActive(false);
+        bigEnemyCim.SetActive(false);
+        bossCim.SetActive(false);
         cinematicCanvas.SetActive(false);
+        CinematicNumber = 0;
     }
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.A))
+        if (Input.GetKey(KeyCode.J))
             inCinematic = true;
-        if (Input.GetKey(KeyCode.S))
+        if (Input.GetKey(KeyCode.K))
             inCinematic = false;
 
         if (Input.GetButtonDown("Fire1") && inCinematic)
         {
             cinematicCanvas.SetActive(true);
-            playerCim.SetActive(true);
-            robotCim.SetActive(true);
+            switch (CinematicNumber)
+            {
+                case 0:
+                    playerCim.SetActive(true);
+                    robotCim.SetActive(true);
 
-            if (!dialogeStart)
-            {
-                StartDialoge();
-            }
-            else if (dialogeText.text == cinematic1Text[lineIndex])
-            {
-                NextDialogeLine();
-            }
-            else 
-            { 
-                StopCoroutine(dialogeText.text);
-                dialogeText.text = cinematic1Text[lineIndex];
+                    if (!dialogeStart)
+                    {
+                        StartDialoge(cinematic1Text);
+                    }
+                    else if (dialogeText.text == cinematic1Text[lineIndex])
+                    {
+                        NextDialogeLine(cinematic1Text);
+                    }
+                    else
+                    {
+                        StopCoroutine(dialogeText.text);
+                        dialogeText.text = cinematic1Text[lineIndex];
+                    }
+                    break;
+
+                case 1:
+                    playerCim.SetActive(true);
+                    if (lineIndex == 0)
+                    {
+                        bigEnemyCim.SetActive(true);
+                    }
+
+                    if (!dialogeStart)
+                    {
+                        StartDialoge(cinematic2Text);
+                    }
+                    else if (dialogeText.text == cinematic2Text[lineIndex])
+                    {
+                        NextDialogeLine(cinematic2Text);
+                    }
+                    else
+                    {
+                        StopCoroutine(dialogeText.text);
+                        dialogeText.text = cinematic2Text[lineIndex];
+                    }
+                    break;
+
+                case 2:
+                    playerCim.SetActive(true);
+                    if (lineIndex == 0)
+                    {
+                        bossCim.SetActive(true);
+                    }
+
+                    if (!dialogeStart)
+                    {
+                        StartDialoge(cinematic3Text);
+                    }
+                    else if (dialogeText.text == cinematic3Text[lineIndex])
+                    {
+                        NextDialogeLine(cinematic3Text);
+                    }
+                    else
+                    {
+                        StopCoroutine(dialogeText.text);
+                        dialogeText.text = cinematic3Text[lineIndex];
+                    }
+                    break;
+
+                case 3:
+                    playerCim.SetActive(true);
+                    robotCim.SetActive(true);
+
+                    if (!dialogeStart)
+                    {
+                        StartDialoge(cinematic4Text);
+                    }
+                    else if (dialogeText.text == cinematic4Text[lineIndex])
+                    {
+                        NextDialogeLine(cinematic4Text);
+                    }
+                    else
+                    {
+                        StopCoroutine(dialogeText.text);
+                        dialogeText.text = cinematic4Text[lineIndex];
+                    }
+                    break;
             }
         }
     }
 
-    private void StartDialoge()
+    private void StartDialoge(string[] cinematicText)
     {
         dialogeStart = true;
         dialogePanel.SetActive(true);
         lineIndex = 0;
         Time.timeScale = 0f;
-        StartCoroutine(ShowLine());
+        StartCoroutine(ShowLine(cinematicText));
     }
 
-    private void NextDialogeLine()
+    private void NextDialogeLine(string[] cinematicText)
     {
         lineIndex++;
-        if (lineIndex < cinematic1Text.Length)
+        if (lineIndex < cinematicText.Length)
         {
-            StartCoroutine(ShowLine());
+            StartCoroutine(ShowLine(cinematicText));
         }
         else
         {
@@ -77,16 +149,19 @@ public class CinematicManager : MonoBehaviour
             dialogePanel.SetActive(false);
             playerCim.SetActive(false);
             robotCim.SetActive(false);
+            bigEnemyCim.SetActive(false);
+            bossCim.SetActive(false);
             cinematicCanvas.SetActive(false);
             Time.timeScale = 1.0f;
+            CinematicNumber++;
         }
     }
 
-    private IEnumerator ShowLine()
+    private IEnumerator ShowLine(string[] cinematicText)
     {
         dialogeText.text = string.Empty;
 
-        foreach(char ch in cinematic1Text[lineIndex]) 
+        foreach(char ch in cinematicText[lineIndex]) 
         { 
             dialogeText.text += ch;
             yield return new WaitForSecondsRealtime(dialogeSpeed);
