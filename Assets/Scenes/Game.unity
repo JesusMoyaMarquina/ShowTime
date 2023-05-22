@@ -2915,15 +2915,10 @@ MonoBehaviour:
     con la suya.'
   - "S.C.R-3W: \xA1Bip! \"\xA1A jugar siii!\""
   cinematic2Text:
-  - "Noah: Uff, uff. Bueno, ya he calentado. \xA1\xBFNO TIENES MAS?!"
-  - 'Big-Boss: Bueno, si no es mucha molestia.'
-  - "Noah: \xBFEh?"
-  - "Big-Boss: \xBFEh?"
-  cinematic3Text:
   - "Noah: \xA1Madre mia! Uff. Si hombre. \xBFNi un descanso?"
   - 'El Gato: No.'
   - 'Noah: Diantres...'
-  cinematic4Text:
+  cinematic3Text:
   - "Noah: Se acab\xF3."
   - "S.C.R-3W: \xBFBip? \"\xBFYa nos vamos a casa?\""
   - "Noah: Aqu\xED hay un portal, \xBFSer\xE1 este el que nos lleve a casa?"
@@ -2932,7 +2927,6 @@ MonoBehaviour:
   dialogePanel: {fileID: 193672301}
   dialogeText: {fileID: 1637019960}
   dialogeSpeed: 0.05
-  inCinematic: 0
   playerCim: {fileID: 1266686321}
   robotCim: {fileID: 1096870751}
   bigEnemyCim: {fileID: 1702353860}

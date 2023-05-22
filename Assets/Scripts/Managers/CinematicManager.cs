@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System;
 
 public class CinematicManager : MonoBehaviour
 {
-    [SerializeField, TextArea(4, 6)] private string[] cinematic1Text, cinematic2Text, cinematic3Text, cinematic4Text;
+    [SerializeField, TextArea(4, 6)] private string[] cinematic1Text, cinematic2Text, cinematic3Text;
     [SerializeField] private GameObject dialogePanel;
     [SerializeField] private TMP_Text dialogeText;
 
@@ -15,9 +16,31 @@ public class CinematicManager : MonoBehaviour
     private int lineIndex;
     private int CinematicNumber;
 
-    [HideInInspector]public bool inCinematic;
-
     public GameObject playerCim, robotCim, bigEnemyCim, bossCim, cinematicCanvas;
+
+    private void Awake()
+    {
+        GameManager.OnGameStateChange += GameManagerOnGameStateChange;
+    }
+
+    private void OnDestroy()
+    {
+        GameManager.OnGameStateChange -= GameManagerOnGameStateChange;
+    }
+
+    private void GameManagerOnGameStateChange(GameState state)
+    {
+        switch(state)
+        {
+            case GameState.Cinematics:
+                CinematicNumber++;
+                gameObject.SetActive(true);
+                break;
+            default:
+                gameObject.SetActive(false);
+                break;
+        }
+    }
 
     private void Start()
     {
@@ -32,12 +55,12 @@ public class CinematicManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetButtonDown("Fire1") && inCinematic)
+        if (Input.GetButtonDown("Fire1"))
         {
             cinematicCanvas.SetActive(true);
             switch (CinematicNumber)
             {
-                case 0:
+                case 1:
                     playerCim.SetActive(true);
                     robotCim.SetActive(true);
 
@@ -56,7 +79,7 @@ public class CinematicManager : MonoBehaviour
                     }
                     break;
 
-                case 1:
+                case 2:
                     playerCim.SetActive(true);
                     if (lineIndex == 0)
                     {
@@ -78,12 +101,9 @@ public class CinematicManager : MonoBehaviour
                     }
                     break;
 
-                case 2:
+                case 3:
                     playerCim.SetActive(true);
-                    if (lineIndex == 0)
-                    {
-                        bossCim.SetActive(true);
-                    }
+                    robotCim.SetActive(true);
 
                     if (!dialogeStart)
                     {
@@ -97,25 +117,6 @@ public class CinematicManager : MonoBehaviour
                     {
                         StopCoroutine(dialogeText.text);
                         dialogeText.text = cinematic3Text[lineIndex];
-                    }
-                    break;
-
-                case 3:
-                    playerCim.SetActive(true);
-                    robotCim.SetActive(true);
-
-                    if (!dialogeStart)
-                    {
-                        StartDialoge(cinematic4Text);
-                    }
-                    else if (dialogeText.text == cinematic4Text[lineIndex])
-                    {
-                        NextDialogeLine(cinematic4Text);
-                    }
-                    else
-                    {
-                        StopCoroutine(dialogeText.text);
-                        dialogeText.text = cinematic4Text[lineIndex];
                     }
                     break;
             }
@@ -146,6 +147,20 @@ public class CinematicManager : MonoBehaviour
             bigEnemyCim.SetActive(false);
             bossCim.SetActive(false);
             cinematicCanvas.SetActive(false);
+
+            switch (CinematicNumber)
+            {
+                case 1:
+                    GameManager.Instance.UpdateGameState(GameState.Combat);
+                    break;
+                case 2:
+                    GameManager.Instance.UpdateGameState(GameState.Combat);
+                    break;
+                case 3:
+                    GameManager.Instance.UpdateGameState(GameState.CombatFinished);
+                    break;
+
+            }
         }
     }
 
