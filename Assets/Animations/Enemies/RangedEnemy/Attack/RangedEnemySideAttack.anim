@@ -21,25 +21,25 @@ AnimationClip:
   - curve:
     - time: 0
       value: {fileID: 21300000, guid: 2f6b426e68937e64a9d3a528f31a8948, type: 3}
-    - time: 0.25
+    - time: 0.16666667
       value: {fileID: 21300000, guid: 110f3f263c2af7348816f1b4dfe9c9b3, type: 3}
-    - time: 0.5
+    - time: 0.33333334
       value: {fileID: 21300000, guid: 7a6d7ba02c976f649aecc6105c583f4e, type: 3}
-    - time: 0.75
+    - time: 0.5
       value: {fileID: 21300000, guid: 66029f7a014f01e4f90c1b3d9a5d7242, type: 3}
-    - time: 1
+    - time: 0.6666667
       value: {fileID: 21300000, guid: 47af3504b31fcff4cb761c60862c4589, type: 3}
-    - time: 1.25
+    - time: 0.8333333
       value: {fileID: 21300000, guid: 8d01215a6c9d2cb4b9dbdc8de60f2216, type: 3}
-    - time: 1.5
+    - time: 1
       value: {fileID: 21300000, guid: 48f72c270a5e635489f84573ff584f51, type: 3}
-    - time: 1.75
+    - time: 1.1666666
       value: {fileID: 21300000, guid: 3d8dc8c12d5f991459c386f5310032c3, type: 3}
-    - time: 2
+    - time: 1.3333334
       value: {fileID: 21300000, guid: cc5ead1d1de0cb947971ede3fd767b47, type: 3}
-    - time: 2.25
+    - time: 1.5
       value: {fileID: 21300000, guid: 29bd69b0d7f14a143830a7f309227029, type: 3}
-    - time: 2.5
+    - time: 1.6666666
       value: {fileID: 21300000, guid: 29bd69b0d7f14a143830a7f309227029, type: 3}
     attribute: m_Sprite
     path: 
@@ -76,7 +76,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 2.5833333
+    m_StopTime: 1.75
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -96,29 +96,29 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 1.5
+  - time: 1
     functionName: PlayAttackFX
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 2.5
-    functionName: SetAttackingFalse
+  - time: 1.3333334
+    functionName: PlayThrowFX
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 2.5
+  - time: 1.3333334
     functionName: ThrowAttack
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 2.5
-    functionName: PlayThrowFX
+  - time: 1.6666666
+    functionName: SetAttackingFalse
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
