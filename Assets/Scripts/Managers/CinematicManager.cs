@@ -32,11 +32,6 @@ public class CinematicManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.J))
-            inCinematic = true;
-        if (Input.GetKey(KeyCode.K))
-            inCinematic = false;
-
         if (Input.GetButtonDown("Fire1") && inCinematic)
         {
             cinematicCanvas.SetActive(true);
@@ -132,7 +127,6 @@ public class CinematicManager : MonoBehaviour
         dialogeStart = true;
         dialogePanel.SetActive(true);
         lineIndex = 0;
-        Time.timeScale = 0f;
         StartCoroutine(ShowLine(cinematicText));
     }
 
@@ -152,8 +146,6 @@ public class CinematicManager : MonoBehaviour
             bigEnemyCim.SetActive(false);
             bossCim.SetActive(false);
             cinematicCanvas.SetActive(false);
-            Time.timeScale = 1.0f;
-            CinematicNumber++;
         }
     }
 

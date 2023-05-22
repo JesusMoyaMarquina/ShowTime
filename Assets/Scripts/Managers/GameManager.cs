@@ -53,7 +53,7 @@ public class GameManager : MonoBehaviour
 
     private void HandleCinematic()
     {
-        Debug.Log("Handle Dialogs");
+        Time.timeScale = 0f;
     }
 
     private void HandleCombat()
