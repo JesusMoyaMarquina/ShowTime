@@ -11,6 +11,7 @@ public class CinematicManager : MonoBehaviour
     [SerializeField] private TMP_Text dialogeText;
 
     [SerializeField] private float dialogeSpeed;
+    [SerializeField] private InstanceCinematic cinematicPlayer;
 
     private bool dialogeStart;
     private int lineIndex;
@@ -62,7 +63,7 @@ public class CinematicManager : MonoBehaviour
                 playerCim.SetActive(true);
                 robotCim.SetActive(true);
 
-                if (!dialogeStart)
+                if (!dialogeStart && cinematicPlayer.IsOnGoal())
                 {
                     StartDialoge(cinematic1Text);
                 }
