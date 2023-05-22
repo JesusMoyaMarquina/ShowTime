@@ -87,7 +87,6 @@ public class MenuManager : MonoBehaviour
         closeDelay = true;
         yield return new WaitForEndOfFrame();
         closeDelay = false;
-
     }
 
     #region General menu options

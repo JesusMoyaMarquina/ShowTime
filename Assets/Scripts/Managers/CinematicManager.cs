@@ -54,17 +54,16 @@ public class CinematicManager : MonoBehaviour
         CinematicNumber = 0;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         cinematicCanvas.SetActive(true);
         switch (CinematicNumber)
         {
             case 1:
-                playerCim.SetActive(true);
-                robotCim.SetActive(true);
-
                 if (!dialogeStart && cinematicPlayer.IsOnGoal())
                 {
+                    playerCim.SetActive(true);
+                    robotCim.SetActive(true);
                     StartDialoge(cinematic1Text);
                 }
                 else if (dialogeText.text == cinematic1Text[lineIndex])
