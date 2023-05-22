@@ -6,10 +6,9 @@ public class UnitManager : MonoBehaviour
 {
 
     public int generateUnit, unitIncremental;
-    private int previousGenerateUnit;
-    public GameObject meleeUnit, rangedUnit, bossUnit;
-    public GameObject unitContaner;
-    public GameObject bossSpawnPoint;
+    public GameObject meleeUnit, rangedUnit, bossUnit, player;
+    public GameObject unitContainer, playerContainer;
+    public GameObject bossSpawnPoint, playerSpawnPoint;
     public GameObject[] spawnAreas;
     public float meleeUnitPercentage, rangedUnitPercentage;
 
@@ -17,7 +16,8 @@ public class UnitManager : MonoBehaviour
     {
         GetSpawnAreas();
         GetDifficulty();
-        unitContaner = GameObject.Find("Units");
+        unitContainer = GameObject.Find("Units");
+        playerContainer = GameObject.Find("Players");
     }
 
     private void GetDifficulty()
@@ -74,7 +74,7 @@ public class UnitManager : MonoBehaviour
                 float spawnXPos = Random.Range(- area.transform.localScale.x / 2, area.transform.localScale.x / 2) + area.transform.position.x;
                 float spawnYPos = Random.Range(- area.transform.localScale.y / 2, area.transform.localScale.y / 2) + area.transform.position.y;
 
-                Instantiate(meleeUnit, new Vector3(spawnXPos, spawnYPos, 0), Quaternion.identity, unitContaner.transform);
+                Instantiate(meleeUnit, new Vector3(spawnXPos, spawnYPos, 0), Quaternion.identity, unitContainer.transform);
 
                 meleeUnitsToSpawn--;
                 areaSpawnUnits--;
@@ -86,7 +86,7 @@ public class UnitManager : MonoBehaviour
                 float spawnXPos = Random.Range(- area.transform.localScale.x / 2, area.transform.localScale.x / 2) + area.transform.position.x;
                 float spawnYPos = Random.Range(- area.transform.localScale.y / 2, area.transform.localScale.y / 2) + area.transform.position.y;
 
-                Instantiate(rangedUnit, new Vector3(spawnXPos, spawnYPos, 0), Quaternion.identity, unitContaner.transform);
+                Instantiate(rangedUnit, new Vector3(spawnXPos, spawnYPos, 0), Quaternion.identity, unitContainer.transform);
 
                 rangedUnitsToSpawn--;
                 areaSpawnUnits--;
@@ -105,11 +105,11 @@ public class UnitManager : MonoBehaviour
 
                 if (meleeUnitPercentage >= rangedUnitPercentage)
                 {
-                    Instantiate(meleeUnit, new Vector3(spawnXPos, spawnYPos, 0), Quaternion.identity, unitContaner.transform);
+                    Instantiate(meleeUnit, new Vector3(spawnXPos, spawnYPos, 0), Quaternion.identity, unitContainer.transform);
                 }
                 else if (meleeUnitPercentage < rangedUnitPercentage)
                 {
-                    Instantiate(rangedUnit, new Vector3(spawnXPos, spawnYPos, 0), Quaternion.identity, unitContaner.transform);
+                    Instantiate(rangedUnit, new Vector3(spawnXPos, spawnYPos, 0), Quaternion.identity, unitContainer.transform);
                 }
                 addExtra = false;
                 unitToGenerate--;
@@ -117,9 +117,14 @@ public class UnitManager : MonoBehaviour
         }
     }
 
+    public GameObject GeneratePlayer()
+    {
+        return Instantiate(player, new Vector3(playerSpawnPoint.transform.position.x, playerSpawnPoint.transform.position.y, 0), Quaternion.identity, playerContainer.transform);
+    }
+
     public GameObject GenerateBoss()
     {
-        return Instantiate(bossUnit, new Vector3(bossSpawnPoint.transform.position.x, bossSpawnPoint.transform.position.y, 0), Quaternion.identity, unitContaner.transform);
+        return Instantiate(bossUnit, new Vector3(bossSpawnPoint.transform.position.x, bossSpawnPoint.transform.position.y, 0), Quaternion.identity, unitContainer.transform);
     }
 
     private void GetSpawnAreas()

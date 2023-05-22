@@ -149,7 +149,7 @@ MonoBehaviour:
   minDistance: 2
   hitted: 0
   stunned: 0
-  totalHealth: 500
+  totalHealth: 1
   distanceToPlayer: 0
   audioSource: {fileID: -1758514401157523288}
   stepFX: {fileID: 8300000, guid: 6e4ddb40bf8c81a42a3632fb4813b4a9, type: 3}
@@ -164,7 +164,7 @@ MonoBehaviour:
   dashSpeed: 36
   dashStunTime: 1
   dashDamage: 30
-  dashKnockbackForce: 4
+  dashKnockbackForce: 3
   dashChargeTime: 0
   ignoreLayers:
     serializedVersion: 2

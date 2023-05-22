@@ -13,10 +13,12 @@ public class CombatManager : MonoBehaviour
 
     #region Unit variables
     public UnitManager unitManager;
+    public GameObject playerSpawnPoint;
 
     public int secondsToGenerate;
 
     private int generateIteration;
+    private bool generatedPlayer;
     #endregion
 
     #region Timer variables
@@ -66,7 +68,7 @@ public class CombatManager : MonoBehaviour
     private void Start()
     {
         GameManager.OnGameStateChange += GameManagerOnGameStateChange;
-        RestartGameTimer();
+        generatedPlayer = false;
     }
 
     private void GameManagerOnGameStateChange(GameState state)
@@ -76,6 +78,9 @@ public class CombatManager : MonoBehaviour
             case GameState.Combat:
 
                 combatState = CombatState.timerCombat;
+                unitManager.GeneratePlayer();
+                generatedPlayer = true;
+                RestartGameTimer();
                 CutPreviousTimer();
 
                 break;
@@ -111,6 +116,7 @@ public class CombatManager : MonoBehaviour
             case GameState.Cinematics:
 
                 combatState = CombatState.pause;
+                acumulatedMultiplierTime = actualTime;
 
                 break;
         }
@@ -130,6 +136,8 @@ public class CombatManager : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!generatedPlayer) return;
+
         if (!timerPause && GameManager.Instance.isInCombat)
         {
             ManageLoseCondition();
@@ -214,7 +222,7 @@ public class CombatManager : MonoBehaviour
         {
             StopUI();
             KillAllEnemies();
-            GameManager.Instance.UpdateGameState(GameState.BossCombat);
+            GameManager.Instance.UpdateGameState(GameState.Cinematics);
         }
     }
 

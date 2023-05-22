@@ -157,14 +157,14 @@ public class BossEM : EnemyMovement
 
         BoxCollider2D pbc = nearPlayer.GetComponent<BoxCollider2D>();
 
-        Vector2 rLowerPlayerHitPosition = new Vector2(nearPlayer.transform.position.x - 0.35f + (pbc.size.x + pbc.offset.x),
-                                                      nearPlayer.transform.position.y + 0.35f - (pbc.size.y + pbc.offset.y));
-        Vector2 lLowerPlayerHitPosition = new Vector2(nearPlayer.transform.position.x + 0.35f - (pbc.size.x + pbc.offset.x),
-                                                      nearPlayer.transform.position.y + 0.35f - (pbc.size.y + pbc.offset.y));
-        Vector2 rHigherPlayerHitPosition = new Vector2(nearPlayer.transform.position.x - 0.35f + (pbc.size.x + pbc.offset.x), 
-                                                       nearPlayer.transform.position.y - 0.35f + (pbc.size.y + pbc.offset.y));
-        Vector2 lHigherPlayerHitPosition = new Vector2(nearPlayer.transform.position.x + 0.35f - (pbc.size.x + pbc.offset.x),
-                                                       nearPlayer.transform.position.y - 0.35f + (pbc.size.y + pbc.offset.y));
+        Vector2 rLowerPlayerHitPosition = new Vector2(nearPlayer.transform.position.x - 0.45f + (pbc.size.x + pbc.offset.x),
+                                                      nearPlayer.transform.position.y + 0.45f - (pbc.size.y + pbc.offset.y));
+        Vector2 lLowerPlayerHitPosition = new Vector2(nearPlayer.transform.position.x + 0.45f - (pbc.size.x + pbc.offset.x),
+                                                      nearPlayer.transform.position.y + 0.45f - (pbc.size.y + pbc.offset.y));
+        Vector2 rHigherPlayerHitPosition = new Vector2(nearPlayer.transform.position.x - 0.45f + (pbc.size.x + pbc.offset.x), 
+                                                       nearPlayer.transform.position.y - 0.45f + (pbc.size.y + pbc.offset.y));
+        Vector2 lHigherPlayerHitPosition = new Vector2(nearPlayer.transform.position.x + 0.45f - (pbc.size.x + pbc.offset.x),
+                                                       nearPlayer.transform.position.y - 0.45f + (pbc.size.y + pbc.offset.y));
 
         Vector2 rHigherHitDirection = new Vector2(rHigherPlayerHitPosition.x - rHigherHitPosition.x,
                                                   rHigherPlayerHitPosition.y - rHigherHitPosition.y);
@@ -196,7 +196,6 @@ public class BossEM : EnemyMovement
 
     private void CancelDash()
     {
-        print("a");
         isDash = false;
         attackLine.enabled = false;
         StopCoroutine(lastPreparateDashCoroutine);

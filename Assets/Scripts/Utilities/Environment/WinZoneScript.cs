@@ -8,7 +8,7 @@ public class WinZoneScript : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            GameManager.Instance.UpdateGameState(GameState.Vicory);
+            GameManager.Instance.UpdateGameState(GameState.Cinematics);
         }
     }
 }
