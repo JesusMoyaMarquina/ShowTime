@@ -180,10 +180,11 @@ public class BossEM : EnemyMovement
         RaycastHit2D rHigherHit = Physics2D.Raycast(rHigherHitPosition, rHigherHitDirection, Mathf.Infinity, ~ignoreLayers);
         RaycastHit2D lHigherHit = Physics2D.Raycast(lHigherHitPosition, lHigherHitDirection, Mathf.Infinity, ~ignoreLayers);
 
-        Debug.DrawLine(rLowerHitPosition, rLowerHit.point, Color.red);
-        Debug.DrawLine(lLowerHitPosition, lLowerHit.point, Color.red);
-        Debug.DrawLine(rHigherHitPosition, rHigherHit.point, Color.red);
-        Debug.DrawLine(lHigherHitPosition, lHigherHit.point, Color.red);
+        print("a");
+        Debug.DrawLine(rLowerHitPosition, rLowerHit.point);
+        Debug.DrawLine(lLowerHitPosition, lLowerHit.point);
+        Debug.DrawLine(rHigherHitPosition, rHigherHit.point);
+        Debug.DrawLine(lHigherHitPosition, lHigherHit.point);
 
         if (!rLowerHit.collider.CompareTag("Player") || !lLowerHit.collider.CompareTag("Player") 
             || !rHigherHit.collider.CompareTag("Player") || !lHigherHit.collider.CompareTag("Player"))

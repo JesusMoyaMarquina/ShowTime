@@ -13,7 +13,7 @@ public class CinematicManager : MonoBehaviour
     [SerializeField] private float dialogeSpeed;
     [SerializeField] private InstanceCinematic cinematicPlayer;
 
-    private bool dialogeStart;
+    private bool dialogeStart, dialogDelay;
     private int lineIndex;
     private int CinematicNumber;
     private Coroutine lastShowLineCoroutine;
@@ -54,7 +54,7 @@ public class CinematicManager : MonoBehaviour
         CinematicNumber = 0;
     }
 
-    void FixedUpdate()
+    void Update()
     {
         cinematicCanvas.SetActive(true);
         switch (CinematicNumber)
@@ -68,17 +68,25 @@ public class CinematicManager : MonoBehaviour
                 }
                 else if (dialogeText.text == cinematic1Text[lineIndex])
                 {
-                    if (Input.GetButtonDown("Fire1"))
+                    if (Input.GetButtonDown("Fire1") && !dialogDelay)
                     {
                         NextDialogeLine(cinematic1Text);
+                        if (gameObject.activeSelf)
+                        {
+                            StartCoroutine(DialogDelay());
+                        }
                     }
                 }
                 else
                 {
-                    if (Input.GetButtonDown("Fire1"))
+                    if (Input.GetButtonDown("Fire1") && lastShowLineCoroutine != null && !dialogDelay)
                     {
                         StopCoroutine(lastShowLineCoroutine);
                         dialogeText.text = cinematic1Text[lineIndex];
+                        if (gameObject.activeSelf)
+                        {
+                            StartCoroutine(DialogDelay());
+                        }
                     }
                 }
                 break;
@@ -96,17 +104,25 @@ public class CinematicManager : MonoBehaviour
                 }
                 else if (dialogeText.text == cinematic2Text[lineIndex])
                 {
-                    if (Input.GetButtonDown("Fire1"))
+                    if (Input.GetButtonDown("Fire1") && !dialogDelay)
                     {
                         NextDialogeLine(cinematic2Text);
+                        if (gameObject.activeSelf)
+                        {
+                            StartCoroutine(DialogDelay());
+                        }
                     }
                 }
                 else
                 {
-                    if (Input.GetButtonDown("Fire1"))
+                    if (Input.GetButtonDown("Fire1") && lastShowLineCoroutine != null && !dialogDelay)
                     {
                         StopCoroutine(lastShowLineCoroutine);
                         dialogeText.text = cinematic2Text[lineIndex];
+                        if (gameObject.activeSelf)
+                        {
+                            StartCoroutine(DialogDelay());
+                        }
                     }
                 }
                 break;
@@ -121,17 +137,25 @@ public class CinematicManager : MonoBehaviour
                 }
                 else if (dialogeText.text == cinematic3Text[lineIndex])
                 {
-                    if (Input.GetButtonDown("Fire1"))
+                    if (Input.GetButtonDown("Fire1") && !dialogDelay)
                     {
                         NextDialogeLine(cinematic3Text);
+                        if (gameObject.activeSelf)
+                        {
+                            StartCoroutine(DialogDelay());
+                        }
                     }
                 }
                 else
                 {
-                    if (Input.GetButtonDown("Fire1"))
+                    if (Input.GetButtonDown("Fire1") && lastShowLineCoroutine != null && !dialogDelay)
                     {
                         StopCoroutine(lastShowLineCoroutine);
                         dialogeText.text = cinematic3Text[lineIndex];
+                        if (gameObject.activeSelf)
+                        {
+                            StartCoroutine(DialogDelay());
+                        }
                     }
                 }
                 break;
@@ -176,6 +200,13 @@ public class CinematicManager : MonoBehaviour
 
             }
         }
+    }
+
+    private IEnumerator DialogDelay()
+    {
+        dialogDelay = true;
+        yield return new WaitForEndOfFrame();
+        dialogDelay = false;
     }
 
     private IEnumerator ShowLine(string[] cinematicText)

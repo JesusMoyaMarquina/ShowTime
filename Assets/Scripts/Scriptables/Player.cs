@@ -209,7 +209,6 @@ public class Player : MonoBehaviour
         if (rb.velocity.x != 0)
             direction = rb.velocity;
 
-        print(direction.x);
         spriteRenderer.flipX = direction.x > 0;
         
         anim.SetFloat("speed", rb.velocity.magnitude);

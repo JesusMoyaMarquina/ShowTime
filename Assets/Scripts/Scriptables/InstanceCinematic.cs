@@ -8,6 +8,8 @@ public class InstanceCinematic : MonoBehaviour
     // -12.6 1.9
     [SerializeField] private Transform goal, midPoint;
     [SerializeField] private float speed;
+    [SerializeField] private AudioClip stepFX;
+    private AudioSource audioSource;
     private Animator anim;
     private bool isOnGoal;
 
@@ -22,6 +24,7 @@ public class InstanceCinematic : MonoBehaviour
     {
         GameManager.OnGameStateChange += GameManagerOnGameStateChange;
         anim = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void OnDestroy()
@@ -69,6 +72,11 @@ public class InstanceCinematic : MonoBehaviour
     }
 
     private void CameraFollowUp() => Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -10);
+
+    public void PlayStepFX()
+    {
+        audioSource.PlayOneShot(stepFX);
+    }
 
 
 }
