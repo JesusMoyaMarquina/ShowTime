@@ -189,6 +189,8 @@ public class CinematicManager : MonoBehaviour
             switch (CinematicNumber)
             {
                 case 1:
+                    CombatManager.instance.unitManager.GeneratePlayer();
+                    CombatManager.instance.generatedPlayer = true;
                     GameManager.Instance.UpdateGameState(GameState.Combat);
                     break;
                 case 2:

@@ -18,7 +18,7 @@ public class CombatManager : MonoBehaviour
     public int secondsToGenerate;
 
     private int generateIteration;
-    private bool generatedPlayer;
+    public bool generatedPlayer;
     #endregion
 
     #region Timer variables
@@ -78,7 +78,6 @@ public class CombatManager : MonoBehaviour
             case GameState.Combat:
 
                 combatState = CombatState.timerCombat;
-                unitManager.GeneratePlayer();
                 generatedPlayer = true;
                 RestartGameTimer();
                 CutPreviousTimer();
