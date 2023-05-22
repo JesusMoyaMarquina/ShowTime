@@ -342,7 +342,7 @@ Transform:
   m_GameObject: {fileID: 604665573338875446}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 604665574602146488}
@@ -414,18 +414,18 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.12633225, y: -0.3241543}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 2, y: 2}
+    pivot: {x: 0.57, y: 0.3}
+    oldSize: {x: 1, y: 1}
     newSize: {x: 4, y: 4}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.5348749, y: 0.4691665}
+  m_Size: {x: 0.2674375, y: 0.23458324}
   m_EdgeRadius: 0
 --- !u!50 &604665573338875453
 Rigidbody2D:
@@ -543,11 +543,11 @@ MonoBehaviour:
   attacks:
   - attackName: SoftAttack
     damage: 20
-    cd: 0.25
+    cd: 0.5
     collider: {fileID: 604665574804849438}
   - attackName: StrongAttack
     damage: 30
-    cd: 0.5
+    cd: 0.75
     collider: {fileID: 604665573615533894}
   - attackName: SoftSoftSoftCombo
     damage: 40

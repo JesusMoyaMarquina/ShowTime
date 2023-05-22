@@ -1617,21 +1617,21 @@ EdgeCollider2D:
   m_EdgeRadius: 1
   m_Points:
   - {x: -16.0654, y: -0.8478765}
-  - {x: -8.916583, y: -0.9944892}
-  - {x: -8.614474, y: -1.8789895}
-  - {x: -7.620685, y: -2.8443367}
-  - {x: -5.7846446, y: -3.6735353}
-  - {x: -3.9596996, y: -4.1986284}
-  - {x: -2.0085056, y: -4.5680604}
-  - {x: -0.24305432, y: -4.7031727}
-  - {x: 1.8305922, y: -4.553602}
-  - {x: 3.0231829, y: -4.3045626}
-  - {x: 5.137902, y: -3.566798}
-  - {x: 7.0850477, y: -2.5850248}
-  - {x: 8.478254, y: -0.92114973}
-  - {x: 15.227231, y: -0.57673466}
-  - {x: 14.197852, y: 4.3790293}
-  - {x: 7.4554915, y: 3.5759125}
+  - {x: -9.184934, y: -1.0168517}
+  - {x: -8.882824, y: -1.9684392}
+  - {x: -7.7548594, y: -2.8443367}
+  - {x: -5.941181, y: -3.7853475}
+  - {x: -4.0938745, y: -4.3551655}
+  - {x: -2.0085056, y: -4.769323}
+  - {x: -0.24305432, y: -4.814985}
+  - {x: 1.8082297, y: -4.7101393}
+  - {x: 3.0679078, y: -4.505824}
+  - {x: 5.1602645, y: -3.9022346}
+  - {x: 7.3981223, y: -2.8980992}
+  - {x: 8.657153, y: -1.0776869}
+  - {x: 15.271956, y: -0.82272154}
+  - {x: 14.197852, y: 3.4398065}
+  - {x: 7.5673037, y: 3.1733885}
   - {x: 6.394138, y: 4.2277994}
   - {x: 4.993, y: 4.965518}
   - {x: 3.5372384, y: 5.453198}
@@ -1641,8 +1641,8 @@ EdgeCollider2D:
   - {x: -3.7582896, y: 5.6883717}
   - {x: -5.419663, y: 5.2792177}
   - {x: -6.5921392, y: 4.6242166}
-  - {x: -8.124637, y: 3.5658793}
-  - {x: -14.8649645, y: 3.7807372}
+  - {x: -8.124637, y: 3.2080803}
+  - {x: -14.797876, y: 3.4676628}
   - {x: -16.124096, y: -0.16302106}
   m_AdjacentStartPoint: {x: 0, y: 0}
   m_AdjacentEndPoint: {x: 0, y: 0}
@@ -1900,7 +1900,7 @@ PrefabInstance:
     - target: {fileID: 3030601500588095269, guid: d2dddb37a116d8646921cf07fc432f8f, type: 3}
       propertyPath: settingsMenu
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1566324155}
     - target: {fileID: 4524143306756508565, guid: d2dddb37a116d8646921cf07fc432f8f, type: 3}
       propertyPath: buttonHover
       value: 
@@ -3439,7 +3439,7 @@ PrefabInstance:
       objectReference: {fileID: 5037429430027693209, guid: 66dc63d1a28706640b90f7fd06d1205b, type: 3}
     - target: {fileID: 5526421497139514543, guid: 815897c2898ba1443bc9451ad57672b4, type: 3}
       propertyPath: generateUnit
-      value: 0
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 5526421497139514543, guid: 815897c2898ba1443bc9451ad57672b4, type: 3}
       propertyPath: unitContaner
@@ -3467,7 +3467,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5526421497139514543, guid: 815897c2898ba1443bc9451ad57672b4, type: 3}
       propertyPath: meleeUnitPercentage
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5526421497139514543, guid: 815897c2898ba1443bc9451ad57672b4, type: 3}
       propertyPath: minRangedPercentage
@@ -3475,7 +3475,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5526421497139514543, guid: 815897c2898ba1443bc9451ad57672b4, type: 3}
       propertyPath: rangedUnitPercentage
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 815897c2898ba1443bc9451ad57672b4, type: 3}
