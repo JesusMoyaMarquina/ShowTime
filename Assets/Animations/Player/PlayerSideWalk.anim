@@ -20,31 +20,15 @@ AnimationClip:
   m_PPtrCurves:
   - curve:
     - time: 0
-      value: {fileID: -6959915571989194883, guid: 3d2f599474fd4b2994881f42880ea8c6, type: 3}
+      value: {fileID: 21300000, guid: 14f13ebef457d994896aafbd13b84d42, type: 3}
     - time: 0.083333336
-      value: {fileID: 960921020097805623, guid: 3d2f599474fd4b2994881f42880ea8c6, type: 3}
+      value: {fileID: 21300000, guid: a3fc37a4f14ed1c4f91f24a38889b4a7, type: 3}
     - time: 0.16666667
-      value: {fileID: -3336701548478254045, guid: 3d2f599474fd4b2994881f42880ea8c6, type: 3}
+      value: {fileID: 21300000, guid: f4f6a3da6ed676242aab0834146928b7, type: 3}
     - time: 0.25
-      value: {fileID: -5400053455435091454, guid: 3d2f599474fd4b2994881f42880ea8c6, type: 3}
+      value: {fileID: 21300000, guid: 8b69ed006b385544abab49e210363ef4, type: 3}
     - time: 0.33333334
-      value: {fileID: 4408406346810168619, guid: 3d2f599474fd4b2994881f42880ea8c6, type: 3}
-    - time: 0.41666666
-      value: {fileID: -485737157877676475, guid: 3d2f599474fd4b2994881f42880ea8c6, type: 3}
-    - time: 0.5
-      value: {fileID: -5106187503225981072, guid: 3d2f599474fd4b2994881f42880ea8c6, type: 3}
-    - time: 0.5833333
-      value: {fileID: 5251978615751408329, guid: 3d2f599474fd4b2994881f42880ea8c6, type: 3}
-    - time: 0.6666667
-      value: {fileID: 2965599932687856292, guid: 3d2f599474fd4b2994881f42880ea8c6, type: 3}
-    - time: 0.75
-      value: {fileID: 2365076705713957727, guid: 3d2f599474fd4b2994881f42880ea8c6, type: 3}
-    - time: 0.8333333
-      value: {fileID: 6256131582671704638, guid: 3d2f599474fd4b2994881f42880ea8c6, type: 3}
-    - time: 0.9166667
-      value: {fileID: 7208522903439339441, guid: 3d2f599474fd4b2994881f42880ea8c6, type: 3}
-    - time: 1
-      value: {fileID: -8803371887732516606, guid: 3d2f599474fd4b2994881f42880ea8c6, type: 3}
+      value: {fileID: 21300000, guid: ec4d77b59b9f8424e9c0aa0e9d97f03c, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -64,25 +48,17 @@ AnimationClip:
       customType: 23
       isPPtrCurve: 1
     pptrCurveMapping:
-    - {fileID: -6959915571989194883, guid: 3d2f599474fd4b2994881f42880ea8c6, type: 3}
-    - {fileID: 960921020097805623, guid: 3d2f599474fd4b2994881f42880ea8c6, type: 3}
-    - {fileID: -3336701548478254045, guid: 3d2f599474fd4b2994881f42880ea8c6, type: 3}
-    - {fileID: -5400053455435091454, guid: 3d2f599474fd4b2994881f42880ea8c6, type: 3}
-    - {fileID: 4408406346810168619, guid: 3d2f599474fd4b2994881f42880ea8c6, type: 3}
-    - {fileID: -485737157877676475, guid: 3d2f599474fd4b2994881f42880ea8c6, type: 3}
-    - {fileID: -5106187503225981072, guid: 3d2f599474fd4b2994881f42880ea8c6, type: 3}
-    - {fileID: 5251978615751408329, guid: 3d2f599474fd4b2994881f42880ea8c6, type: 3}
-    - {fileID: 2965599932687856292, guid: 3d2f599474fd4b2994881f42880ea8c6, type: 3}
-    - {fileID: 2365076705713957727, guid: 3d2f599474fd4b2994881f42880ea8c6, type: 3}
-    - {fileID: 6256131582671704638, guid: 3d2f599474fd4b2994881f42880ea8c6, type: 3}
-    - {fileID: 7208522903439339441, guid: 3d2f599474fd4b2994881f42880ea8c6, type: 3}
-    - {fileID: -8803371887732516606, guid: 3d2f599474fd4b2994881f42880ea8c6, type: 3}
+    - {fileID: 21300000, guid: 14f13ebef457d994896aafbd13b84d42, type: 3}
+    - {fileID: 21300000, guid: a3fc37a4f14ed1c4f91f24a38889b4a7, type: 3}
+    - {fileID: 21300000, guid: f4f6a3da6ed676242aab0834146928b7, type: 3}
+    - {fileID: 21300000, guid: 8b69ed006b385544abab49e210363ef4, type: 3}
+    - {fileID: 21300000, guid: ec4d77b59b9f8424e9c0aa0e9d97f03c, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 1.0833334
+    m_StopTime: 0.4166667
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -102,14 +78,14 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 0.5
+  - time: 0.16666667
     functionName: PlayStepFX
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 1.0833334
+  - time: 0.33333334
     functionName: PlayStepFX
     data: 
     objectReferenceParameter: {fileID: 0}

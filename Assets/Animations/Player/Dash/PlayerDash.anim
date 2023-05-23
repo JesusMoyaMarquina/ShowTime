@@ -31,6 +31,8 @@ AnimationClip:
       value: {fileID: 21300000, guid: b068d32f0df6a5b40aeea599cbf79e54, type: 3}
     - time: 0.41666666
       value: {fileID: 21300000, guid: 4cddacfc6298efd48816440e9a24ce07, type: 3}
+    - time: 0.5
+      value: {fileID: 21300000, guid: 4cddacfc6298efd48816440e9a24ce07, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -56,12 +58,13 @@ AnimationClip:
     - {fileID: 21300000, guid: b0c979acf14b06b4e97baaac4ab83d93, type: 3}
     - {fileID: 21300000, guid: b068d32f0df6a5b40aeea599cbf79e54, type: 3}
     - {fileID: 21300000, guid: 4cddacfc6298efd48816440e9a24ce07, type: 3}
+    - {fileID: 21300000, guid: 4cddacfc6298efd48816440e9a24ce07, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.5
+    m_StopTime: 0.5833333
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -81,7 +84,7 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 0.41666666
+  - time: 0.5
     functionName: StopDashing
     data: 
     objectReferenceParameter: {fileID: 11500000, guid: d61dd668a383b1e47a37bcee93ef1447, type: 3}
