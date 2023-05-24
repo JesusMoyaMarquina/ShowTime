@@ -41,7 +41,7 @@ public class DistanceAttack : MonoBehaviour
 
     public void Translation()
     {
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90;
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 180;
         float x = transform.position.x + Mathf.Cos(angle * Mathf.Deg2Rad);
         float y = transform.position.y + Mathf.Sin(angle * Mathf.Deg2Rad);
         var targetPos = new Vector3(x, y, this.transform.position.z);
