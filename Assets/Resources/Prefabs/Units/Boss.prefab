@@ -198,7 +198,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ignoreLayers:
     serializedVersion: 2
-    m_Bits: 1984
+    m_Bits: 6080
   color: {r: 1, g: 0.2784314, b: 0.2784314, a: 0}
 --- !u!82 &-1758514401157523288
 AudioSource:
