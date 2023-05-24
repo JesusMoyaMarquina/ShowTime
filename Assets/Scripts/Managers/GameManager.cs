@@ -23,6 +23,19 @@ public class GameManager : MonoBehaviour
         UpdateGameState(GameState.Cinematics);
     }
 
+    private void Update()
+    {
+        HandlePauseInput();
+    }
+
+    private void HandlePauseInput()
+    {
+        if (Input.GetButtonDown("Cancel") && state != GameState.Pause)
+        {
+            Instance.UpdateGameState(GameState.Pause);
+        }
+    }
+
     public void UpdateGameState(GameState newState)
     {
         previousGameState = state;

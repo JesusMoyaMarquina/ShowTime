@@ -79,7 +79,10 @@ public class CombatManager : MonoBehaviour
 
                 combatState = CombatState.timerCombat;
                 generatedPlayer = true;
-                RestartGameTimer();
+                if (GameManager.Instance.previousGameState == GameState.Cinematics)
+                {
+                    RestartGameTimer();
+                }
                 CutPreviousTimer();
 
                 break;
@@ -125,7 +128,6 @@ public class CombatManager : MonoBehaviour
     {
         if (GameManager.Instance.isInCombat)
         {
-            HandleCombatInputs();
             if ((Mathf.CeilToInt(remainingTime) == combatTime - secondsToGenerate * generateIteration || remainingTime == combatTime) && remainingTime > 0)
             {
                 GenerateUnits();
@@ -168,14 +170,6 @@ public class CombatManager : MonoBehaviour
     private void ShowBossHealth(bool show = true)
     {
         bossCombatUI.SetActive(show);
-    }
-
-    private void HandleCombatInputs()
-    {
-        if (Input.GetButtonDown("Cancel"))
-        {
-            GameManager.Instance.UpdateGameState(GameState.Pause);
-        }
     }
 
     #region UI Management

@@ -12,9 +12,9 @@ public class CinematicManager : MonoBehaviour
 
     [SerializeField] private float dialogeSpeed;
     [SerializeField] private InstanceCinematic cinematicPlayer;
-    [SerializeField] private AudioClip AudioThunder;
+    [SerializeField] private AudioClip AudioThunder, cinematicMusic;
 
-    private bool dialogeStart, dialogDelay, playSound;
+    private bool dialogeStart, dialogDelay, playSound, pause;
     private int lineIndex;
     private int CinematicNumber;
     private Coroutine lastShowLineCoroutine;
@@ -38,8 +38,17 @@ public class CinematicManager : MonoBehaviour
     {
         switch(state)
         {
+            case GameState.Pause:
+                pause = true;
+                audioS.Pause();
+                break;
             case GameState.Cinematics:
-                CinematicNumber++;
+                if (GameManager.Instance.previousGameState != GameState.Pause)  
+                {
+                    CinematicNumber++;
+                }
+                pause = false;
+                audioS.Play();
                 gameObject.SetActive(true);
                 break;
             default:
@@ -59,10 +68,14 @@ public class CinematicManager : MonoBehaviour
         cinematicCanvas.SetActive(false);
         CinematicNumber = 0;
         playSound = true;
+        audioS.clip = cinematicMusic;
+        audioS.Play();
     }
 
     void Update()
     {
+        if (pause) return;
+
         cinematicCanvas.SetActive(true);
         switch (CinematicNumber)
         {
@@ -246,13 +259,13 @@ public class CinematicManager : MonoBehaviour
             {
                 case 1:
                     cinematicPlayer.Cinematic1Over();
-                    audioS.Stop();
                     GameManager.Instance.UpdateGameState(GameState.Cinematics);
                     break;
 
                 case 2:
                     CombatManager.instance.unitManager.GeneratePlayer();
                     CombatManager.instance.generatedPlayer = true;
+                    audioS.Stop();
                     GameManager.Instance.UpdateGameState(GameState.Combat);
                     break;
 
@@ -281,7 +294,7 @@ public class CinematicManager : MonoBehaviour
         foreach(char ch in cinematicText[lineIndex]) 
         { 
             dialogeText.text += ch;
-            yield return new WaitForSecondsRealtime(dialogeSpeed);
+            yield return new WaitForSeconds(dialogeSpeed);
         }
     }
 }

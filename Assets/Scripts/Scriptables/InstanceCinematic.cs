@@ -12,7 +12,7 @@ public class InstanceCinematic : MonoBehaviour
     private AudioSource audioSource;
     private Animator anim;
     private bool isOnGoal;
-    private bool cinematic1Over;
+    private bool cinematic1Over, pause;
 
     private bool onMidPoint;
 
@@ -44,11 +44,18 @@ public class InstanceCinematic : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        else if (state == GameState.Pause) 
+        {
+            pause = true;
+        } else
+        {
+            pause = false;
+        }
     }
 
     void Update()
     {
-        if (cinematic1Over)
+        if (cinematic1Over && !pause)
         {
             CameraFollowUp();
 
