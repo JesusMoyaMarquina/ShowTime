@@ -12,12 +12,18 @@ public class InstanceCinematic : MonoBehaviour
     private AudioSource audioSource;
     private Animator anim;
     private bool isOnGoal;
+    private bool cinematic1Over;
 
     private bool onMidPoint;
 
     public bool IsOnGoal()
     {
         return isOnGoal;
+    }
+
+    public void Cinematic1Over()
+    {
+        cinematic1Over = true;
     }
 
     private void Awake()
@@ -42,31 +48,35 @@ public class InstanceCinematic : MonoBehaviour
 
     void Update()
     {
-        CameraFollowUp();
-
-        if (!onMidPoint)
+        if (cinematic1Over)
         {
-            transform.position = Vector2.MoveTowards(transform.position, midPoint.position, speed);
+            CameraFollowUp();
 
-            if (transform.position == midPoint.position)
+            if (!onMidPoint)
             {
-                onMidPoint = true;
-            }
+                transform.position = Vector2.MoveTowards(transform.position, midPoint.position, speed);
 
-            anim.SetFloat("speed", 1f);
-        }
-        else
-        {
-            transform.position = Vector2.MoveTowards(transform.position, goal.position, speed);
+                if (transform.position == midPoint.position)
+                {
+                    onMidPoint = true;
+                }
 
-            if(transform.position != goal.position) 
-            {
                 anim.SetFloat("speed", 1f);
-            } else
+            }
+            else
             {
-                isOnGoal = true;
-                anim.SetFloat("speed", 0);
+                transform.position = Vector2.MoveTowards(transform.position, goal.position, speed);
 
+                if (transform.position != goal.position)
+                {
+                    anim.SetFloat("speed", 1f);
+                }
+                else
+                {
+                    isOnGoal = true;
+                    anim.SetFloat("speed", 0);
+
+                }
             }
         }
     }

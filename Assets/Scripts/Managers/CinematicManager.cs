@@ -12,16 +12,20 @@ public class CinematicManager : MonoBehaviour
 
     [SerializeField] private float dialogeSpeed;
     [SerializeField] private InstanceCinematic cinematicPlayer;
+    [SerializeField] private AudioClip AudioThunder;
 
-    private bool dialogeStart, dialogDelay;
+    private bool dialogeStart, dialogDelay, playSound;
     private int lineIndex;
     private int CinematicNumber;
     private Coroutine lastShowLineCoroutine;
 
     public GameObject playerCim, robotCim, bossCim, godCim, bgPanel, cinematicCanvas;
 
+    private AudioSource audioS;
+
     private void Awake()
     {
+        audioS = GetComponent<AudioSource>();
         GameManager.OnGameStateChange += GameManagerOnGameStateChange;
     }
 
@@ -50,8 +54,11 @@ public class CinematicManager : MonoBehaviour
         playerCim.SetActive(false);
         robotCim.SetActive(false);
         bossCim.SetActive(false);
+        godCim.SetActive(false);
+        bgPanel.SetActive(false);
         cinematicCanvas.SetActive(false);
         CinematicNumber = 0;
+        playSound = true;
     }
 
     void Update()
@@ -60,44 +67,21 @@ public class CinematicManager : MonoBehaviour
         switch (CinematicNumber)
         {
             case 1:
-                bgPanel.SetActive(true);
-                playerCim.SetActive(true);
 
                 if (lineIndex == 1)
                 {
+                    if (playSound)
+                    {
+                        audioS.PlayOneShot(AudioThunder);
+                        playSound = false;
+                    }
                     godCim.SetActive(true);
                 }
 
-                else if (dialogeText.text == cinematic1Text[lineIndex])
+                if (!dialogeStart)
                 {
-                    if (Input.GetButtonDown("Fire1") && !dialogDelay)
-                    {
-                        NextDialogeLine(cinematic1Text);
-                        if (gameObject.activeSelf)
-                        {
-                            StartCoroutine(DialogDelay());
-                        }
-                    }
-                }
-                else
-                {
-                    if (Input.GetButtonDown("Fire1") && lastShowLineCoroutine != null && !dialogDelay)
-                    {
-                        StopCoroutine(lastShowLineCoroutine);
-                        dialogeText.text = cinematic1Text[lineIndex];
-                        if (gameObject.activeSelf)
-                        {
-                            StartCoroutine(DialogDelay());
-                        }
-                    }
-                }
-                break;
-
-            case 2:
-                if (!dialogeStart && cinematicPlayer.IsOnGoal())
-                {
+                    bgPanel.SetActive(true);
                     playerCim.SetActive(true);
-                    robotCim.SetActive(true);
                     StartDialoge(cinematic1Text);
                 }
                 else if (dialogeText.text == cinematic1Text[lineIndex])
@@ -125,7 +109,41 @@ public class CinematicManager : MonoBehaviour
                 }
                 break;
 
+            case 2:
+
+                if (!dialogeStart && cinematicPlayer.IsOnGoal())
+                {
+                    playerCim.SetActive(true);
+                    robotCim.SetActive(true);
+                    StartDialoge(cinematic2Text);
+                }
+                else if (dialogeText.text == cinematic2Text[lineIndex])
+                {
+                    if (Input.GetButtonDown("Fire1") && !dialogDelay)
+                    {
+                        NextDialogeLine(cinematic2Text);
+                        if (gameObject.activeSelf)
+                        {
+                            StartCoroutine(DialogDelay());
+                        }
+                    }
+                }
+                else
+                {
+                    if (Input.GetButtonDown("Fire1") && lastShowLineCoroutine != null && !dialogDelay)
+                    {
+                        StopCoroutine(lastShowLineCoroutine);
+                        dialogeText.text = cinematic2Text[lineIndex];
+                        if (gameObject.activeSelf)
+                        {
+                            StartCoroutine(DialogDelay());
+                        }
+                    }
+                }
+                break;
+
             case 3:
+
                 playerCim.SetActive(true);
                 if (lineIndex == 1)
                 {
@@ -162,6 +180,7 @@ public class CinematicManager : MonoBehaviour
                 break;
 
             case 4:
+
                 playerCim.SetActive(true);
                 robotCim.SetActive(true);
 
@@ -221,10 +240,13 @@ public class CinematicManager : MonoBehaviour
             bossCim.SetActive(false);
             godCim.SetActive(false);
             cinematicCanvas.SetActive(false);
+            lineIndex = 0;
 
             switch (CinematicNumber)
             {
                 case 1:
+                    cinematicPlayer.Cinematic1Over();
+                    audioS.Stop();
                     GameManager.Instance.UpdateGameState(GameState.Cinematics);
                     break;
 
