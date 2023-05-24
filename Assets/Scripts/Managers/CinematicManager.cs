@@ -6,7 +6,7 @@ using System;
 
 public class CinematicManager : MonoBehaviour
 {
-    [SerializeField, TextArea(4, 6)] private string[] cinematic1Text, cinematic2Text, cinematic3Text;
+    [SerializeField, TextArea(4, 6)] private string[] cinematic1Text, cinematic2Text, cinematic3Text, cinematic4Text;
     [SerializeField] private GameObject dialogePanel;
     [SerializeField] private TMP_Text dialogeText;
 
@@ -18,7 +18,7 @@ public class CinematicManager : MonoBehaviour
     private int CinematicNumber;
     private Coroutine lastShowLineCoroutine;
 
-    public GameObject playerCim, robotCim, bossCim, cinematicCanvas;
+    public GameObject playerCim, robotCim, bossCim, godCim, bgPanel, cinematicCanvas;
 
     private void Awake()
     {
@@ -60,6 +60,40 @@ public class CinematicManager : MonoBehaviour
         switch (CinematicNumber)
         {
             case 1:
+                bgPanel.SetActive(true);
+                playerCim.SetActive(true);
+
+                if (lineIndex == 1)
+                {
+                    godCim.SetActive(true);
+                }
+
+                else if (dialogeText.text == cinematic1Text[lineIndex])
+                {
+                    if (Input.GetButtonDown("Fire1") && !dialogDelay)
+                    {
+                        NextDialogeLine(cinematic1Text);
+                        if (gameObject.activeSelf)
+                        {
+                            StartCoroutine(DialogDelay());
+                        }
+                    }
+                }
+                else
+                {
+                    if (Input.GetButtonDown("Fire1") && lastShowLineCoroutine != null && !dialogDelay)
+                    {
+                        StopCoroutine(lastShowLineCoroutine);
+                        dialogeText.text = cinematic1Text[lineIndex];
+                        if (gameObject.activeSelf)
+                        {
+                            StartCoroutine(DialogDelay());
+                        }
+                    }
+                }
+                break;
+
+            case 2:
                 if (!dialogeStart && cinematicPlayer.IsOnGoal())
                 {
                     playerCim.SetActive(true);
@@ -91,45 +125,12 @@ public class CinematicManager : MonoBehaviour
                 }
                 break;
 
-            case 2:
+            case 3:
                 playerCim.SetActive(true);
                 if (lineIndex == 1)
                 {
                     bossCim.SetActive(true);
                 }
-
-                if (!dialogeStart)
-                {
-                    StartDialoge(cinematic2Text);
-                }
-                else if (dialogeText.text == cinematic2Text[lineIndex])
-                {
-                    if (Input.GetButtonDown("Fire1") && !dialogDelay)
-                    {
-                        NextDialogeLine(cinematic2Text);
-                        if (gameObject.activeSelf)
-                        {
-                            StartCoroutine(DialogDelay());
-                        }
-                    }
-                }
-                else
-                {
-                    if (Input.GetButtonDown("Fire1") && lastShowLineCoroutine != null && !dialogDelay)
-                    {
-                        StopCoroutine(lastShowLineCoroutine);
-                        dialogeText.text = cinematic2Text[lineIndex];
-                        if (gameObject.activeSelf)
-                        {
-                            StartCoroutine(DialogDelay());
-                        }
-                    }
-                }
-                break;
-
-            case 3:
-                playerCim.SetActive(true);
-                robotCim.SetActive(true);
 
                 if (!dialogeStart)
                 {
@@ -159,6 +160,39 @@ public class CinematicManager : MonoBehaviour
                     }
                 }
                 break;
+
+            case 4:
+                playerCim.SetActive(true);
+                robotCim.SetActive(true);
+
+                if (!dialogeStart)
+                {
+                    StartDialoge(cinematic4Text);
+                }
+                else if (dialogeText.text == cinematic4Text[lineIndex])
+                {
+                    if (Input.GetButtonDown("Fire1") && !dialogDelay)
+                    {
+                        NextDialogeLine(cinematic4Text);
+                        if (gameObject.activeSelf)
+                        {
+                            StartCoroutine(DialogDelay());
+                        }
+                    }
+                }
+                else
+                {
+                    if (Input.GetButtonDown("Fire1") && lastShowLineCoroutine != null && !dialogDelay)
+                    {
+                        StopCoroutine(lastShowLineCoroutine);
+                        dialogeText.text = cinematic4Text[lineIndex];
+                        if (gameObject.activeSelf)
+                        {
+                            StartCoroutine(DialogDelay());
+                        }
+                    }
+                }
+                break;
         }
     }
 
@@ -181,25 +215,32 @@ public class CinematicManager : MonoBehaviour
         {
             dialogeStart = false;
             dialogePanel.SetActive(false);
+            bgPanel.SetActive(false);
             playerCim.SetActive(false);
             robotCim.SetActive(false);
             bossCim.SetActive(false);
+            godCim.SetActive(false);
             cinematicCanvas.SetActive(false);
 
             switch (CinematicNumber)
             {
                 case 1:
+                    GameManager.Instance.UpdateGameState(GameState.Cinematics);
+                    break;
+
+                case 2:
                     CombatManager.instance.unitManager.GeneratePlayer();
                     CombatManager.instance.generatedPlayer = true;
                     GameManager.Instance.UpdateGameState(GameState.Combat);
                     break;
-                case 2:
+
+                case 3:
                     GameManager.Instance.UpdateGameState(GameState.BossCombat);
                     break;
-                case 3:
+
+                case 4:
                     GameManager.Instance.UpdateGameState(GameState.Vicory);
                     break;
-
             }
         }
     }
