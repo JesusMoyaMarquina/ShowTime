@@ -63,6 +63,7 @@ public class SoundManager : MonoBehaviour
         switch (state)
         {
             case GameState.Cinematics:
+                menuMusic.Stop();
                 break;
             case GameState.Combat:
                 battleMusic.Play();
