@@ -223,6 +223,7 @@ public class BossEM : EnemyMovement
         attackLine.enabled = false;
         isDashing = false;
         anim.SetBool("isDashing", isDashing);
+        StartCoroutine(DashCooldown());
     }
 
     IEnumerator DashCooldown()

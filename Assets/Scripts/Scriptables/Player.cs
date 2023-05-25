@@ -459,7 +459,6 @@ public class Player : MonoBehaviour
 
     public void DeactivateAttackCollider()
     {
-        print(executedAttack);
         if (executedAttack != null)
         {
             executedAttack.DeactivateCollider();

@@ -229,16 +229,16 @@ public abstract class EnemyMovement : MonoBehaviour
     public virtual void GetDamage(float damage)
     {
         currentHealth -= damage;
+        SetAttackingFalse();
         PlayHittedFX();
 
         CheckDeadCondition();
 
         hitted = false;
         anim.SetBool("hitted", hitted);
-
-        if (!attacking)
-            hitted = true;
-            anim.SetBool("hitted", hitted);
+        
+        hitted = true;
+        anim.SetBool("hitted", hitted);
     }
 
     public bool isAlive()

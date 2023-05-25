@@ -149,7 +149,7 @@ MonoBehaviour:
   minDistance: 2
   hitted: 0
   stunned: 0
-  totalHealth: 1
+  totalHealth: 1000
   distanceToPlayer: 0
   audioSource: {fileID: -1758514401157523288}
   stepFX: {fileID: 8300000, guid: 6e4ddb40bf8c81a42a3632fb4813b4a9, type: 3}
@@ -158,8 +158,8 @@ MonoBehaviour:
   score: 1000
   bossAttack: {fileID: 0}
   attackLine: {fileID: -370279155021738748}
-  dashPreparationTime: 5
-  dashCoolDown: 5
+  dashPreparationTime: 2
+  dashCoolDown: 7
   minimumDashDistance: 8
   dashSpeed: 36
   dashStunTime: 1
