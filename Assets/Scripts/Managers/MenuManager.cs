@@ -9,7 +9,7 @@ public class MenuManager : MonoBehaviour
     //Canvases
     public GameObject principalSceneMenu;
     public GameObject settingsMenu, keybindsMenu, selectDifficultyMenu;
-    private GameObject victoryMenu, loseMenu, mainMenu, pauseMenu, gameUI;
+    private GameObject victoryMenu, loseMenu, mainMenu, pauseMenu, gameUI, cinematicCanvas;
 
     //State
     public bool closeDelay;
@@ -52,6 +52,7 @@ public class MenuManager : MonoBehaviour
         loseMenu = GameObject.Find("LoseMenu");
         pauseMenu = GameObject.Find("PauseMenu");
         gameUI = GameObject.Find("GameUI");
+        cinematicCanvas = GameObject.Find("CinematicCanvas");
     }
 
     private void HandleMenuVisibility()

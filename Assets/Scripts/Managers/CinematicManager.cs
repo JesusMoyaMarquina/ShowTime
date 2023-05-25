@@ -6,15 +6,18 @@ using System;
 
 public class CinematicManager : MonoBehaviour
 {
+    public static CinematicManager Instance;
+
     [SerializeField, TextArea(4, 6)] private string[] cinematic1Text, cinematic2Text, cinematic3Text, cinematic4Text;
-    [SerializeField] private GameObject dialogePanel;
+    [SerializeField] private GameObject dialogePanel, fadeBlack, fadeInLight;
     [SerializeField] private TMP_Text dialogeText;
 
     [SerializeField] private float dialogeSpeed;
     [SerializeField] private InstanceCinematic cinematicPlayer;
     [SerializeField] private AudioClip AudioThunder, cinematicMusic;
+    [SerializeField] private Animator cim1BgAnim;
 
-    private bool dialogeStart, dialogDelay, playSound, pause;
+    private bool dialogeStart, dialogFinished, dialogDelay, playSound, pause, fadedIn;
     private int lineIndex;
     private int CinematicNumber;
     private Coroutine lastShowLineCoroutine;
@@ -25,6 +28,7 @@ public class CinematicManager : MonoBehaviour
 
     private void Awake()
     {
+        Instance = this;
         audioS = GetComponent<AudioSource>();
         GameManager.OnGameStateChange += GameManagerOnGameStateChange;
     }
@@ -32,6 +36,11 @@ public class CinematicManager : MonoBehaviour
     private void OnDestroy()
     {
         GameManager.OnGameStateChange -= GameManagerOnGameStateChange;
+    }
+
+    public void SetFadedInTrue()
+    {
+        fadedIn = true;
     }
 
     private void GameManagerOnGameStateChange(GameState state)
@@ -85,13 +94,14 @@ public class CinematicManager : MonoBehaviour
                 {
                     if (playSound)
                     {
+                        cim1BgAnim.SetTrigger("thunder");
                         audioS.PlayOneShot(AudioThunder);
                         playSound = false;
                     }
                     godCim.SetActive(true);
                 }
 
-                if (!dialogeStart)
+                if (!dialogeStart && !dialogFinished)
                 {
                     bgPanel.SetActive(true);
                     playerCim.SetActive(true);
@@ -123,6 +133,15 @@ public class CinematicManager : MonoBehaviour
                 break;
 
             case 2:
+
+                if (fadedIn)
+                {
+                    cinematicPlayer.StartMoving();
+                } else
+                {
+                    bgPanel.SetActive(false);
+                    fadeInLight.SetActive(true);
+                }
 
                 if (!dialogeStart && cinematicPlayer.IsOnGoal())
                 {
@@ -247,33 +266,34 @@ public class CinematicManager : MonoBehaviour
         {
             dialogeStart = false;
             dialogePanel.SetActive(false);
-            bgPanel.SetActive(false);
             playerCim.SetActive(false);
             robotCim.SetActive(false);
             bossCim.SetActive(false);
             godCim.SetActive(false);
-            cinematicCanvas.SetActive(false);
             lineIndex = 0;
 
             switch (CinematicNumber)
             {
                 case 1:
-                    cinematicPlayer.Cinematic1Over();
-                    GameManager.Instance.UpdateGameState(GameState.Cinematics);
+                    dialogFinished = true;
+                    fadeBlack.SetActive(true);
                     break;
 
                 case 2:
                     CombatManager.instance.unitManager.GeneratePlayer();
                     CombatManager.instance.generatedPlayer = true;
                     audioS.Stop();
+                    cinematicCanvas.SetActive(false);
                     GameManager.Instance.UpdateGameState(GameState.Combat);
                     break;
 
                 case 3:
+                    cinematicCanvas.SetActive(false);
                     GameManager.Instance.UpdateGameState(GameState.BossCombat);
                     break;
 
                 case 4:
+                    cinematicCanvas.SetActive(false);
                     GameManager.Instance.UpdateGameState(GameState.Vicory);
                     break;
             }

@@ -12,7 +12,7 @@ public class InstanceCinematic : MonoBehaviour
     private AudioSource audioSource;
     private Animator anim;
     private bool isOnGoal;
-    private bool cinematic1Over, pause;
+    private bool startMoving, pause;
 
     private bool onMidPoint;
 
@@ -21,9 +21,9 @@ public class InstanceCinematic : MonoBehaviour
         return isOnGoal;
     }
 
-    public void Cinematic1Over()
+    public void StartMoving()
     {
-        cinematic1Over = true;
+        startMoving = true;
     }
 
     private void Awake()
@@ -55,9 +55,9 @@ public class InstanceCinematic : MonoBehaviour
 
     void Update()
     {
-        if (cinematic1Over && !pause)
+        CameraFollowUp();
+        if (startMoving && !pause)
         {
-            CameraFollowUp();
 
             if (!onMidPoint)
             {
