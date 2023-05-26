@@ -23,11 +23,11 @@ AnimationClip:
       value: {fileID: 21300000, guid: 69c993c783977fb49866e9c630e4a32c, type: 3}
     - time: 0.16666667
       value: {fileID: 21300000, guid: 104b9f0fd0017aa419252856e0a8306f, type: 3}
-    - time: 0.33333334
+    - time: 0.41666666
       value: {fileID: 21300000, guid: ff1aed3b959567b4ca240ab411e2d744, type: 3}
-    - time: 0.5
-      value: {fileID: 21300000, guid: 368ea63015e7fc644bbe694a9a191652, type: 3}
     - time: 0.6666667
+      value: {fileID: 21300000, guid: 368ea63015e7fc644bbe694a9a191652, type: 3}
+    - time: 0.8333333
       value: {fileID: 21300000, guid: 368ea63015e7fc644bbe694a9a191652, type: 3}
     attribute: m_Sprite
     path: 
@@ -58,7 +58,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.75
+    m_StopTime: 0.9166666
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -78,7 +78,7 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 0.6666667
+  - time: 0.8333333
     functionName: SetHittedFalse
     data: 
     objectReferenceParameter: {fileID: 0}
