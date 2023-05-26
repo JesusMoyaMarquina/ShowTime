@@ -28,10 +28,10 @@ public class UnitManager : MonoBehaviour
             {
                 case 0:
                     generateUnit = 4;
-                    unitIncremental = 2;
+                    unitIncremental = 1;
                     break;
                 case 1:
-                    generateUnit = 6;
+                    generateUnit = 4;
                     unitIncremental = 2;
                     break;
                 case 2:

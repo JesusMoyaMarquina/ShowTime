@@ -198,7 +198,6 @@ public abstract class EnemyMovement : MonoBehaviour
             if (!hitted && (!attacking && Time.time > lastAttack + attackCooldown))
             {
                 attacking = true;
-                Attacking();
             }
         } else if (inMovementRange)
         {
@@ -210,7 +209,6 @@ public abstract class EnemyMovement : MonoBehaviour
             if (!hitted && (!attacking && Time.time > lastAttack + attackCooldown))
             {
                 attacking = true;
-                Attacking();
             }
         }
 

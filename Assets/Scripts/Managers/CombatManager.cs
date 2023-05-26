@@ -11,6 +11,9 @@ public class CombatManager : MonoBehaviour
 
     private CombatState combatState;
 
+    private bool battlePrepared;
+    private float startTime;
+
     #region Unit variables
     public UnitManager unitManager;
     public GameObject playerSpawnPoint;
@@ -22,9 +25,9 @@ public class CombatManager : MonoBehaviour
     #endregion
 
     #region Timer variables
-    public GameObject timerCombatUI, timerProgressBar, hitsTimerCombatProgressBar, hitsTimerCombatText;
+    public GameObject preparationUI, preparationProgressBar, timerCombatUI, timerProgressBar, hitsTimerCombatProgressBar, hitsTimerCombatText;
 
-    public float multiplierTime, combatTime, beginBattleTime;
+    public float multiplierTime, combatTime, beginBattleTime, preparationTime;
 
     private bool multiplierActive, timerPause;
 
@@ -69,6 +72,7 @@ public class CombatManager : MonoBehaviour
     {
         GameManager.OnGameStateChange += GameManagerOnGameStateChange;
         generatedPlayer = false;
+        battlePrepared = false;
     }
 
     private void GameManagerOnGameStateChange(GameState state)
@@ -79,9 +83,12 @@ public class CombatManager : MonoBehaviour
 
                 combatState = CombatState.timerCombat;
                 generatedPlayer = true;
-                if (GameManager.Instance.previousGameState == GameState.Cinematics)
+                if (GameManager.Instance.previousGameState == GameState.Cinematics && !battlePrepared)
                 {
+                    startTime = Time.time;
+                    StartCoroutine(PrepareForBattle());
                     RestartGameTimer();
+                    ManageBattleTime();
                 }
                 CutPreviousTimer();
 
@@ -123,16 +130,44 @@ public class CombatManager : MonoBehaviour
                 break;
         }
     }
+    IEnumerator PrepareForBattle()
+    {
+        timerPause = true;
+        preparationUI.SetActive(true);
+        yield return new WaitForSeconds(preparationTime);
+        timerCombatUI.SetActive(true);
+        preparationUI.SetActive(false);
+        battlePrepared = true;
+        timerPause = false;
+        RestartGameTimer();
+    }
 
     void Update()
     {
         if (GameManager.Instance.isInCombat)
         {
-            if ((Mathf.CeilToInt(remainingTime) == combatTime - secondsToGenerate * generateIteration || remainingTime == combatTime) && remainingTime > 0)
+            if (battlePrepared && (Mathf.CeilToInt(remainingTime) == combatTime - secondsToGenerate * generateIteration) && remainingTime > 0)
             {
                 GenerateUnits();
+            } 
+            else if (!battlePrepared)
+            {
+                UpdatePreparationTimer();
             }
         }
+    }
+
+    private void UpdatePreparationTimer()
+    {
+        timerCombatUI.SetActive(false);
+
+        TimeSpan t = TimeSpan.FromSeconds((int)Math.Ceiling(startTime + preparationTime - Time.time));
+        string sTime = t.ToString(@"mm\:ss");
+
+        preparationProgressBar.GetComponent<ProgressBar>().maximum = preparationTime;
+        preparationProgressBar.GetComponent<ProgressBar>().current = startTime + preparationTime - Time.time;
+        preparationProgressBar.GetComponent<ProgressBar>().GetCurrentFill();
+        preparationProgressBar.GetComponent<ProgressBar>().SetText(sTime);
     }
 
     private void FixedUpdate()
@@ -238,6 +273,10 @@ public class CombatManager : MonoBehaviour
         unitManager.GenerateUnits();
         unitManager.IncrementUntinsToGenerate();
         generateIteration++;
+        if(generateIteration > 0)
+        {
+            preparationUI.SetActive(false);
+        }
     }
 
     private void KillAllEnemies()

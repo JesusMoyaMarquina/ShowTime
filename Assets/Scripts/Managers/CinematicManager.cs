@@ -15,7 +15,7 @@ public class CinematicManager : MonoBehaviour
     [SerializeField] private float dialogeSpeed;
     [SerializeField] private InstanceCinematic cinematicPlayer;
     [SerializeField] private AudioClip AudioThunder, cinematicMusic;
-    [SerializeField] private Animator cim1BgAnim;
+    [SerializeField] private Animator cim1BgAnim, noahAnim, godAnim;
 
     private bool dialogeStart, dialogFinished, dialogDelay, playSound, pause, fadedIn;
     private int lineIndex;
@@ -130,18 +130,28 @@ public class CinematicManager : MonoBehaviour
                         }
                     }
                 }
+
+                if (cinematic1Text[lineIndex].ToLower().Contains("noah:") && !(dialogeText.text == cinematic1Text[lineIndex]) && playerCim.activeSelf)
+                {
+                    noahAnim.SetBool("isSpeaking", true);
+                }
+                else if (playerCim.activeSelf)
+                {
+                    noahAnim.SetBool("isSpeaking", false);
+                }
+
+                if (cinematic1Text[lineIndex].ToLower().Contains("god:") && !(dialogeText.text == cinematic1Text[lineIndex]) && godCim.activeSelf)
+                {
+                    godAnim.SetBool("isSpeaking", true);
+                }
+                else if (godCim.activeSelf)
+                {
+                    godAnim.SetBool("isSpeaking", false);
+                }
+
                 break;
 
             case 2:
-
-                if (fadedIn)
-                {
-                    cinematicPlayer.StartMoving();
-                } else
-                {
-                    bgPanel.SetActive(false);
-                    fadeInLight.SetActive(true);
-                }
 
                 if (!dialogeStart && cinematicPlayer.IsOnGoal())
                 {
@@ -172,6 +182,26 @@ public class CinematicManager : MonoBehaviour
                         }
                     }
                 }
+
+                if (cinematic2Text[lineIndex].ToLower().Contains("noah:") && !(dialogeText.text == cinematic2Text[lineIndex]) && playerCim.activeSelf)
+                {
+                    noahAnim.SetBool("isSpeaking", true);
+                }
+                else if (playerCim.activeSelf)
+                {
+                    noahAnim.SetBool("isSpeaking", false);
+                }
+
+                if (fadedIn)
+                {
+                    cinematicPlayer.StartMoving();
+                }
+                else
+                {
+                    bgPanel.SetActive(false);
+                    fadeInLight.SetActive(true);
+                }
+
                 break;
 
             case 3:
@@ -209,6 +239,16 @@ public class CinematicManager : MonoBehaviour
                         }
                     }
                 }
+
+                if (cinematic3Text[lineIndex].ToLower().Contains("noah:") && !(dialogeText.text == cinematic3Text[lineIndex]) && playerCim.activeSelf)
+                {
+                    noahAnim.SetBool("isSpeaking", true);
+                }
+                else if (playerCim.activeSelf)
+                {
+                    noahAnim.SetBool("isSpeaking", false);
+                }
+
                 break;
 
             case 4:
@@ -243,6 +283,16 @@ public class CinematicManager : MonoBehaviour
                         }
                     }
                 }
+
+                if (cinematic4Text[lineIndex].ToLower().Contains("noah:") && !(dialogeText.text == cinematic4Text[lineIndex]) && playerCim.activeSelf)
+                {
+                    noahAnim.SetBool("isSpeaking", true);
+                }
+                else if (playerCim.activeSelf)
+                {
+                    noahAnim.SetBool("isSpeaking", false);
+                }
+
                 break;
         }
     }

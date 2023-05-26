@@ -18,7 +18,7 @@ public class Player : MonoBehaviour
 
     //AudioVariables
     private AudioSource audioSource;
-    public AudioClip stepFX, softAttackFX, strongAttackFX, finisherAttackFX;
+    public AudioClip stepFX, hurtFX, softAttackFX, strongAttackFX, finisherAttackFX;
 
     //Color variables
     private Color baseColor;
@@ -264,6 +264,8 @@ public class Player : MonoBehaviour
         this.stunnedTime = stunnedTime;
 
         currentHealth -= damage;
+
+        PlayHurtFX();
 
         DamageAnimation(attackCancel, force);
 
@@ -580,6 +582,11 @@ public class Player : MonoBehaviour
     private void PlayFinisherFX()
     {
         audioSource.PlayOneShot(finisherAttackFX);
+    }
+
+    private void PlayHurtFX()
+    {
+        audioSource.PlayOneShot(hurtFX);
     }
 
 

@@ -461,6 +461,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stepFX: {fileID: 8300000, guid: 6e4ddb40bf8c81a42a3632fb4813b4a9, type: 3}
+  hurtFX: {fileID: 8300000, guid: f99242809819790498626ef00758c36a, type: 3}
   softAttackFX: {fileID: 8300000, guid: 426b46ed58a29f64e9a375be08551ebb, type: 3}
   strongAttackFX: {fileID: 8300000, guid: f886a4ceed2f6ea4facc690e9cbcbe0d, type: 3}
   finisherAttackFX: {fileID: 8300000, guid: afba2ff80ff44f84ba71d83723429a97, type: 3}

@@ -33,14 +33,6 @@ public class DistanceEM : EnemyMovement
     }
 
     public override void Attacking()
-    { }
-
-    public override void AddScore()
-    {
-        CombatManager.instance.AddKillScore(score, "Ranged");
-    }
-
-    public void ThrowAttack()
     {
         arrow = GetComponent<ObjectPool>().GetPooledObject();
 
@@ -50,6 +42,11 @@ public class DistanceEM : EnemyMovement
             arrow.SetActive(true);
             arrow.GetComponent<DistanceAttack>().Launch(nearPlayer);
         }
+    }
+
+    public override void AddScore()
+    {
+        CombatManager.instance.AddKillScore(score, "Ranged");
     }
 
     public override void SetAttackingFalse()
