@@ -339,7 +339,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2045943580}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3035,6 +3035,7 @@ GameObject:
   - component: {fileID: 1594233273}
   - component: {fileID: 1594233275}
   - component: {fileID: 1594233274}
+  - component: {fileID: 1594233276}
   m_Layer: 5
   m_Name: RobotCim
   m_TagString: Untagged
@@ -3055,11 +3056,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2045943580}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -448, y: -113.99945}
+  m_AnchoredPosition: {x: -418, y: -113.99945}
   m_SizeDelta: {x: 500, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1594233274
@@ -3075,14 +3076,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.28773582, g: 0.97886115, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 2544130169632828992, guid: bb842fe46e994e6b903ffa8af9ae0f36, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c84e30ec6fb5af149a7da812d9b465c9, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3100,6 +3101,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1594233272}
   m_CullTransparentMesh: 1
+--- !u!95 &1594233276
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1594233272}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 8012096788704dd4fb0786cad4669774, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1613235116
 GameObject:
   m_ObjectHideFlags: 0
@@ -3327,6 +3348,7 @@ MonoBehaviour:
   cim1BgAnim: {fileID: 2064239058}
   noahAnim: {fileID: 96602758}
   godAnim: {fileID: 229560754}
+  scr3wAnim: {fileID: 1594233276}
   playerCim: {fileID: 96602753}
   robotCim: {fileID: 1594233272}
   bossCim: {fileID: 455616199}
@@ -3518,8 +3540,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2064239055}
-  - {fileID: 96602754}
   - {fileID: 1594233273}
+  - {fileID: 96602754}
   - {fileID: 576370962}
   - {fileID: 455616200}
   - {fileID: 229560751}
@@ -4471,7 +4493,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8447196785075651363, guid: 6924c1468c1dd024d887fab2f7ab4196, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.00002823018
+      value: 0.000047801488
       objectReference: {fileID: 0}
     - target: {fileID: 8447196786502668833, guid: 6924c1468c1dd024d887fab2f7ab4196, type: 3}
       propertyPath: m_Name

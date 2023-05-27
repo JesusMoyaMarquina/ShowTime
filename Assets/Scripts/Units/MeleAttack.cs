@@ -22,6 +22,7 @@ public class MeleAttack : MonoBehaviour
     {
         player = nearPlayer;
         size *= 1.3f;
+        transform.position = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
         transform.localScale = new Vector3(size, size, transform.localScale.z);
         direction = (player.transform.position - transform.position).normalized;
         Rotation(look);

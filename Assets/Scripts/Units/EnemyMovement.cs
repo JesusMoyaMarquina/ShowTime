@@ -168,12 +168,6 @@ public abstract class EnemyMovement : MonoBehaviour
     {
         if(knockbacked) return;
 
-        if (attacking || hitted && Vector2.Distance(rb.position, position) > 0.5f)
-        {
-            rb.constraints = RigidbodyConstraints2D.FreezeAll;
-            return;
-        }
-
         switch (SetDirection())
         {
             case 'L':
@@ -182,6 +176,12 @@ public abstract class EnemyMovement : MonoBehaviour
             case 'R':
                 spriteRenderer.flipX = false;
                 break;
+        }
+
+        if (attacking || hitted && Vector2.Distance(rb.position, position) > 0.5f)
+        {
+            rb.constraints = RigidbodyConstraints2D.FreezeAll;
+            return;
         }
 
         if (inMovementRange && GetType() != typeof(BossEM))

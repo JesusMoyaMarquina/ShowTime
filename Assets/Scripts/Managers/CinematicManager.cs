@@ -15,9 +15,9 @@ public class CinematicManager : MonoBehaviour
     [SerializeField] private float dialogeSpeed;
     [SerializeField] private InstanceCinematic cinematicPlayer;
     [SerializeField] private AudioClip AudioThunder, cinematicMusic;
-    [SerializeField] private Animator cim1BgAnim, noahAnim, godAnim;
+    [SerializeField] private Animator cim1BgAnim, noahAnim, godAnim, scr3wAnim;
 
-    private bool dialogeStart, dialogFinished, dialogDelay, playSound, pause, fadedIn;
+    private bool dialogeStart, dialogFinished, dialogDelay, playSound, pause, lastLine, fadedIn;
     private int lineIndex;
     private int CinematicNumber;
     private Coroutine lastShowLineCoroutine;
@@ -55,6 +55,7 @@ public class CinematicManager : MonoBehaviour
                 if (GameManager.Instance.previousGameState != GameState.Pause)  
                 {
                     CinematicNumber++;
+                    lastLine = false;
                 }
                 pause = false;
                 audioS.Play();
@@ -76,6 +77,7 @@ public class CinematicManager : MonoBehaviour
         bgPanel.SetActive(false);
         cinematicCanvas.SetActive(false);
         CinematicNumber = 0;
+        lastLine = true;
         playSound = true;
         audioS.clip = cinematicMusic;
         audioS.Play();
@@ -83,7 +85,7 @@ public class CinematicManager : MonoBehaviour
 
     void Update()
     {
-        if (pause) return;
+        if (pause || lastLine) return;
 
         cinematicCanvas.SetActive(true);
         switch (CinematicNumber)
@@ -133,20 +135,33 @@ public class CinematicManager : MonoBehaviour
 
                 if (cinematic1Text[lineIndex].ToLower().Contains("noah:") && !(dialogeText.text == cinematic1Text[lineIndex]) && playerCim.activeSelf)
                 {
+                    noahAnim.SetBool("notSpeaking", false);
                     noahAnim.SetBool("isSpeaking", true);
+                }
+                else if (cinematic1Text[lineIndex].ToLower().Contains("noah:") && playerCim.activeSelf)
+                {
+                    noahAnim.SetBool("notSpeaking", false);
+                    noahAnim.SetBool("isSpeaking", false);
                 }
                 else if (playerCim.activeSelf)
                 {
                     noahAnim.SetBool("isSpeaking", false);
+                    noahAnim.SetBool("notSpeaking", true);
                 }
 
                 if (cinematic1Text[lineIndex].ToLower().Contains("god:") && !(dialogeText.text == cinematic1Text[lineIndex]) && godCim.activeSelf)
                 {
+                    godAnim.SetBool("notSpeaking", false);
                     godAnim.SetBool("isSpeaking", true);
                 }
-                else if (godCim.activeSelf)
+                else if (cinematic1Text[lineIndex].ToLower().Contains("god:") && godCim.activeSelf)
+                {
+                    godAnim.SetBool("notSpeaking", false);
+                    godAnim.SetBool("isSpeaking", false);
+                } else if (godCim.activeSelf)
                 {
                     godAnim.SetBool("isSpeaking", false);
+                    godAnim.SetBool("notSpeaking", true);
                 }
 
                 break;
@@ -159,7 +174,7 @@ public class CinematicManager : MonoBehaviour
                     robotCim.SetActive(true);
                     StartDialoge(cinematic2Text);
                 }
-                else if (dialogeText.text == cinematic2Text[lineIndex])
+                else if (dialogeText.text == cinematic2Text[lineIndex] && cinematicPlayer.IsOnGoal())
                 {
                     if (Input.GetButtonDown("Fire1") && !dialogDelay)
                     {
@@ -170,7 +185,7 @@ public class CinematicManager : MonoBehaviour
                         }
                     }
                 }
-                else
+                else if (cinematicPlayer.IsOnGoal())
                 {
                     if (Input.GetButtonDown("Fire1") && lastShowLineCoroutine != null && !dialogDelay)
                     {
@@ -185,11 +200,34 @@ public class CinematicManager : MonoBehaviour
 
                 if (cinematic2Text[lineIndex].ToLower().Contains("noah:") && !(dialogeText.text == cinematic2Text[lineIndex]) && playerCim.activeSelf)
                 {
+                    noahAnim.SetBool("notSpeaking", false);
                     noahAnim.SetBool("isSpeaking", true);
+                }
+                else if (cinematic2Text[lineIndex].ToLower().Contains("noah:") && playerCim.activeSelf)
+                {
+                    noahAnim.SetBool("notSpeaking", false);
+                    noahAnim.SetBool("isSpeaking", false);
                 }
                 else if (playerCim.activeSelf)
                 {
                     noahAnim.SetBool("isSpeaking", false);
+                    noahAnim.SetBool("notSpeaking", true);
+                }
+
+                if (cinematic2Text[lineIndex].ToLower().Contains("s.c.r-3w:") && !(dialogeText.text == cinematic2Text[lineIndex]) && robotCim.activeSelf)
+                {
+                    scr3wAnim.SetBool("notSpeaking", false);
+                    scr3wAnim.SetBool("isSpeaking", true);
+                }
+                else if (cinematic2Text[lineIndex].ToLower().Contains("s.c.r-3w:") && robotCim.activeSelf)
+                {
+                    scr3wAnim.SetBool("notSpeaking", false);
+                    scr3wAnim.SetBool("isSpeaking", false);
+                }
+                else if (robotCim.activeSelf)
+                {
+                    scr3wAnim.SetBool("isSpeaking", false);
+                    scr3wAnim.SetBool("notSpeaking", true);
                 }
 
                 if (fadedIn)
@@ -240,13 +278,22 @@ public class CinematicManager : MonoBehaviour
                     }
                 }
 
+
+
                 if (cinematic3Text[lineIndex].ToLower().Contains("noah:") && !(dialogeText.text == cinematic3Text[lineIndex]) && playerCim.activeSelf)
                 {
+                    noahAnim.SetBool("notSpeaking", false);
                     noahAnim.SetBool("isSpeaking", true);
+                }
+                else if (cinematic3Text[lineIndex].ToLower().Contains("noah:") && playerCim.activeSelf)
+                {
+                    noahAnim.SetBool("notSpeaking", false);
+                    noahAnim.SetBool("isSpeaking", false);
                 }
                 else if (playerCim.activeSelf)
                 {
                     noahAnim.SetBool("isSpeaking", false);
+                    noahAnim.SetBool("notSpeaking", true);
                 }
 
                 break;
@@ -284,13 +331,38 @@ public class CinematicManager : MonoBehaviour
                     }
                 }
 
+
+
                 if (cinematic4Text[lineIndex].ToLower().Contains("noah:") && !(dialogeText.text == cinematic4Text[lineIndex]) && playerCim.activeSelf)
                 {
+                    noahAnim.SetBool("notSpeaking", false);
                     noahAnim.SetBool("isSpeaking", true);
+                }
+                else if (cinematic4Text[lineIndex].ToLower().Contains("noah:") && playerCim.activeSelf)
+                {
+                    noahAnim.SetBool("notSpeaking", false);
+                    noahAnim.SetBool("isSpeaking", false);
                 }
                 else if (playerCim.activeSelf)
                 {
                     noahAnim.SetBool("isSpeaking", false);
+                    noahAnim.SetBool("notSpeaking", true);
+                }
+
+                if (cinematic4Text[lineIndex].ToLower().Contains("s.c.r-3w:") && !(dialogeText.text == cinematic4Text[lineIndex]) && robotCim.activeSelf)
+                {
+                    scr3wAnim.SetBool("notSpeaking", false);
+                    scr3wAnim.SetBool("isSpeaking", true);
+                }
+                else if (cinematic4Text[lineIndex].ToLower().Contains("s.c.r-3w:") && robotCim.activeSelf)
+                {
+                    scr3wAnim.SetBool("notSpeaking", false);
+                    scr3wAnim.SetBool("isSpeaking", false);
+                }
+                else if (robotCim.activeSelf)
+                {
+                    scr3wAnim.SetBool("isSpeaking", false);
+                    scr3wAnim.SetBool("notSpeaking", true);
                 }
 
                 break;
@@ -315,6 +387,7 @@ public class CinematicManager : MonoBehaviour
         else
         {
             dialogeStart = false;
+            lastLine = true;
             dialogePanel.SetActive(false);
             playerCim.SetActive(false);
             robotCim.SetActive(false);
