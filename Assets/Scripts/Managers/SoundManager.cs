@@ -12,7 +12,8 @@ public class SoundManager : MonoBehaviour
 
     public static SoundManager instance;
 
-    public AudioSource battleMusic, menuMusic, bossBattleMusic, battleFinishMusic, loseMusic, victoryMusic, FXSource;
+    public AudioSource cinematicMusic, battleMusic, menuMusic, bossBattleMusic, battleFinishMusic, loseMusic, victoryMusic, japaneseMapAmbientFX, FXSource;
+    public int map = 0;
 
     private void Awake()
     {
@@ -63,9 +64,13 @@ public class SoundManager : MonoBehaviour
         switch (state)
         {
             case GameState.Cinematics:
+                PlayMapFX();
+                cinematicMusic.Play();
                 menuMusic.Stop();
                 break;
             case GameState.Combat:
+                PlayMapFX();
+                cinematicMusic.Stop();
                 battleMusic.Play();
                 menuMusic.Stop();
                 bossBattleMusic.Stop();
@@ -73,11 +78,15 @@ public class SoundManager : MonoBehaviour
                 loseMusic.Stop();
                 break;
             case GameState.BossCombat:
+                PlayMapFX();
+                cinematicMusic.Stop();
                 battleMusic.Stop();
                 menuMusic.Pause();
                 bossBattleMusic.Play();
                 break;
             case GameState.CombatFinished:
+                PlayMapFX();
+                cinematicMusic.Stop();
                 bossBattleMusic.Stop();
                 menuMusic.Pause();
                 battleFinishMusic.Play();
@@ -90,10 +99,16 @@ public class SoundManager : MonoBehaviour
                 else if (GameManager.Instance.previousGameState == GameState.BossCombat)
                 {
                     bossBattleMusic.Pause();
+                } else if (GameManager.Instance.previousGameState == GameState.Cinematics)
+                {
+                    cinematicMusic.Pause();
                 }
+                PauseMapFX();
                 menuMusic.Play();
                 break;
             case GameState.Vicory:
+                StopMapFX();
+                cinematicMusic.Stop();
                 bossBattleMusic.Stop();
                 battleMusic.Stop();
                 battleFinishMusic.Stop();
@@ -101,11 +116,64 @@ public class SoundManager : MonoBehaviour
                 victoryMusic.Play();
                 break;
             case GameState.Lose:
+                StopMapFX();
+                cinematicMusic.Stop();
                 bossBattleMusic.Stop();
                 battleFinishMusic.Stop();
                 battleMusic.Stop();
                 menuMusic.Pause();
                 loseMusic.Play();
+                break;
+        }
+    }
+
+    private void PlayMapFX()
+    {
+        switch (map)
+        {
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                if (japaneseMapAmbientFX.isPlaying) return;
+                japaneseMapAmbientFX.Play();
+                break;
+            case 4:
+                break;
+        }
+
+    }
+
+    private void PauseMapFX()
+    {
+        switch (map)
+        {
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                japaneseMapAmbientFX.Pause();
+                break;
+            case 4:
+                break;
+        }
+
+    }
+
+    private void StopMapFX() 
+    { 
+        switch (map)
+        {
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                japaneseMapAmbientFX.Stop();
+                break;
+            case 4:
                 break;
         }
     }

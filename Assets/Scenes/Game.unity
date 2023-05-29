@@ -1345,10 +1345,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 959315144}
     m_Modifications:
-    - target: {fileID: 1640551561018889457, guid: 78a0995c99ac52a468efd63e14cb5702, type: 3}
-      propertyPath: m_audioClip
-      value: 
-      objectReference: {fileID: 8300000, guid: 66d670ac040a1604b8c493cafee79053, type: 3}
     - target: {fileID: 2271619520664732152, guid: 78a0995c99ac52a468efd63e14cb5702, type: 3}
       propertyPath: m_Name
       value: SoundManager
@@ -1397,10 +1393,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8896714404452879134, guid: 78a0995c99ac52a468efd63e14cb5702, type: 3}
-      propertyPath: m_audioClip
-      value: 
-      objectReference: {fileID: 8300000, guid: 1ccd2f48cf8a4b8499519464354889c8, type: 3}
+    - target: {fileID: 3815160538571897812, guid: 78a0995c99ac52a468efd63e14cb5702, type: 3}
+      propertyPath: m_Volume
+      value: 0.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 78a0995c99ac52a468efd63e14cb5702, type: 3}
 --- !u!4 &538437857 stripped
@@ -3344,7 +3340,6 @@ MonoBehaviour:
   dialogeSpeed: 0.05
   cinematicPlayer: {fileID: 5332590494109577311}
   AudioThunder: {fileID: 8300000, guid: 4c7f53717df32604f86b70d8a983b1a3, type: 3}
-  cinematicMusic: {fileID: 8300000, guid: 03543ce985c989142a79a08fb95bdb92, type: 3}
   cim1BgAnim: {fileID: 2064239058}
   noahAnim: {fileID: 96602758}
   godAnim: {fileID: 229560754}
@@ -4493,7 +4488,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8447196785075651363, guid: 6924c1468c1dd024d887fab2f7ab4196, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000047801488
+      value: 0.000036334448
       objectReference: {fileID: 0}
     - target: {fileID: 8447196786502668833, guid: 6924c1468c1dd024d887fab2f7ab4196, type: 3}
       propertyPath: m_Name

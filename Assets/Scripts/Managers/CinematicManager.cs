@@ -14,7 +14,7 @@ public class CinematicManager : MonoBehaviour
 
     [SerializeField] private float dialogeSpeed;
     [SerializeField] private InstanceCinematic cinematicPlayer;
-    [SerializeField] private AudioClip AudioThunder, cinematicMusic;
+    [SerializeField] private AudioClip AudioThunder;
     [SerializeField] private Animator cim1BgAnim, noahAnim, godAnim, scr3wAnim;
 
     private bool dialogeStart, dialogFinished, dialogDelay, playSound, pause, lastLine, fadedIn;
@@ -79,8 +79,6 @@ public class CinematicManager : MonoBehaviour
         CinematicNumber = 0;
         lastLine = true;
         playSound = true;
-        audioS.clip = cinematicMusic;
-        audioS.Play();
     }
 
     void Update()
@@ -399,13 +397,13 @@ public class CinematicManager : MonoBehaviour
             {
                 case 1:
                     dialogFinished = true;
+                    SoundManager.instance.map = 3;
                     fadeBlack.SetActive(true);
                     break;
 
                 case 2:
                     CombatManager.instance.unitManager.GeneratePlayer();
                     CombatManager.instance.generatedPlayer = true;
-                    audioS.Stop();
                     cinematicCanvas.SetActive(false);
                     GameManager.Instance.UpdateGameState(GameState.Combat);
                     break;
