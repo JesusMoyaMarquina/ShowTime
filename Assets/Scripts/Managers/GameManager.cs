@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     public bool isInCombat;
     public GameState previousGameState;
     private GameState state;
+    [SerializeField] private GameState StartGameState;
 
     public static event Action<GameState> OnGameStateChange;
 
@@ -20,7 +21,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        UpdateGameState(GameState.Cinematics);
+        UpdateGameState(StartGameState);
     }
 
     private void Update()
@@ -63,6 +64,9 @@ public class GameManager : MonoBehaviour
                 break;
             case GameState.Lose:
                 HandleLose();
+                break;
+            case GameState.Train: 
+                HandleTrain(); 
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(newState), newState, null);
@@ -141,6 +145,16 @@ public class GameManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Time.timeScale = 1f;
     }
+
+    private void HandleTrain()
+    {
+        print("Train");
+
+        isInCombat = true;
+
+        Cursor.lockState = CursorLockMode.None;
+        Time.timeScale = 1f;
+    }
 }
 
 public enum GameState
@@ -151,5 +165,6 @@ public enum GameState
     CombatFinished,
     Pause,
     Vicory,
-    Lose
+    Lose,
+    Train
 }

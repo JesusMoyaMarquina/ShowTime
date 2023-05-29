@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Game.unity
     guid: 141357feb19168644a802aaa058922af
+  - enabled: 1
+    path: Assets/Scenes/Train.unity
+    guid: 42130959f9d4f124093448b19924349f
   m_configObjects: {}

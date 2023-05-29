@@ -9,7 +9,7 @@ public class MenuManager : MonoBehaviour
     //Canvases
     public GameObject principalSceneMenu;
     public GameObject settingsMenu, keybindsMenu, selectDifficultyMenu;
-    private GameObject victoryMenu, loseMenu, mainMenu, pauseMenu, gameUI, cinematicCanvas;
+    private GameObject victoryMenu, loseMenu, mainMenu, pauseMenu, gameUI, creditsScreen, trainZoneSettingsMenu, cinematicCanvas;
 
     //State
     public bool closeDelay;
@@ -53,6 +53,9 @@ public class MenuManager : MonoBehaviour
         pauseMenu = GameObject.Find("PauseMenu");
         gameUI = GameObject.Find("GameUI");
         cinematicCanvas = GameObject.Find("CinematicCanvas");
+        trainZoneSettingsMenu = GameObject.Find("TrainingZoneSettings");
+        creditsScreen = GameObject.Find("CreditsScreen");
+
     }
 
     private void HandleMenuVisibility()
@@ -81,6 +84,18 @@ public class MenuManager : MonoBehaviour
         {
             selectDifficultyMenu?.SetActive(false);
         }
+        if (trainZoneSettingsMenu != null)
+        {
+            trainZoneSettingsMenu?.SetActive(false);
+        }
+        if (creditsScreen != null)
+        {
+            creditsScreen?.SetActive(false);
+        }
+        if (cinematicCanvas != null)
+        {
+            cinematicCanvas?.SetActive(false);
+        }
     }
 
     public IEnumerator CloseMenuDelay()
@@ -97,10 +112,22 @@ public class MenuManager : MonoBehaviour
         SceneManager.LoadScene("MainMenu");
     }
 
+    public void OpenCredits()
+    {
+        principalSceneMenu?.SetActive(false);
+        FindObjectOfType<CreditScreensScript>(true).gameObject.SetActive(true);
+    }
+
     public void OpenSettings()
     {
         principalSceneMenu?.SetActive(false);
         FindObjectOfType<SettingsMenuScript>(true).gameObject.SetActive(true);
+    }
+
+    public void OpenTrainingZoneSettings()
+    {
+        FindObjectOfType<SelectDifficultyScript>(true).gameObject.SetActive(false);
+        FindObjectOfType<TrainingZoneSettingsScript>(true).gameObject.SetActive(true);
     }
 
     public void OpenDifficulty()

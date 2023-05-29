@@ -19,6 +19,11 @@ public class SelectDifficultyScript : MonoBehaviour
         this.difficulty = difficulty;
     }
 
+    public void OpenTrainingZoneSettings()
+    {
+        MenuManager.Instance.OpenTrainingZoneSettings();
+    }
+
     public void StartGame()
     {
         MenuManager.isPaused = false;

@@ -5,6 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuScript : MonoBehaviour
 {
+    public void OpenCredits()
+    {
+        MenuManager.Instance.OpenCredits();
+    }
+
     public void OpenSettings()
     {
         MenuManager.Instance.OpenSettings();
