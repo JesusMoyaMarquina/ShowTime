@@ -39,7 +39,7 @@ public class Player : MonoBehaviour
     private Vector2 damageDirection;
     private bool hitted;
     private bool alive;
-    private float currentHealth;
+    private float currentHealth;      // cambio para el guardado de partida
     private float inmortalityTime;
     private float startInmortalTime;
     private bool knockbacked;
