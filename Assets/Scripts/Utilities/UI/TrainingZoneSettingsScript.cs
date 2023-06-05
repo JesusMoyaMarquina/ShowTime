@@ -5,9 +5,14 @@ using UnityEngine.SceneManagement;
 
 public class TrainingZoneSettingsScript : MonoBehaviour
 {
-    public static SelectDifficultyScript Instance;
+    public static TrainingZoneSettingsScript Instance;
 
     private int enemyType;
+
+    private void Start()
+    {
+        Instance = this;
+    }
 
     public void StartTrain()
     {

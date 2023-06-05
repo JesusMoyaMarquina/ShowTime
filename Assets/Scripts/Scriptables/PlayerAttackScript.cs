@@ -37,7 +37,10 @@ public class PlayerAttackScript : MonoBehaviour
 
             enemy.GetDamage(player.executedAttack.GetDamage());
 
-            CombatManager.instance.ComboSystem(true);
+            if (CombatManager.instance != null)
+            {
+                CombatManager.instance.ComboSystem(true);
+            }
 
             if (!enemy.isAlive())
             {

@@ -23,10 +23,14 @@ public class DistanceEM : EnemyMovement
         inMinRange = distance > minDistance;
         inMaxRange = distance <= maxDistance;
 
-        if (!inMaxRange)
+        if (!inMaxRange && TrainManagerScript.Instance == null || TrainManagerScript.Instance.attackingTrain)
             inMovementRange = true;
-        else if (!inMinRange)
+        else if (!inMinRange && TrainManagerScript.Instance == null || TrainManagerScript.Instance.attackingTrain)
             inMovementRange = false;
+        else if (TrainManagerScript.Instance != null || !TrainManagerScript.Instance.attackingTrain)
+        {
+            inMovementRange = false;
+        }
 
         Translation();
         SetAnimation();

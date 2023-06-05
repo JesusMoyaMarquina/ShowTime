@@ -37,9 +37,16 @@ public class MenuManager : MonoBehaviour
 
     private void GameManagerOnGameStateChange(GameState state)
     {
-        victoryMenu.SetActive(state == GameState.Vicory);
-        loseMenu.SetActive(state == GameState.Lose);
-        gameUI?.SetActive(GameManager.Instance.isInCombat);
+        if (CombatManager.instance != null)
+        {
+            victoryMenu.SetActive(state == GameState.Vicory);
+            loseMenu.SetActive(state == GameState.Lose);
+            gameUI?.SetActive(GameManager.Instance.isInCombat);
+        } 
+        else if (TrainManagerScript.Instance != null)
+        {
+            gameUI?.SetActive(GameManager.Instance.isInCombat);
+        }
     }
 
     private void SetVariableMenus()
@@ -51,7 +58,14 @@ public class MenuManager : MonoBehaviour
         victoryMenu = GameObject.Find("VictoryMenu");
         loseMenu = GameObject.Find("LoseMenu");
         pauseMenu = GameObject.Find("PauseMenu");
-        gameUI = GameObject.Find("GameUI");
+        if(GameManager.Instance != null)
+        {
+            gameUI = GameObject.Find("GameUI");
+        }
+        else if (TrainManagerScript.Instance != null)
+        {
+            gameUI = GameObject.Find("TrainUI");
+        }
         cinematicCanvas = GameObject.Find("CinematicCanvas");
         trainZoneSettingsMenu = GameObject.Find("TrainingZoneSettings");
         creditsScreen = GameObject.Find("CreditsScreen");
@@ -126,7 +140,7 @@ public class MenuManager : MonoBehaviour
 
     public void OpenTrainingZoneSettings()
     {
-        FindObjectOfType<SelectDifficultyScript>(true).gameObject.SetActive(false);
+        FindObjectOfType<SelectDifficultyScript>(false).gameObject.SetActive(false);
         FindObjectOfType<TrainingZoneSettingsScript>(true).gameObject.SetActive(true);
     }
 

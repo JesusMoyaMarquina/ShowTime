@@ -19,7 +19,14 @@ public class MeleEM : EnemyMovement
             return;
         }
 
-        inMovementRange = distance > minDistance;
+        if (TrainManagerScript.Instance == null || TrainManagerScript.Instance.attackingTrain)
+        {
+            inMovementRange = distance > minDistance;
+        }
+        else if (TrainManagerScript.Instance != null && !TrainManagerScript.Instance.attackingTrain)
+        {
+            inMovementRange = false;
+        }
         Translation();
         SetAnimation();
     }

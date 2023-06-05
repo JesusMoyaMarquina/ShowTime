@@ -38,10 +38,13 @@ public class BossEM : EnemyMovement
         isDashing = false;
         isDashInCooldown = false;
         bossHealthBar = GameObject.Find("BossProgressBarHealth");
-        bossHealthBar.GetComponent<EntityProgressBar>().maximum = totalHealth;
-        bossHealthBar.GetComponent<EntityProgressBar>().current = currentHealth;
-        bossHealthBar.GetComponent<EntityProgressBar>().previousCurrent = currentHealth;
-        bossHealthBar.GetComponent<EntityProgressBar>().GetCurrentFill();
+        if (bossHealthBar != null)
+        {
+            bossHealthBar.GetComponent<EntityProgressBar>().maximum = totalHealth;
+            bossHealthBar.GetComponent<EntityProgressBar>().current = currentHealth;
+            bossHealthBar.GetComponent<EntityProgressBar>().previousCurrent = currentHealth;
+            bossHealthBar.GetComponent<EntityProgressBar>().GetCurrentFill();
+        }
     }
 
     override
@@ -50,9 +53,12 @@ public class BossEM : EnemyMovement
         currentHealth -= damage;
         PlayHittedFX();
 
-        bossHealthBar.GetComponent<EntityProgressBar>().maximum = totalHealth;
-        bossHealthBar.GetComponent<EntityProgressBar>().current = currentHealth;
-        bossHealthBar.GetComponent<EntityProgressBar>().GetCurrentFill();
+        if (bossHealthBar != null)
+        {
+            bossHealthBar.GetComponent<EntityProgressBar>().maximum = totalHealth;
+            bossHealthBar.GetComponent<EntityProgressBar>().current = currentHealth;
+            bossHealthBar.GetComponent<EntityProgressBar>().GetCurrentFill();
+        }
 
         CheckDeadCondition();
 
@@ -117,26 +123,30 @@ public class BossEM : EnemyMovement
 
         bool isPossibleDash = true;
 
-        if (isDash)
+        if (TrainManagerScript.Instance == null || TrainManagerScript.Instance.attackingTrain)
         {
-            isPossibleDash = CheckPosibleDash();
-        }
+            if (isDash)
+            {
+                isPossibleDash = CheckPosibleDash();
+            }
 
-        if (!isDashing && !isDashInCooldown && distance <= minimumDashDistance && isPossibleDash && !isDash)
-        {
-            lastPreparateDashCoroutine = StartCoroutine(DashPreparation());
-        }
+            if (!isDashing && !isDashInCooldown && distance <= minimumDashDistance && isPossibleDash && !isDash)
+            {
+                lastPreparateDashCoroutine = StartCoroutine(DashPreparation());
+            }
 
-        if (isDash)
-        {
-            float percentage = (Time.time - dashChargeTime - dashPreparationTime) / dashPreparationTime + 1;
-            dashAim = dashCast.UpdateDirection(new Vector2(transform.position.x, transform.position.y), direction, attackLine, percentage);
-            SetAttackingFalse();
-        } else if (isDashing)
-        {
-            dashCast.UpdateDirection(new Vector2(transform.position.x, transform.position.y), direction, attackLine);
-            rb.velocity = direction.normalized * dashSpeed;
-            SetAttackingFalse();
+            if (isDash)
+            {
+                float percentage = (Time.time - dashChargeTime - dashPreparationTime) / dashPreparationTime + 1;
+                dashAim = dashCast.UpdateDirection(new Vector2(transform.position.x, transform.position.y), direction, attackLine, percentage);
+                SetAttackingFalse();
+            }
+            else if (isDashing)
+            {
+                dashCast.UpdateDirection(new Vector2(transform.position.x, transform.position.y), direction, attackLine);
+                rb.velocity = direction.normalized * dashSpeed;
+                SetAttackingFalse();
+            }
         }
         else
         {
@@ -235,7 +245,14 @@ public class BossEM : EnemyMovement
 
     public override void Tracking()
     {
-        inMovementRange = distance > minDistance;
+        if (TrainManagerScript.Instance == null || TrainManagerScript.Instance.attackingTrain)
+        {
+            inMovementRange = distance > minDistance;
+        } 
+        else
+        {
+            inMovementRange = false;
+        }
         Translation();
         SetAnimation();
     }

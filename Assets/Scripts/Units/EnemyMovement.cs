@@ -71,10 +71,17 @@ public abstract class EnemyMovement : MonoBehaviour
     {
         if (!alive || !GameManager.Instance.isInCombat) return;
 
-        nearPlayer = FindNearPlayer();
+        if (TrainManagerScript.Instance != null && !TrainManagerScript.Instance.attackingTrain)
+        {
+            direction = (-enemyPos).normalized;
+        }
+        else
+        {
+            nearPlayer = FindNearPlayer();
 
-        distance = Vector3.Distance(enemyPos, nearPlayer.transform.position);
-        direction = new Vector2(nearPlayer.transform.position.x - enemyPos.x, nearPlayer.transform.position.y - enemyPos.y);
+            distance = Vector3.Distance(enemyPos, nearPlayer.transform.position);
+            direction = new Vector2(nearPlayer.transform.position.x - enemyPos.x, nearPlayer.transform.position.y - enemyPos.y);
+        }
 
         Tracking();
     }
@@ -128,6 +135,16 @@ public abstract class EnemyMovement : MonoBehaviour
             if (hitted || attacking) return;
             Vector2 direction = (nearPlayer.transform.position - transform.position).normalized;
             var targetPos = new Vector3(nearPlayer.transform.position.x, nearPlayer.transform.position.y, this.transform.position.z);
+            transform.LookAt(targetPos);
+            rb.velocity = direction * speed;
+            transform.rotation = Quaternion.identity;
+            SetAttackingFalse();
+        }
+        else if (TrainManagerScript.Instance != null || !TrainManagerScript.Instance.attackingTrain)
+        {
+            if (hitted || attacking) return;
+            Vector2 direction = (-transform.position).normalized;
+            var targetPos = new Vector3(0, 0, this.transform.position.z);
             transform.LookAt(targetPos);
             rb.velocity = direction * speed;
             transform.rotation = Quaternion.identity;
@@ -195,9 +212,13 @@ public abstract class EnemyMovement : MonoBehaviour
 
             rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
             
-            if (!hitted && (!attacking && Time.time > lastAttack + attackCooldown))
+            if (!hitted && (!attacking && Time.time > lastAttack + attackCooldown) && (TrainManagerScript.Instance == null || TrainManagerScript.Instance.attackingTrain))
             {
                 attacking = true;
+            }
+            else if (TrainManagerScript.Instance != null && !TrainManagerScript.Instance.attackingTrain)
+            {
+                SetAttackingFalse();
             }
         } else if (inMovementRange)
         {
@@ -206,11 +227,16 @@ public abstract class EnemyMovement : MonoBehaviour
         {
             rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
 
-            if (!hitted && (!attacking && Time.time > lastAttack + attackCooldown))
+            if (!hitted && (!attacking && Time.time > lastAttack + attackCooldown) && (TrainManagerScript.Instance == null || TrainManagerScript.Instance.attackingTrain))
             {
                 attacking = true;
             }
+            else if (TrainManagerScript.Instance != null && !TrainManagerScript.Instance.attackingTrain)
+            {
+                SetAttackingFalse();
+            }
         }
+        print(attacking);
 
         anim.SetBool("attacking", attacking);
         anim.SetBool("isMoving", inMovementRange);

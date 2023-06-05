@@ -133,6 +133,14 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        if(TrainManagerScript.Instance != null)
+        {
+            if (playerInput.actions["SwapTrainingMode"].triggered)
+            {
+                TrainManagerScript.Instance.SwapTrainingMode();
+            }
+        }
+
         if (!GameManager.Instance.isInCombat || stunned)
         {
             rb.constraints = RigidbodyConstraints2D.FreezeAll;

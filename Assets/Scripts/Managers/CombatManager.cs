@@ -16,7 +16,6 @@ public class CombatManager : MonoBehaviour
 
     #region Unit variables
     public UnitManager unitManager;
-    public GameObject playerSpawnPoint;
 
     public int secondsToGenerate;
 

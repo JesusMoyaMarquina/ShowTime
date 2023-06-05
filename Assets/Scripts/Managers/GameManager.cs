@@ -148,11 +148,11 @@ public class GameManager : MonoBehaviour
 
     private void HandleTrain()
     {
-        print("Train");
+        print("HandleTrain");
 
         isInCombat = true;
 
-        Cursor.lockState = CursorLockMode.None;
+        Cursor.lockState = CursorLockMode.Locked;
         Time.timeScale = 1f;
     }
 }

@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: -3024020600051969732}
   - component: {fileID: -370279155021738748}
   m_Layer: 10
-  m_Name: Boss
+  m_Name: TrainBoss
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -181,7 +181,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b940fa4b0b75db4f901b1fe4689140b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectToPool: {fileID: 1393277690351578813, guid: e108dd589c6445d4c83b4d2d381e06a8, type: 3}
+  objectToPool: {fileID: 1393277690351578813, guid: d36b689adb876cb41be19435d6a8b350, type: 3}
   amountToPool: 1
   pooledObjects: []
 --- !u!114 &-6180251200359876531
