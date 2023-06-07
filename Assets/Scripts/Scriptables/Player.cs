@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Linq;
 using UnityEngine.UI;
+using TMPro;
 
 public class Player : MonoBehaviour
 {
@@ -118,8 +119,8 @@ public class Player : MonoBehaviour
     private void Start()
     {
         //Abilities
-        fistComboProgressBar = GameObject.Find("FistRadialDownProgressBarWithImage");
-        dashProgressBar = GameObject.Find("DashRadialDownProgressBarWithImage");
+        fistComboProgressBar = GameObject.Find("FistUpDownProgressBar");
+        dashProgressBar = GameObject.Find("DashUpDownProgressBar");
         SetDashProgressBarToMaximum();
         SetFistProgressBarToMaximum(1);
 
@@ -504,7 +505,7 @@ public class Player : MonoBehaviour
         float actualDashCooldownTime;
         if (dashCooldownTime > 0)
         {
-            actualDashCooldownTime = 2 - (dashCooldownTime - Time.time);
+            actualDashCooldownTime = dashCooldownTime - Time.time;
             UpdateDashCooldownBar(actualDashCooldownTime);
         }
         else
@@ -512,7 +513,7 @@ public class Player : MonoBehaviour
             actualDashCooldownTime = 0;
         }
 
-        if (actualDashCooldownTime >= 2)
+        if (actualDashCooldownTime <= 0)
         {
             dashCooldownTime = 0;
             SetDashProgressBarToMaximum();
@@ -521,7 +522,7 @@ public class Player : MonoBehaviour
         float actualExecutedAttackCD;
         if (executedAttackCD > 0)
         {
-            actualExecutedAttackCD = totalExecutedAttackTime - (executedAttackCD - Time.time);
+            actualExecutedAttackCD = executedAttackCD - Time.time;
             UpdateFistCooldownBar(actualExecutedAttackCD);
         }
         else
@@ -529,7 +530,7 @@ public class Player : MonoBehaviour
             actualExecutedAttackCD = 0;
         }
 
-        if (actualExecutedAttackCD >= totalExecutedAttackTime && totalExecutedAttackTime > 0)
+        if (actualExecutedAttackCD <= 0)
         {
             executedAttackCD = 0;
             SetFistProgressBarToMaximum(totalExecutedAttackTime);
@@ -545,6 +546,7 @@ public class Player : MonoBehaviour
     {
         UpdateProgressBar(dashProgressBar, current);
     }
+
     public void SetFistProgressBarToMaximum(float maximum)
     {
         SetProgressBarToMaximum(fistComboProgressBar, maximum);
@@ -558,6 +560,7 @@ public class Player : MonoBehaviour
     private void SetProgressBarToMaximum(GameObject progressBarGO, float maximum = 1)
     {
         ProgressBar progressBar = progressBarGO.GetComponent<ProgressBar>();
+        progressBarGO.GetComponentInChildren<TextMeshProUGUI>().text = "";
         progressBar.maximum = maximum;
         progressBar.current = 0;
         progressBar.GetCurrentFill();
@@ -566,6 +569,7 @@ public class Player : MonoBehaviour
     private void UpdateProgressBar(GameObject progressBarGO, float current)
     {
         ProgressBar progressBar = progressBarGO.GetComponent<ProgressBar>();
+        progressBarGO.GetComponentInChildren<TextMeshProUGUI>().text = string.Format("{0:F1}", current);
         progressBar.current = current;
         progressBar.GetCurrentFill();
     }
