@@ -18,12 +18,12 @@ public class MeleAttack : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
-    public void Launch(GameObject nearPlayer, float size, char look)
+    public void Launch(GameObject nearPlayer, float size, char look, Vector2 enemySize)
     {
         player = nearPlayer;
         size *= 1.3f;
         transform.position = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
-        transform.localScale = new Vector3(size, size, transform.localScale.z);
+        transform.localScale = new Vector3(size / enemySize.x, size / enemySize.y, transform.localScale.z);
         direction = (player.transform.position - transform.position).normalized;
         Rotation(look);
     }

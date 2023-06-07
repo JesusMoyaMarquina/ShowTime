@@ -88,7 +88,7 @@ public class BossEM : EnemyMovement
         {
             sharp.transform.SetPositionAndRotation(new Vector3(transform.position.x, transform.position.y, 0), Quaternion.identity);
             sharp.SetActive(true);
-            sharp.GetComponent<MeleAttack>().Launch(nearPlayer, minDistance, SetDirection());
+            sharp.GetComponent<MeleAttack>().Launch(nearPlayer, minDistance, SetDirection(), transform.localScale);
         }
     }
 
@@ -121,10 +121,10 @@ public class BossEM : EnemyMovement
             return;
         }
 
-        bool isPossibleDash = true;
-
         if (TrainManagerScript.Instance == null || TrainManagerScript.Instance.attackingTrain)
         {
+
+            bool isPossibleDash = true;
             if (isDash)
             {
                 isPossibleDash = CheckPosibleDash();
@@ -147,10 +147,10 @@ public class BossEM : EnemyMovement
                 rb.velocity = direction.normalized * dashSpeed;
                 SetAttackingFalse();
             }
-        }
-        else
-        {
-            base.Translation();
+            else
+            {
+                base.Translation();
+            }
         }
     }
 

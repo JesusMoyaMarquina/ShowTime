@@ -39,7 +39,7 @@ public class MeleEM : EnemyMovement
         {
             sharp.transform.SetPositionAndRotation(new Vector3(transform.position.x, transform.position.y, 0), Quaternion.identity);
             sharp.SetActive(true);
-            sharp.GetComponent<MeleAttack>().Launch(nearPlayer, minDistance, SetDirection());
+            sharp.GetComponent<MeleAttack>().Launch(nearPlayer, minDistance, SetDirection(), transform.localScale);
         }
     }
 

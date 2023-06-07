@@ -67,6 +67,11 @@ public class CombatManager : MonoBehaviour
         instance = this;
     }
 
+    private void OnDestroy()
+    {
+        GameManager.OnGameStateChange -= GameManagerOnGameStateChange;
+    }
+
     private void Start()
     {
         GameManager.OnGameStateChange += GameManagerOnGameStateChange;

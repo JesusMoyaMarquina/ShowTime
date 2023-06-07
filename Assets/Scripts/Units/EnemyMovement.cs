@@ -49,6 +49,9 @@ public abstract class EnemyMovement : MonoBehaviour
     //Score variables
     public float score;
 
+    //Train variables
+    private bool isCentered;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -58,6 +61,7 @@ public abstract class EnemyMovement : MonoBehaviour
         players = GameObject.FindGameObjectsWithTag("Player");
         knockbacked = false;
         alive = true;
+        isCentered = true;
         attackCooldown = 1.5f;
         currentHealth = totalHealth;
     }
@@ -73,7 +77,13 @@ public abstract class EnemyMovement : MonoBehaviour
 
         if (TrainManagerScript.Instance != null && !TrainManagerScript.Instance.attackingTrain)
         {
+            isCentered = transform.position.x < 0.1f && transform.position.y < 0.1f && transform.position.x > -0.1f && transform.position.y > -0.1f ? true : false;
             direction = (-enemyPos).normalized;
+            if (isCentered)
+            {
+                nearPlayer = FindNearPlayer();
+                direction = new Vector2(nearPlayer.transform.position.x - enemyPos.x, nearPlayer.transform.position.y - enemyPos.y);
+            }
         }
         else
         {
@@ -140,7 +150,7 @@ public abstract class EnemyMovement : MonoBehaviour
             transform.rotation = Quaternion.identity;
             SetAttackingFalse();
         }
-        else if (TrainManagerScript.Instance != null || !TrainManagerScript.Instance.attackingTrain)
+        else if (TrainManagerScript.Instance != null && !TrainManagerScript.Instance.attackingTrain && !isCentered)
         {
             if (hitted || attacking) return;
             Vector2 direction = (-transform.position).normalized;
@@ -195,6 +205,13 @@ public abstract class EnemyMovement : MonoBehaviour
                 break;
         }
 
+        if(TrainManagerScript.Instance != null && !TrainManagerScript.Instance.attackingTrain)
+        {
+            rb.constraints = RigidbodyConstraints2D.None | RigidbodyConstraints2D.FreezeRotation;
+            anim.SetBool("isMoving", rb.velocity.magnitude > 0.1f ? true : false);
+            return;
+        }
+
         if (attacking || hitted && Vector2.Distance(rb.position, position) > 0.5f)
         {
             rb.constraints = RigidbodyConstraints2D.FreezeAll;
@@ -236,7 +253,6 @@ public abstract class EnemyMovement : MonoBehaviour
                 SetAttackingFalse();
             }
         }
-        print(attacking);
 
         anim.SetBool("attacking", attacking);
         anim.SetBool("isMoving", inMovementRange);

@@ -38,8 +38,6 @@ public class ControladorDatosJuego : MonoBehaviour
             string contenido = File.ReadAllText(archivoDeGuardado);
             datosJuego = JsonUtility.FromJson<GameData>(contenido);
 
-            print("Posicion jugador: " + datosJuego.Position);
-
             jugador.transform.position = datosJuego.Position;
         }
         else

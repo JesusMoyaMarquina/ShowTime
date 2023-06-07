@@ -235,7 +235,7 @@ public class Player : MonoBehaviour
     {
         isDashing = false;
         anim.SetBool("isDashing", isDashing);
-        dashCooldownTime = 2 + Time.time - CombatManager.instance.beginBattleTime;
+        dashCooldownTime = 2 + Time.time;
         StartCoroutine(DashCooldown());
     }
 
@@ -487,7 +487,7 @@ public class Player : MonoBehaviour
         if (executedAttack.GetCD() > 0 && inputQueue.Count >= 3)
         {
             SetFistProgressBarToMaximum(executedAttack.GetCD());
-            executedAttackCD = executedAttack.GetCD() + Time.time - CombatManager.instance.beginBattleTime;
+            executedAttackCD = executedAttack.GetCD() + Time.time;
             totalExecutedAttackTime = executedAttack.GetCD();
         }
     }
@@ -504,7 +504,7 @@ public class Player : MonoBehaviour
         float actualDashCooldownTime;
         if (dashCooldownTime > 0)
         {
-            actualDashCooldownTime = 2 - (dashCooldownTime - (Time.time - CombatManager.instance.beginBattleTime));
+            actualDashCooldownTime = 2 - (dashCooldownTime - Time.time);
             UpdateDashCooldownBar(actualDashCooldownTime);
         }
         else
@@ -521,7 +521,7 @@ public class Player : MonoBehaviour
         float actualExecutedAttackCD;
         if (executedAttackCD > 0)
         {
-            actualExecutedAttackCD = totalExecutedAttackTime - (executedAttackCD - (Time.time - CombatManager.instance.beginBattleTime));
+            actualExecutedAttackCD = totalExecutedAttackTime - (executedAttackCD - Time.time);
             UpdateFistCooldownBar(actualExecutedAttackCD);
         }
         else
