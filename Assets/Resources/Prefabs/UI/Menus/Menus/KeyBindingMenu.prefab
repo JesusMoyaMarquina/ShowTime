@@ -379,9 +379,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52fcf6e7337096f4cb67d3f16143a15b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonHover: {fileID: 0}
-  buttonPress: {fileID: 0}
-  buttonDisabled: {fileID: 0}
+  buttonHover: {fileID: 8300000, guid: e20e2b443eb69e04684734a7d844e122, type: 3}
+  buttonPress: {fileID: 8300000, guid: da67fb9a30e67464396ee2b979164c05, type: 3}
+  buttonDisabled: {fileID: 8300000, guid: 2d68144795ba3d94d8f9c4de8f3b8388, type: 3}
 --- !u!1 &4524143307059355580
 GameObject:
   m_ObjectHideFlags: 0
@@ -581,7 +581,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e27d81f8d0e232b498c5b4c19d0d78cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  settingsMenu: {fileID: 7026412676992851197, guid: e3ea6308ca8f3084a8d0cf5b3b4be2e6, type: 3}
+  settingsMenu: {fileID: 0}
   inputActions: {fileID: -944628639613478452, guid: 8026b8365b5bfa7439446f715aa928f4, type: 3}
 --- !u!1 &4524143307605304333
 GameObject:
@@ -1118,9 +1118,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52fcf6e7337096f4cb67d3f16143a15b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonHover: {fileID: 0}
-  buttonPress: {fileID: 0}
-  buttonDisabled: {fileID: 0}
+  buttonHover: {fileID: 8300000, guid: e20e2b443eb69e04684734a7d844e122, type: 3}
+  buttonPress: {fileID: 8300000, guid: da67fb9a30e67464396ee2b979164c05, type: 3}
+  buttonDisabled: {fileID: 8300000, guid: 2d68144795ba3d94d8f9c4de8f3b8388, type: 3}
 --- !u!1001 &4524143306738019017
 PrefabInstance:
   m_ObjectHideFlags: 0
