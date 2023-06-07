@@ -1133,6 +1133,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1466770242}
     m_Modifications:
+    - target: {fileID: 4719266913790034123, guid: 463c58453672e3c4e9877b609552ca53, type: 3}
+      propertyPath: m_FillAmount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4719266914947891382, guid: 463c58453672e3c4e9877b609552ca53, type: 3}
+      propertyPath: m_Name
+      value: DashUpDownProgressBar
+      objectReference: {fileID: 0}
+    - target: {fileID: 4719266915345109779, guid: 463c58453672e3c4e9877b609552ca53, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.000022888184
+      objectReference: {fileID: 0}
+    - target: {fileID: 5057203671437839289, guid: 463c58453672e3c4e9877b609552ca53, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -1.6260986
+      objectReference: {fileID: 0}
     - target: {fileID: 7596143551169391790, guid: 463c58453672e3c4e9877b609552ca53, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -1220,6 +1236,18 @@ PrefabInstance:
     - target: {fileID: 7596143551169391791, guid: 463c58453672e3c4e9877b609552ca53, type: 3}
       propertyPath: m_Name
       value: TrainUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 8747179197155105957, guid: 463c58453672e3c4e9877b609552ca53, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.000022888184
+      objectReference: {fileID: 0}
+    - target: {fileID: 8747179197568569088, guid: 463c58453672e3c4e9877b609552ca53, type: 3}
+      propertyPath: m_Name
+      value: FistUpDownProgressBar
+      objectReference: {fileID: 0}
+    - target: {fileID: 8747179197753872253, guid: 463c58453672e3c4e9877b609552ca53, type: 3}
+      propertyPath: m_FillAmount
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 463c58453672e3c4e9877b609552ca53, type: 3}
