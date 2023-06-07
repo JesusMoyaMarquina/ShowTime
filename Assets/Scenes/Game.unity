@@ -436,22 +436,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &202875587
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1116379004}
-  m_Layer: 0
-  m_Name: 'Recovery GameObject for Transform (ID in file: 1116379004)'
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &229560750
 GameObject:
   m_ObjectHideFlags: 0
@@ -2400,21 +2384,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!4 &1116379004
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 5526421497139514542, guid: 815897c2898ba1443bc9451ad57672b4, type: 3}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 202875587}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.30628145, y: -0.34423655, z: 3.5332098}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1191332631}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1119934980 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8447196786969430338, guid: 6924c1468c1dd024d887fab2f7ab4196, type: 3}
@@ -2555,7 +2524,6 @@ Transform:
   - {fileID: 1901839061}
   - {fileID: 901131870}
   - {fileID: 1542823148}
-  - {fileID: 1116379004}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3222,7 +3190,7 @@ GameObject:
   - component: {fileID: 1542823148}
   - component: {fileID: 1542823149}
   m_Layer: 0
-  m_Name: ControladorDatosJuego
+  m_Name: GameDataControler
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3255,11 +3223,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a425f9d674ac9bb4d9f6fd440720ac4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jugador: {fileID: 202875587}
-  archivoDeGuardado: 
-  datosJuego:
-    Position: {x: 0, y: 0, z: 0}
-    vida: 0
 --- !u!1 &1566324155 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7026412676992851197, guid: e3ea6308ca8f3084a8d0cf5b3b4be2e6, type: 3}
@@ -4631,7 +4594,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8447196785075651363, guid: 6924c1468c1dd024d887fab2f7ab4196, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.0044442196
+      value: -0.000030704134
       objectReference: {fileID: 0}
     - target: {fileID: 8447196786502668833, guid: 6924c1468c1dd024d887fab2f7ab4196, type: 3}
       propertyPath: m_Name

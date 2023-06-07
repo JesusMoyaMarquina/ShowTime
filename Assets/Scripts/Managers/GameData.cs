@@ -6,5 +6,4 @@ using UnityEngine;
 public class GameData
 {
     public Vector3 Position;
-    public float vida;
 }
