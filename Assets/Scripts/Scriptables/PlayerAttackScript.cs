@@ -7,6 +7,7 @@ public class PlayerAttackScript : MonoBehaviour
     public Vector3 leftPosition, rightPosition;
     private Player player;
     private Weapon weapon;
+    private bool hitted;
 
     private void Awake()
     {
@@ -16,6 +17,8 @@ public class PlayerAttackScript : MonoBehaviour
 
     private void OnEnable()
     {
+        hitted = false;
+
         if (player.GetDirection().x > 0)
         {
             transform.localPosition = rightPosition;
@@ -33,6 +36,12 @@ public class PlayerAttackScript : MonoBehaviour
         EnemyMovement enemy = collision.GetComponent<EnemyMovement>();
         if (enemy != null && !enemy.hitted && enemy.isAlive())
         {
+            if (!hitted)
+            {
+                hitted = true;
+                player.ReduceCooldown();
+            }
+
             enemy.Knockback(weapon.MngList[player.inputQueue.Count], player.GetComponent<SpriteRenderer>().flipX ? Vector2.right : Vector2.left);
 
             enemy.GetDamage(player.executedAttack.GetDamage());

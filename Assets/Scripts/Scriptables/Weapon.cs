@@ -4,12 +4,14 @@ using UnityEngine;
 
 public abstract class Weapon : MonoBehaviour
 {
+    [SerializeField] private float cdReducer;
+    [SerializeField] private int lifeSteal;
+    [SerializeField] private float knockbackForce;
     public float[] MngList;
-    public int lifeSteal;
-    public float knockbackForce;
 
-    public List<Attack> attacks = new List<Attack>();
+    [SerializeField] protected List<Attack> attacks = new List<Attack>();
 
+    protected float startCD, timeCD;
     protected WeaponType weaponType;
     protected bool isInNormalCD;
     protected bool isInCD;
@@ -22,16 +24,28 @@ public abstract class Weapon : MonoBehaviour
         isInCD = false;
     }
 
+    private void Update()
+    {
+        if (startCD - Time.time >= 0)
+        {
+            isInCD = true;
+        } else
+        {
+            isInCD = false;
+        }
+    }
+
     public abstract Attack Hit(string attackName, int attackCount, Rigidbody2D playerRB, string attackType);
 
-    public void Hit(float tiempoCD, Rigidbody2D playerRB, int attackCount, string attackType)
+    public void Hit(float timeCD, Rigidbody2D playerRB, int attackCount, string attackType)
     {
         Magnetismo(MngList[attackCount], playerRB);
         if (attackCount >= 2)
         {
-            if (tiempoCD > 0)
+            if (timeCD > 0)
             {
-                StartCoroutine(TiempoCD(tiempoCD));
+                this.timeCD = timeCD;
+                StartCD();
             }
         }
         if (attackType == "softHit")
@@ -41,6 +55,16 @@ public abstract class Weapon : MonoBehaviour
         {
             StartCoroutine(TiempoNormalCD(attacks.Find(o => o.GetAttackName() == "StrongAttack").GetCD()));
         }
+    }
+
+    public void ReduceCD()
+    {
+        startCD -= cdReducer;
+    }
+
+    private void StartCD()
+    {
+        startCD = timeCD + Time.time;
     }
 
     public float GetLifeSteal()
@@ -58,6 +82,11 @@ public abstract class Weapon : MonoBehaviour
         return isInCD;
     }
 
+    public float GetCDReducer()
+    {
+        return cdReducer;
+    }
+
     private void Magnetismo(float atkMng, Rigidbody2D playerRB)
     {
         Vector2 direction = GetComponent<SpriteRenderer>().flipX ? Vector2.right : Vector2.left;
@@ -69,13 +98,6 @@ public abstract class Weapon : MonoBehaviour
         isInNormalCD = true;
         yield return new WaitForSeconds(tiempoCD);
         isInNormalCD = false;
-    }
-
-    IEnumerator TiempoCD(float tiempoCD)
-    {
-        isInCD = true;
-        yield return new WaitForSeconds(tiempoCD);
-        isInCD = false;
     }
 }
 

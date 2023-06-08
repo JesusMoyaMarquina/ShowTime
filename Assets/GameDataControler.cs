@@ -36,7 +36,7 @@ public class GameDataControler : MonoBehaviour
         if (File.Exists(archivoDeGuardado))
         {
             string contenido = File.ReadAllText(archivoDeGuardado);
-            datosJuego = JsonUtility.FromJson<GameData>(EncryptDecrypt(contenido));
+            //datosJuego = JsonUtility.FromJson<GameData>(EncryptDecrypt(contenido));
 
             jugador.transform.position = datosJuego.Position;
 

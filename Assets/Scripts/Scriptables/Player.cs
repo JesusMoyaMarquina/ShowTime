@@ -65,6 +65,7 @@ public class Player : MonoBehaviour
     private float executedAttackCD, totalExecutedAttackTime;
 
     //Combo system
+    [SerializeField] private float cooldownReducer;
     private Weapon currentWeapon;
     public Attack executedAttack;
     public Queue<string> inputQueue;
@@ -496,6 +497,12 @@ public class Player : MonoBehaviour
     public bool GetIsDashing()
     {
         return isDashing;
+    }
+
+    public void ReduceCooldown()
+    {
+        currentWeapon.ReduceCD();
+        executedAttackCD -= currentWeapon.GetCDReducer();
     }
     #endregion
 
