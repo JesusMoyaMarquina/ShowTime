@@ -13,6 +13,7 @@ public abstract class EnemyMovement : MonoBehaviour
     protected CircleCollider2D cc;
     protected Animator anim;
     protected SpriteRenderer spriteRenderer;
+    [SerializeField] float easyMultiplier, hardMultiplier;
 
     //Movement variables
     public float speed;
@@ -32,6 +33,7 @@ public abstract class EnemyMovement : MonoBehaviour
     //Stats variables
     public bool hitted, stunned;
     public float totalHealth;
+    public float damage;
     protected float currentHealth;
     protected bool alive;
 
@@ -54,6 +56,24 @@ public abstract class EnemyMovement : MonoBehaviour
 
     void Start()
     {
+        print(totalHealth);
+        if (SelectDifficultyScript.Instance != null)
+        {
+            switch (SelectDifficultyScript.Instance.GetDifficulty())
+            {
+                case 0:
+                    totalHealth *= easyMultiplier;
+                    damage *= easyMultiplier;
+                    print(easyMultiplier);
+                    break;
+                case 2:
+                    totalHealth *= hardMultiplier;
+                    damage *= hardMultiplier;
+                    break;
+                default:
+                    break;
+            }
+        }
         rb = GetComponent<Rigidbody2D>();
         cc = GetComponent<CircleCollider2D>();
         anim = GetComponent<Animator>();
@@ -313,7 +333,6 @@ public abstract class EnemyMovement : MonoBehaviour
 
     protected void CheckDeadCondition()
     {
-
         if (currentHealth <= 0)
         {
             if (!(GetType() == typeof(BossEM)))

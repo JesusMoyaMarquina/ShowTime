@@ -23,6 +23,7 @@ public class PauseMenuScript : MonoBehaviour
 
     public void OpenSettings()
     {
+        MenuManager.Instance.principalSceneMenu = gameObject;
         MenuManager.Instance.OpenSettings();
     }
 

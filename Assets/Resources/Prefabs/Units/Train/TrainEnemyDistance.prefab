@@ -159,11 +159,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 765cf038549b1554f9d01d0b7a04a5f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  easyMultiplier: 0.7
+  hardMultiplier: 1.2
   speed: 6
   minDistance: 5
   hitted: 0
   stunned: 0
   totalHealth: 35
+  damage: 0
   distanceToPlayer: 0
   audioSource: {fileID: 1589246139129536207}
   stepFX: {fileID: 8300000, guid: 6e4ddb40bf8c81a42a3632fb4813b4a9, type: 3}
@@ -184,7 +187,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b940fa4b0b75db4f901b1fe4689140b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectToPool: {fileID: 1393277690351578813, guid: 93c01b6918918a64883fcd79e80b2bdd, type: 3}
+  objectToPool: {fileID: 1393277690351578813, guid: 64b5729b664677140bb7200c90faaa41, type: 3}
   amountToPool: 1
   pooledObjects: []
 --- !u!82 &1589246139129536207

@@ -159,12 +159,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 000060b1106ebac439a9c7fc9b9832d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  easyMultiplier: 0.7
+  hardMultiplier: 1.2
   speed: 6
-  minDistance: 2
+  minDistance: 0
   hitted: 0
   stunned: 0
   totalHealth: 70
-  distanceToPlayer: 0
+  damage: 10
+  distanceToPlayer: 1
   audioSource: {fileID: -1758514401157523288}
   stepFX: {fileID: 8300000, guid: 6e4ddb40bf8c81a42a3632fb4813b4a9, type: 3}
   attackFX: {fileID: 8300000, guid: c41c44a3efed9cc438a24bb0c750cf48, type: 3}

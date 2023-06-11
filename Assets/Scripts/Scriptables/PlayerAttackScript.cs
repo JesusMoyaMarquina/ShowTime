@@ -39,6 +39,7 @@ public class PlayerAttackScript : MonoBehaviour
             if (!hitted)
             {
                 hitted = true;
+                player.ChargeHeal(enemy.totalHealth * (weapon.GetLifeSteal() / 100));
                 player.ReduceCooldown();
             }
 
@@ -54,7 +55,6 @@ public class PlayerAttackScript : MonoBehaviour
             if (!enemy.isAlive())
             {
                 enemy.AddScore();
-                player.Heal(enemy.totalHealth * (weapon.GetLifeSteal() / 100));
             }
         }
     }

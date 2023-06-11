@@ -611,10 +611,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 783614030}
     m_Modifications:
-    - target: {fileID: 3568460086167923245, guid: 34a79bc0171a1144599ec53ac45757ce, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 2220
-      objectReference: {fileID: 0}
     - target: {fileID: 8447196784998465820, guid: 34a79bc0171a1144599ec53ac45757ce, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -628,12 +624,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8447196785075651363, guid: 34a79bc0171a1144599ec53ac45757ce, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 2220
-      objectReference: {fileID: 0}
-    - target: {fileID: 8447196785075651363, guid: 34a79bc0171a1144599ec53ac45757ce, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00081540435
+      value: 0.000061035156
       objectReference: {fileID: 0}
     - target: {fileID: 8447196786502668833, guid: 34a79bc0171a1144599ec53ac45757ce, type: 3}
       propertyPath: m_Name
@@ -721,18 +713,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8447196786502668838, guid: 34a79bc0171a1144599ec53ac45757ce, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8447196786866774532, guid: 34a79bc0171a1144599ec53ac45757ce, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8447196786866774532, guid: 34a79bc0171a1144599ec53ac45757ce, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8447196786866774532, guid: 34a79bc0171a1144599ec53ac45757ce, type: 3}
-      propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -1384,7 +1364,7 @@ PrefabInstance:
     - target: {fileID: 2911656623367583905, guid: 9c30f5985cff3524f82d6a3aace0bc57, type: 3}
       propertyPath: m_fontAsset
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 11400000, guid: 6caed5cf8ae11004093e83629e6e56a5, type: 2}
     - target: {fileID: 3714429079084051370, guid: 9c30f5985cff3524f82d6a3aace0bc57, type: 3}
       propertyPath: m_Name
       value: SelectDifficultyMenu

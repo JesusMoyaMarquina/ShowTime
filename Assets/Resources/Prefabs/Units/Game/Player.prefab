@@ -466,6 +466,8 @@ MonoBehaviour:
   strongAttackFX: {fileID: 8300000, guid: f886a4ceed2f6ea4facc690e9cbcbe0d, type: 3}
   finisherAttackFX: {fileID: 8300000, guid: afba2ff80ff44f84ba71d83723429a97, type: 3}
   speed: 20
+  healCooldownTime: 5
+  dashCooldownTime: 2
   maxHealth: 100
   knockbackForce: 50
   cooldownReducer: 0
