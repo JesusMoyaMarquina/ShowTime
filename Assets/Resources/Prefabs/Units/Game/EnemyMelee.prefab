@@ -162,7 +162,7 @@ MonoBehaviour:
   easyMultiplier: 0.7
   hardMultiplier: 1.2
   speed: 6
-  minDistance: 0
+  minDistance: 2
   hitted: 0
   stunned: 0
   totalHealth: 70

@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 using System.Linq;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour
 {
@@ -57,7 +58,7 @@ public class Player : MonoBehaviour
     private string executeAttackName;
 
     //Abilities
-    private GameObject fistComboProgressBar, dashProgressBar, healProgressBar;
+    private GameObject fistComboProgressBar, dashProgressBar, healProgressBar, screw;
 
     private float executedAttackCD, totalExecutedAttackTime;
     private float healCharge;
@@ -67,6 +68,8 @@ public class Player : MonoBehaviour
     private Weapon currentWeapon;
     public Attack executedAttack;
     public Queue<string> inputQueue;
+
+    private AvailableComboPanelScript avialibleComboPanel;
 
     private void Awake()
     {
@@ -120,8 +123,11 @@ public class Player : MonoBehaviour
         //Abilities
         fistComboProgressBar = GameObject.Find("FistUpDownProgressBar");
         dashProgressBar = GameObject.Find("DashUpDownProgressBar");
+        healProgressBar = GameObject.Find("HealDownUpProgressBar");
+        screw = FindObjectOfType<Screw>().gameObject;
         SetDashProgressBarToMaximum();
         SetFistProgressBarToMaximum(1);
+        SetChargeBarScriptToMaximum(healProgressBar);
 
         //Health
         playerHealthBar = GameObject.Find("PlayerHealthProgressBar");
@@ -129,6 +135,9 @@ public class Player : MonoBehaviour
         playerHealthBar.GetComponent<EntityProgressBar>().current = currentHealth;
         playerHealthBar.GetComponent<EntityProgressBar>().previousCurrent = currentHealth;
         playerHealthBar.GetComponent<EntityProgressBar>().GetCurrentFill();
+
+        //Combo list
+        avialibleComboPanel = FindObjectOfType<AvailableComboPanelScript>();
     }
 
     void Update()
@@ -182,9 +191,7 @@ public class Player : MonoBehaviour
 
         if (playerInput.actions["Heal"].triggered && !isHealInCooldown)
         {
-            Heal(healCharge);
-            healCooldownStartTime = healCooldownTime + Time.time;
-            StartCoroutine(HealCooldown());
+            Heal(healCharge * maxHealth);
         }
 
         if (isInmortal)
@@ -265,6 +272,7 @@ public class Player : MonoBehaviour
 
     public void Heal(float heal)
     {
+        print(heal);
         if (currentHealth + heal < maxHealth)
         {
             currentHealth += heal;
@@ -275,11 +283,35 @@ public class Player : MonoBehaviour
 
         playerHealthBar.GetComponent<EntityProgressBar>().current = currentHealth;
         playerHealthBar.GetComponent<EntityProgressBar>().GetCurrentFill();
+
+        healCharge = 0;
+
+        healProgressBar.GetComponent<ChargeBarScript>().current = healCharge;
+        healProgressBar.GetComponent<ChargeBarScript>().GetCurrentFill();
+
+        print(screw);
+        if (screw != null)
+        {
+            screw.GetComponent<Screw>().ActivateHeal();
+        }
+
+        healCooldownStartTime = healCooldownTime + Time.time;
+        StartCoroutine(HealCooldown());
     }
 
     public void ChargeHeal(float heal)
     {
+        if (healCharge + heal / maxHealth < 1)
+        {
+            healCharge += heal / maxHealth;
+        }
+        else
+        {
+            healCharge = 1;
+        }
 
+        healProgressBar.GetComponent<ChargeBarScript>().current = healCharge;
+        healProgressBar.GetComponent<ChargeBarScript>().GetCurrentFill();
     }
 
     public void GetDamage(float damage, Vector2 damageDirection, float stunnedTime = 0, bool attackCancel = false, float force = 0)
@@ -416,7 +448,17 @@ public class Player : MonoBehaviour
 
         if (currentWeapon.IsInCD())
         {
+            if (avialibleComboPanel != null)
+            {
+                avialibleComboPanel.ComboListUpdate(inputQueue, true);
+            }
             QuitarAccion();
+        } else
+        {
+            if (avialibleComboPanel != null)
+            {
+                avialibleComboPanel.ComboListUpdate(inputQueue);
+            }
         }
 
         if (inputQueue.Count == 3)
@@ -526,6 +568,23 @@ public class Player : MonoBehaviour
     #region Abilities graphic management
     private void UpdateProgressBars()
     {
+        float actualHealCooldownTime;
+        if (healCooldownStartTime > 0)
+        {
+            actualHealCooldownTime = healCooldownStartTime - Time.time;
+            UpdateHealCooldownBar(actualHealCooldownTime);
+        }
+        else
+        {
+            actualHealCooldownTime = 0;
+        }
+
+        if (actualHealCooldownTime <= 0)
+        {
+            healCooldownStartTime = 0;
+            SetHealProgressBarToMaximum();
+        }
+
         float actualDashCooldownTime;
         if (dashCooldownStartTime > 0)
         {
@@ -561,14 +620,24 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void SetHealProgressBarToMaximum()
+    {
+        SetProgressBarToMaximum(healProgressBar, healCooldownTime);
+    }
+
     private void SetDashProgressBarToMaximum()
     {
-        SetProgressBarToMaximum(dashProgressBar, 2);
+        SetProgressBarToMaximum(dashProgressBar, dashCooldownTime);
     }
 
     private void UpdateDashCooldownBar(float current)
     {
         UpdateProgressBar(dashProgressBar, current);
+    }
+
+    private void UpdateHealCooldownBar(float current)
+    {
+        UpdateProgressBar(healProgressBar, current);
     }
 
     public void SetFistProgressBarToMaximum(float maximum)
@@ -579,6 +648,14 @@ public class Player : MonoBehaviour
     private void UpdateFistCooldownBar(float current)
     {
         UpdateProgressBar(fistComboProgressBar, current);
+    }
+
+    private void SetChargeBarScriptToMaximum(GameObject progressBarGO, float maximum = 1)
+    {
+        ChargeBarScript progressBar = progressBarGO.GetComponent<ChargeBarScript>();
+        progressBar.maximum = maximum;
+        progressBar.current = 0;
+        progressBar.GetCurrentFill();
     }
 
     private void SetProgressBarToMaximum(GameObject progressBarGO, float maximum = 1)

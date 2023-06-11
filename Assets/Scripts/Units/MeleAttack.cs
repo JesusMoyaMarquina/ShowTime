@@ -59,7 +59,7 @@ public class MeleAttack : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            collision.GetComponent<Player>().GetDamage(GetComponent<EnemyMovement>().damage, direction);
+            collision.GetComponent<Player>().GetDamage(GetComponentInParent<EnemyMovement>().damage, direction);
             DestroyObject();
         }
     }

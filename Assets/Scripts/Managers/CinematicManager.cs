@@ -13,7 +13,7 @@ public class CinematicManager : MonoBehaviour
     [SerializeField] private TMP_Text dialogeText;
 
     [SerializeField] private float dialogeSpeed;
-    [SerializeField] private InstanceCinematic cinematicPlayer;
+    [SerializeField] private InstanceCinematic cinematicPlayer, cinematicScrew;
     [SerializeField] private AudioClip AudioThunder;
     [SerializeField] private Animator cim1BgAnim, noahAnim, godAnim, scr3wAnim;
 
@@ -231,6 +231,7 @@ public class CinematicManager : MonoBehaviour
                 if (fadedIn)
                 {
                     cinematicPlayer.StartMoving();
+                    cinematicScrew.StartMoving();
                 }
                 else
                 {

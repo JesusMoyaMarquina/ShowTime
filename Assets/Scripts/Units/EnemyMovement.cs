@@ -56,7 +56,6 @@ public abstract class EnemyMovement : MonoBehaviour
 
     void Start()
     {
-        print(totalHealth);
         if (SelectDifficultyScript.Instance != null)
         {
             switch (SelectDifficultyScript.Instance.GetDifficulty())
@@ -64,7 +63,6 @@ public abstract class EnemyMovement : MonoBehaviour
                 case 0:
                     totalHealth *= easyMultiplier;
                     damage *= easyMultiplier;
-                    print(easyMultiplier);
                     break;
                 case 2:
                     totalHealth *= hardMultiplier;

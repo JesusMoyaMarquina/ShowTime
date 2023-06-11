@@ -6,9 +6,9 @@ public class UnitManager : MonoBehaviour
 {
 
     public int generateUnit, unitIncremental;
-    public GameObject meleeUnit, rangedUnit, bossUnit, player;
+    public GameObject meleeUnit, rangedUnit, bossUnit, player, screw;
     public GameObject unitContainer, playerContainer;
-    public GameObject bossSpawnPoint, playerSpawnPoint;
+    public GameObject bossSpawnPoint, playerSpawnPoint, screwSpawnPoint;
     public GameObject[] spawnAreas;
     public float meleeUnitPercentage, rangedUnitPercentage;
 
@@ -119,6 +119,7 @@ public class UnitManager : MonoBehaviour
 
     public GameObject GeneratePlayer()
     {
+        Instantiate(screw, new Vector3(screwSpawnPoint.transform.position.x, screwSpawnPoint.transform.position.y, 0), Quaternion.identity, playerContainer.transform);
         return Instantiate(player, new Vector3(playerSpawnPoint.transform.position.x, playerSpawnPoint.transform.position.y, 0), Quaternion.identity, playerContainer.transform);
     }
 

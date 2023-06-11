@@ -97,7 +97,6 @@ public class VictoryMenuScript : MonoBehaviour
         MenuManager.Instance.BackToMainMenu();
     }
 
-
     IEnumerator ScoreLoad()
     {
         ScoreScrollView.GetComponent<ScrollRect>().vertical = false;

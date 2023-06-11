@@ -58,7 +58,10 @@ public class InstanceCinematic : MonoBehaviour
         CameraFollowUp();
         if (startMoving && !pause)
         {
-
+            if(midPoint == null)
+            {
+                onMidPoint = true;
+            }
             if (!onMidPoint)
             {
                 transform.position = Vector2.MoveTowards(transform.position, midPoint.position, speed);

@@ -236,6 +236,11 @@ public class CombatManager : MonoBehaviour
 
         for(int i = 0; i < totalOfPlayers; i++)
         {
+            if(players.GetChild(i).GetComponent<Player>() == null)
+            {
+                continue;
+            }
+
             if (!players.GetChild(i).GetComponent<Player>().isAlive())
             {
                 deadPlayers++;
