@@ -1,13 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Linq;
-using UnityEngine.UI;
 using TMPro;
-using UnityEngine.UIElements;
+using Unity.Mathematics;
 
 public class Player : MonoBehaviour
 {
@@ -37,7 +35,7 @@ public class Player : MonoBehaviour
     public float maxHealth;
     public float knockbackForce;
     private Vector2 damageDirection;
-    private bool hitted;
+    private bool hitted, inmortal;
     private bool alive;
     private float currentHealth;      // cambio para el guardado de partida
     private float inmortalityTime;
@@ -92,6 +90,7 @@ public class Player : MonoBehaviour
         //Start health
         alive = true;
         hitted = false;
+
         currentHealth = maxHealth;
         inmortalityTime = 1f;
 
@@ -120,6 +119,8 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
+        inmortal = FindObjectOfType<TrainManagerScript>() != null;
+
         //Abilities
         fistComboProgressBar = GameObject.Find("FistUpDownProgressBar");
         dashProgressBar = GameObject.Find("DashUpDownProgressBar");
@@ -272,7 +273,6 @@ public class Player : MonoBehaviour
 
     public void Heal(float heal)
     {
-        print(heal);
         if (currentHealth + heal < maxHealth)
         {
             currentHealth += heal;
@@ -284,12 +284,19 @@ public class Player : MonoBehaviour
         playerHealthBar.GetComponent<EntityProgressBar>().current = currentHealth;
         playerHealthBar.GetComponent<EntityProgressBar>().GetCurrentFill();
 
+
+        print(healCharge);
+
+        if (healCharge >= 1)
+        {
+            ActivateRandomBoost();
+        }
+
         healCharge = 0;
 
         healProgressBar.GetComponent<ChargeBarScript>().current = healCharge;
         healProgressBar.GetComponent<ChargeBarScript>().GetCurrentFill();
 
-        print(screw);
         if (screw != null)
         {
             screw.GetComponent<Screw>().ActivateHeal();
@@ -297,6 +304,29 @@ public class Player : MonoBehaviour
 
         healCooldownStartTime = healCooldownTime + Time.time;
         StartCoroutine(HealCooldown());
+    }
+
+    private void ActivateRandomBoost()
+    {
+        //Speed, attack damage, recieved damage, cooldown reducer 
+        int randNum = UnityEngine.Random.Range(0, 100);
+
+        if (randNum < 25)
+        {
+            print("speedUp");
+        }
+        else if (randNum < 50)
+        {
+            print("attackUp");
+        }
+        else if (randNum < 75)
+        {
+            print("defeseUp");
+        }
+        else
+        {
+            print("cdReduction");
+        }
     }
 
     public void ChargeHeal(float heal)
@@ -322,7 +352,23 @@ public class Player : MonoBehaviour
 
         this.stunnedTime = stunnedTime;
 
-        currentHealth -= damage;
+        if (!inmortal)
+        {
+            currentHealth -= damage;
+        }
+
+        if (healCharge > 0.75f)
+        {
+            healCharge = 0.75f;
+            healProgressBar.GetComponent<ChargeBarScript>().current = healCharge;
+            healProgressBar.GetComponent<ChargeBarScript>().GetCurrentFill();
+        }
+        else if (healCharge > 0.5f)
+        {
+            healCharge = 0.5f;
+            healProgressBar.GetComponent<ChargeBarScript>().current = healCharge;
+            healProgressBar.GetComponent<ChargeBarScript>().GetCurrentFill();
+        }
 
         PlayHurtFX();
 

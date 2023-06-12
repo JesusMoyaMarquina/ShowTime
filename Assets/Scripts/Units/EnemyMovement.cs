@@ -31,7 +31,7 @@ public abstract class EnemyMovement : MonoBehaviour
     protected bool knockbacked;
 
     //Stats variables
-    public bool hitted, stunned;
+    public bool hitted, stunned, inmortal;
     public float totalHealth;
     public float damage;
     protected float currentHealth;
@@ -56,6 +56,8 @@ public abstract class EnemyMovement : MonoBehaviour
 
     void Start()
     {
+        inmortal = FindObjectOfType<TrainManagerScript>() != null;
+
         if (SelectDifficultyScript.Instance != null)
         {
             switch (SelectDifficultyScript.Instance.GetDifficulty())
@@ -72,6 +74,7 @@ public abstract class EnemyMovement : MonoBehaviour
                     break;
             }
         }
+
         rb = GetComponent<Rigidbody2D>();
         cc = GetComponent<CircleCollider2D>();
         anim = GetComponent<Animator>();
@@ -286,7 +289,10 @@ public abstract class EnemyMovement : MonoBehaviour
     #region stats functions
     public virtual void GetDamage(float damage)
     {
-        currentHealth -= damage;
+        if (!inmortal)
+        {
+            currentHealth -= damage;
+        }
         SetAttackingFalse();
         PlayHittedFX();
 
