@@ -70,7 +70,6 @@ public class InstanceCinematic : MonoBehaviour
                 {
                     onMidPoint = true;
                 }
-
                 anim.SetFloat("speed", 1f);
             }
             else
