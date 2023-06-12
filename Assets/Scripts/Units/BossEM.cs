@@ -23,6 +23,25 @@ public class BossEM : EnemyMovement
 
     private void Start()
     {
+        if (SelectDifficultyScript.Instance != null)
+        {
+            switch (SelectDifficultyScript.Instance.GetDifficulty())
+            {
+                case 0:
+                    totalHealth *= easyMultiplier;
+                    damage *= easyMultiplier;
+                    dashDamage *= easyMultiplier;
+                    break;
+                case 2:
+                    totalHealth *= hardMultiplier;
+                    damage *= hardMultiplier;
+                    dashDamage *= hardMultiplier;
+                    break;
+                default:
+                    break;
+            }
+        }
+
         dashCast = GetComponent<DrawAttackCast>();
         rb = GetComponent<Rigidbody2D>();
         bc = GetComponent<BoxCollider2D>();

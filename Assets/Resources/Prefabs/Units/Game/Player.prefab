@@ -538,8 +538,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffcff1a3018f1d14a812d3355b4b2f4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cdReducer: 2
-  lifeSteal: 100
+  cdReducer: 1
+  lifeSteal: 10
   knockbackForce: 80
   MngList:
   - 20

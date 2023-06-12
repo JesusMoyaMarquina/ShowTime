@@ -14,7 +14,7 @@ public abstract class EnemyMovement : MonoBehaviour
     protected CircleCollider2D cc;
     protected Animator anim;
     protected SpriteRenderer spriteRenderer;
-    [SerializeField] float easyMultiplier, hardMultiplier;
+    [SerializeField] protected float easyMultiplier, hardMultiplier;
 
     //Movement variables
     public float speed;
