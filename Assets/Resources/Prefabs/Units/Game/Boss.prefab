@@ -145,15 +145,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35c269d929574b84fa43ff362b08b127, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  easyMultiplier: 0.7
+  hardMultiplier: 1.2
   speed: 12
   minDistance: 2
   hitted: 0
   stunned: 0
   totalHealth: 1000
+  damage: 20
   distanceToPlayer: 0
   audioSource: {fileID: -1758514401157523288}
   stepFX: {fileID: 8300000, guid: 6e4ddb40bf8c81a42a3632fb4813b4a9, type: 3}
-  attackFX: {fileID: 8300000, guid: be5519fddb36a5848ad96908ebf04327, type: 3}
+  attackFX: {fileID: 8300000, guid: c41c44a3efed9cc438a24bb0c750cf48, type: 3}
   hittedFX: {fileID: 8300000, guid: 456efbda1a133f84c897f097204f44a4, type: 3}
   score: 1000
   bossAttack: {fileID: 0}
@@ -181,7 +184,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b940fa4b0b75db4f901b1fe4689140b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectToPool: {fileID: 1393277690351578813, guid: e108dd589c6445d4c83b4d2d381e06a8, type: 3}
+  objectToPool: {fileID: 1393277690351578813, guid: 3f0a8c472e2835b4282b2e0ab29c5edf, type: 3}
   amountToPool: 1
   pooledObjects: []
 --- !u!114 &-6180251200359876531

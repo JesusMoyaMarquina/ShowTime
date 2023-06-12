@@ -58,7 +58,10 @@ public class InstanceCinematic : MonoBehaviour
         CameraFollowUp();
         if (startMoving && !pause)
         {
-
+            if(midPoint == null)
+            {
+                onMidPoint = true;
+            }
             if (!onMidPoint)
             {
                 transform.position = Vector2.MoveTowards(transform.position, midPoint.position, speed);
@@ -67,7 +70,6 @@ public class InstanceCinematic : MonoBehaviour
                 {
                     onMidPoint = true;
                 }
-
                 anim.SetFloat("speed", 1f);
             }
             else

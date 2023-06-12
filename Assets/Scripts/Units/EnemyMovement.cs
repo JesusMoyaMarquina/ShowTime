@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
@@ -13,6 +14,7 @@ public abstract class EnemyMovement : MonoBehaviour
     protected CircleCollider2D cc;
     protected Animator anim;
     protected SpriteRenderer spriteRenderer;
+    [SerializeField] float easyMultiplier, hardMultiplier;
 
     //Movement variables
     public float speed;
@@ -30,8 +32,9 @@ public abstract class EnemyMovement : MonoBehaviour
     protected bool knockbacked;
 
     //Stats variables
-    public bool hitted, stunned;
+    public bool hitted, stunned, inmortal;
     public float totalHealth;
+    public float damage;
     protected float currentHealth;
     protected bool alive;
 
@@ -54,6 +57,25 @@ public abstract class EnemyMovement : MonoBehaviour
 
     void Start()
     {
+        inmortal = FindObjectOfType<TrainManagerScript>() != null;
+
+        if (SelectDifficultyScript.Instance != null)
+        {
+            switch (SelectDifficultyScript.Instance.GetDifficulty())
+            {
+                case 0:
+                    totalHealth *= easyMultiplier;
+                    damage *= easyMultiplier;
+                    break;
+                case 2:
+                    totalHealth *= hardMultiplier;
+                    damage *= hardMultiplier;
+                    break;
+                default:
+                    break;
+            }
+        }
+
         rb = GetComponent<Rigidbody2D>();
         cc = GetComponent<CircleCollider2D>();
         anim = GetComponent<Animator>();
@@ -268,7 +290,10 @@ public abstract class EnemyMovement : MonoBehaviour
     #region stats functions
     public virtual void GetDamage(float damage)
     {
-        currentHealth -= damage;
+        if (!inmortal)
+        {
+            currentHealth -= damage;
+        }
         SetAttackingFalse();
         PlayHittedFX();
 
@@ -313,7 +338,6 @@ public abstract class EnemyMovement : MonoBehaviour
 
     protected void CheckDeadCondition()
     {
-
         if (currentHealth <= 0)
         {
             if (!(GetType() == typeof(BossEM)))

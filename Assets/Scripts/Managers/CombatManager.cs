@@ -231,11 +231,16 @@ public class CombatManager : MonoBehaviour
     private void ManageLoseCondition()
     {
         Transform players = GameObject.Find("Players").transform;
-        int totalOfPlayers = players.childCount;
+        int totalOfPlayers = FindObjectsOfType<Player>().Length;
         int deadPlayers = 0;
 
         for(int i = 0; i < totalOfPlayers; i++)
         {
+            if(players.GetChild(i).GetComponent<Player>() == null)
+            {
+                continue;
+            }
+
             if (!players.GetChild(i).GetComponent<Player>().isAlive())
             {
                 deadPlayers++;

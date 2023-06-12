@@ -1,12 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Linq;
-using UnityEngine.UI;
 using TMPro;
+using Unity.Mathematics;
 
 public class Player : MonoBehaviour
 {
@@ -26,19 +25,17 @@ public class Player : MonoBehaviour
     private Color hitColor;
 
     //Movement variables
-    public float speed;
+    [SerializeField] float speed, healCooldownTime, dashCooldownTime;
     private Vector2 direction;
     private Vector2 movement;
-    private bool isDashing;
-    private bool isDashInCooldown;
-    private bool stunned;
-    private float stunnedTime;
+    private bool isDashing, isDashInCooldown, stunned, isHealInCooldown;
+    private float stunnedTime, healCooldownStartTime, dashCooldownStartTime;
 
     //Stats variables
     public float maxHealth;
     public float knockbackForce;
     private Vector2 damageDirection;
-    private bool hitted;
+    private bool hitted, inmortal;
     private bool alive;
     private float currentHealth;      // cambio para el guardado de partida
     private float inmortalityTime;
@@ -59,15 +56,18 @@ public class Player : MonoBehaviour
     private string executeAttackName;
 
     //Abilities
-    private GameObject fistComboProgressBar, dashProgressBar;
+    private GameObject fistComboProgressBar, dashProgressBar, healProgressBar, screw;
 
-    private float dashCooldownTime;
     private float executedAttackCD, totalExecutedAttackTime;
+    private float healCharge;
 
     //Combo system
+    [SerializeField] private float cooldownReducer;
     private Weapon currentWeapon;
     public Attack executedAttack;
     public Queue<string> inputQueue;
+
+    private AvailableComboPanelScript avialibleComboPanel;
 
     private void Awake()
     {
@@ -90,11 +90,12 @@ public class Player : MonoBehaviour
         //Start health
         alive = true;
         hitted = false;
+
         currentHealth = maxHealth;
         inmortalityTime = 1f;
 
         //Abilities
-        dashCooldownTime = 0;
+        dashCooldownStartTime = 0;
 
         //Atack Stats
         atkDist[0] = new Vector2();
@@ -118,11 +119,16 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
+        inmortal = FindObjectOfType<TrainManagerScript>() != null;
+
         //Abilities
         fistComboProgressBar = GameObject.Find("FistUpDownProgressBar");
         dashProgressBar = GameObject.Find("DashUpDownProgressBar");
+        healProgressBar = GameObject.Find("HealDownUpProgressBar");
+        screw = FindObjectOfType<Screw>().gameObject;
         SetDashProgressBarToMaximum();
         SetFistProgressBarToMaximum(1);
+        SetChargeBarScriptToMaximum(healProgressBar);
 
         //Health
         playerHealthBar = GameObject.Find("PlayerHealthProgressBar");
@@ -130,6 +136,9 @@ public class Player : MonoBehaviour
         playerHealthBar.GetComponent<EntityProgressBar>().current = currentHealth;
         playerHealthBar.GetComponent<EntityProgressBar>().previousCurrent = currentHealth;
         playerHealthBar.GetComponent<EntityProgressBar>().GetCurrentFill();
+
+        //Combo list
+        avialibleComboPanel = FindObjectOfType<AvailableComboPanelScript>();
     }
 
     void Update()
@@ -180,6 +189,11 @@ public class Player : MonoBehaviour
 
         if (playerInput.actions["Dash"].ReadValue<float>() == 1 && !isDashInCooldown)
             PlayerDash();
+
+        if (playerInput.actions["Heal"].triggered && !isHealInCooldown)
+        {
+            Heal(healCharge * maxHealth);
+        }
 
         if (isInmortal)
         {
@@ -236,14 +250,21 @@ public class Player : MonoBehaviour
     {
         isDashing = false;
         anim.SetBool("isDashing", isDashing);
-        dashCooldownTime = 2 + Time.time;
+        dashCooldownStartTime = dashCooldownTime + Time.time;
         StartCoroutine(DashCooldown());
+    }
+
+    IEnumerator HealCooldown()
+    {
+        isHealInCooldown = true;
+        yield return new WaitForSeconds(healCooldownTime);
+        isHealInCooldown = false;
     }
 
     IEnumerator DashCooldown()
     {
         isDashInCooldown = true;
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(dashCooldownTime);
         isDashInCooldown = false;
     }
     #endregion
@@ -262,6 +283,65 @@ public class Player : MonoBehaviour
 
         playerHealthBar.GetComponent<EntityProgressBar>().current = currentHealth;
         playerHealthBar.GetComponent<EntityProgressBar>().GetCurrentFill();
+
+
+        print(healCharge);
+
+        if (healCharge >= 1)
+        {
+            ActivateRandomBoost();
+        }
+
+        healCharge = 0;
+
+        healProgressBar.GetComponent<ChargeBarScript>().current = healCharge;
+        healProgressBar.GetComponent<ChargeBarScript>().GetCurrentFill();
+
+        if (screw != null)
+        {
+            screw.GetComponent<Screw>().ActivateHeal();
+        }
+
+        healCooldownStartTime = healCooldownTime + Time.time;
+        StartCoroutine(HealCooldown());
+    }
+
+    private void ActivateRandomBoost()
+    {
+        //Speed, attack damage, recieved damage, cooldown reducer 
+        int randNum = UnityEngine.Random.Range(0, 100);
+
+        if (randNum < 25)
+        {
+            print("speedUp");
+        }
+        else if (randNum < 50)
+        {
+            print("attackUp");
+        }
+        else if (randNum < 75)
+        {
+            print("defeseUp");
+        }
+        else
+        {
+            print("cdReduction");
+        }
+    }
+
+    public void ChargeHeal(float heal)
+    {
+        if (healCharge + heal / maxHealth < 1)
+        {
+            healCharge += heal / maxHealth;
+        }
+        else
+        {
+            healCharge = 1;
+        }
+
+        healProgressBar.GetComponent<ChargeBarScript>().current = healCharge;
+        healProgressBar.GetComponent<ChargeBarScript>().GetCurrentFill();
     }
 
     public void GetDamage(float damage, Vector2 damageDirection, float stunnedTime = 0, bool attackCancel = false, float force = 0)
@@ -272,7 +352,23 @@ public class Player : MonoBehaviour
 
         this.stunnedTime = stunnedTime;
 
-        currentHealth -= damage;
+        if (!inmortal)
+        {
+            currentHealth -= damage;
+        }
+
+        if (healCharge > 0.75f)
+        {
+            healCharge = 0.75f;
+            healProgressBar.GetComponent<ChargeBarScript>().current = healCharge;
+            healProgressBar.GetComponent<ChargeBarScript>().GetCurrentFill();
+        }
+        else if (healCharge > 0.5f)
+        {
+            healCharge = 0.5f;
+            healProgressBar.GetComponent<ChargeBarScript>().current = healCharge;
+            healProgressBar.GetComponent<ChargeBarScript>().GetCurrentFill();
+        }
 
         PlayHurtFX();
 
@@ -398,7 +494,17 @@ public class Player : MonoBehaviour
 
         if (currentWeapon.IsInCD())
         {
+            if (avialibleComboPanel != null)
+            {
+                avialibleComboPanel.ComboListUpdate(inputQueue, true);
+            }
             QuitarAccion();
+        } else
+        {
+            if (avialibleComboPanel != null)
+            {
+                avialibleComboPanel.ComboListUpdate(inputQueue);
+            }
         }
 
         if (inputQueue.Count == 3)
@@ -497,15 +603,38 @@ public class Player : MonoBehaviour
     {
         return isDashing;
     }
+
+    public void ReduceCooldown()
+    {
+        currentWeapon.ReduceCD();
+        executedAttackCD -= currentWeapon.GetCDReducer();
+    }
     #endregion
 
     #region Abilities graphic management
     private void UpdateProgressBars()
     {
-        float actualDashCooldownTime;
-        if (dashCooldownTime > 0)
+        float actualHealCooldownTime;
+        if (healCooldownStartTime > 0)
         {
-            actualDashCooldownTime = dashCooldownTime - Time.time;
+            actualHealCooldownTime = healCooldownStartTime - Time.time;
+            UpdateHealCooldownBar(actualHealCooldownTime);
+        }
+        else
+        {
+            actualHealCooldownTime = 0;
+        }
+
+        if (actualHealCooldownTime <= 0)
+        {
+            healCooldownStartTime = 0;
+            SetHealProgressBarToMaximum();
+        }
+
+        float actualDashCooldownTime;
+        if (dashCooldownStartTime > 0)
+        {
+            actualDashCooldownTime = dashCooldownStartTime - Time.time;
             UpdateDashCooldownBar(actualDashCooldownTime);
         }
         else
@@ -515,7 +644,7 @@ public class Player : MonoBehaviour
 
         if (actualDashCooldownTime <= 0)
         {
-            dashCooldownTime = 0;
+            dashCooldownStartTime = 0;
             SetDashProgressBarToMaximum();
         }
 
@@ -537,14 +666,24 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void SetHealProgressBarToMaximum()
+    {
+        SetProgressBarToMaximum(healProgressBar, healCooldownTime);
+    }
+
     private void SetDashProgressBarToMaximum()
     {
-        SetProgressBarToMaximum(dashProgressBar, 2);
+        SetProgressBarToMaximum(dashProgressBar, dashCooldownTime);
     }
 
     private void UpdateDashCooldownBar(float current)
     {
         UpdateProgressBar(dashProgressBar, current);
+    }
+
+    private void UpdateHealCooldownBar(float current)
+    {
+        UpdateProgressBar(healProgressBar, current);
     }
 
     public void SetFistProgressBarToMaximum(float maximum)
@@ -555,6 +694,14 @@ public class Player : MonoBehaviour
     private void UpdateFistCooldownBar(float current)
     {
         UpdateProgressBar(fistComboProgressBar, current);
+    }
+
+    private void SetChargeBarScriptToMaximum(GameObject progressBarGO, float maximum = 1)
+    {
+        ChargeBarScript progressBar = progressBarGO.GetComponent<ChargeBarScript>();
+        progressBar.maximum = maximum;
+        progressBar.current = 0;
+        progressBar.GetCurrentFill();
     }
 
     private void SetProgressBarToMaximum(GameObject progressBarGO, float maximum = 1)

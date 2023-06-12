@@ -108,7 +108,7 @@ public class BossEM : EnemyMovement
         {
             Translation();
         }
-        else
+        else if (!isDashing)
         {
             base.Movement();
         }
@@ -146,6 +146,18 @@ public class BossEM : EnemyMovement
                 dashCast.UpdateDirection(new Vector2(transform.position.x, transform.position.y), direction, attackLine);
                 rb.velocity = direction.normalized * dashSpeed;
                 SetAttackingFalse();
+            }
+            else
+            {
+                base.Translation();
+            }
+        }
+        else
+        {
+            if(isDash || isDashing)
+            {
+                CancelDash();
+                StopDashing();
             }
             else
             {

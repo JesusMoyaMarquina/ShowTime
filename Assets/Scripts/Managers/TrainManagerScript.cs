@@ -8,10 +8,10 @@ public class TrainManagerScript : MonoBehaviour
 {
     public static TrainManagerScript Instance;
 
-    public GameObject meleeUnit, rangedUnit, bossUnit, player;
+    public GameObject meleeUnit, rangedUnit, bossUnit, player, screw;
     public bool attackingTrain;
     [SerializeField] private GameObject unitContainer, playerContainer;
-    [SerializeField] private GameObject enemySpawnPoint, playerSpawnPoint;
+    [SerializeField] private GameObject enemySpawnPoint, playerSpawnPoint, screwSpawnPoint;
     [SerializeField] private TextMeshProUGUI trainingModeText;
     private PlayerInput combatInput;
 
@@ -23,7 +23,8 @@ public class TrainManagerScript : MonoBehaviour
         combatInput = GetComponent<PlayerInput>();
         attackingTrain = false;
         Instantiate(player, new Vector3(playerSpawnPoint.transform.position.x, playerSpawnPoint.transform.position.y, 0), Quaternion.identity, playerContainer.transform);
-        GetDifficulty();
+        Instantiate(screw, new Vector3(screwSpawnPoint.transform.position.x, screwSpawnPoint.transform.position.y, 0), Quaternion.identity, playerContainer.transform);
+        GetEnemyType();
     }
 
     public void SwapTrainingMode()
@@ -33,7 +34,7 @@ public class TrainManagerScript : MonoBehaviour
                                                               trainingModeText.text.Contains("Static") ? "Combat" : "Static");
     }
 
-    private void GetDifficulty()
+    private void GetEnemyType()
     {
         if (TrainingZoneSettingsScript.Instance != null)
         {

@@ -124,6 +124,15 @@ public class SoundManager : MonoBehaviour
                 menuMusic.Pause();
                 loseMusic.Play();
                 break;
+            case GameState.Train:
+                PlayMapFX();
+                cinematicMusic.Stop();
+                bossBattleMusic.Stop();
+                battleFinishMusic.Stop();
+                battleMusic.Stop();
+                menuMusic.Pause();
+                loseMusic.Stop();
+                break;
         }
     }
 
@@ -140,6 +149,10 @@ public class SoundManager : MonoBehaviour
                 japaneseMapAmbientFX.Play();
                 break;
             case 4:
+                break;
+            default:
+                if (japaneseMapAmbientFX.isPlaying) return;
+                japaneseMapAmbientFX.Play();
                 break;
         }
 
@@ -158,6 +171,9 @@ public class SoundManager : MonoBehaviour
                 break;
             case 4:
                 break;
+            default:
+                japaneseMapAmbientFX.Pause();
+                break;
         }
 
     }
@@ -174,6 +190,9 @@ public class SoundManager : MonoBehaviour
                 japaneseMapAmbientFX.Stop();
                 break;
             case 4:
+                break;
+            default:
+                japaneseMapAmbientFX.Stop();
                 break;
         }
     }

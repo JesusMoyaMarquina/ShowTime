@@ -7,8 +7,6 @@ using UnityEngine;
 
 public class MeleAttack : MonoBehaviour
 {
-    public float damage;
-
     private GameObject player;
     private Rigidbody2D rb;
     private Vector2 direction;
@@ -61,7 +59,7 @@ public class MeleAttack : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            collision.GetComponent<Player>().GetDamage(damage, direction);
+            collision.GetComponent<Player>().GetDamage(GetComponentInParent<EnemyMovement>().damage, direction);
             DestroyObject();
         }
     }
