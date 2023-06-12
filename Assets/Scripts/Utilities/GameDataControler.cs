@@ -14,24 +14,22 @@ public class GameDataControler : MonoBehaviour
         archivoDeGuardado = Application.dataPath + "/GameData.json";
 
         jugador = GameObject.FindGameObjectWithTag("Player");
-
-        CargarDatos();
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            CargarDatos();
-        }
+    //private void Update()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.C))
+    //    {
+    //        CargarDatos();
+    //    }
 
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            GuardarDatos();
-        }
-    }
+    //    if (Input.GetKeyDown(KeyCode.G))
+    //    {
+    //        GuardarDatos();
+    //    }
+    //}
 
-    private void CargarDatos()
+    public void CargarDatos()
     {
         if (File.Exists(archivoDeGuardado))
         {
@@ -46,7 +44,7 @@ public class GameDataControler : MonoBehaviour
             print("El archivo no existe");
     }
 
-    private void GuardarDatos()
+    public void GuardarDatos()
     {
         GameData nuevosDatos = new()
         {
