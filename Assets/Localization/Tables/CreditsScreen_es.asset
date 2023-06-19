@@ -1,0 +1,82 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: CreditsScreen_es
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: es
+  m_SharedData: {fileID: 11400000, guid: 4774a2154e4e0cb469fc7b5631f61ab2, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 113601384448
+    m_Localized: CREDITOS
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14619018760192
+    m_Localized: PRODUCTOR & DISTRIBUIDOR
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15275209232384
+    m_Localized: "DISE\xD1O & DESARROLLO"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16016254668800
+    m_Localized: ARTISTAS
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17360852062208
+    m_Localized: PROGRAMACION
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17822389080064
+    m_Localized: SONIDO & FX
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18714337185792
+    m_Localized: ANIMACIONES
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19187047829504
+    m_Localized: "NIVELES & DISE\xD1O DE ESDENARIOS"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19572152045568
+    m_Localized: "DISE\xD1O IA"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19979771285504
+    m_Localized: CINEMATICAS
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20184587538432
+    m_Localized: MARKETING & PROMOCION
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21144546283520
+    m_Localized: AGRADECIMIENTOS ESPECIALES
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21390126977024
+    m_Localized: 'Familiares y amigos que aportaron ayuda
+
+      Gracias a todos
+      los jugadores que disfrutan nuestro juego y nos ayudan en nuestra aventura.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23061380960256
+    m_Localized: VOLVER
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

@@ -17,4 +17,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Train.unity
     guid: 42130959f9d4f124093448b19924349f
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: 6a6b2f95fa4f6004981c6267c820261f, type: 2}
+    com.unity.localization.settings: {fileID: 11400000, guid: 2dc02c9a2a41fb7498ae53d36456e7d2, type: 2}

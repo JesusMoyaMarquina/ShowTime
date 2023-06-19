@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: GameUI Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: GameUI
+  m_TableCollectionNameGuidString: 92073efbca9319448af07205a2be9ee9
+  m_Entries:
+  - m_Id: 647343345664
+    m_Key: Hit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1061082075136
+    m_Key: First Wave
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1511743262720
+    m_Key: Hits
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1695457972224
+    m_Key: Boss
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 8902537187982573612
+  references:
+    version: 2
+    RefIds:
+    - rid: 8902537187982573612
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1687196705550

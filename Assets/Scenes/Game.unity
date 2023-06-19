@@ -2802,7 +2802,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7787846795857698412, guid: 18a5144501cd0c44cadebe2837c878c3, type: 3}
   m_PrefabInstance: {fileID: 7787846795684818995}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 7787846795684818996}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: de79f194974d7544da766ba34c03a5c4, type: 3}
@@ -4410,6 +4410,78 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1466770242}
     m_Modifications:
+    - target: {fileID: 675566491552571230, guid: 9e869019ab2a659498c6cbdaa840caf0, type: 3}
+      propertyPath: managedReferences[8902537187982573620]
+      value: Unity.Localization UnityEngine.Localization.SmartFormat.PersistentVariables.ObjectVariable
+      objectReference: {fileID: 0}
+    - target: {fileID: 675566491552571230, guid: 9e869019ab2a659498c6cbdaa840caf0, type: 3}
+      propertyPath: managedReferences[8902537187982573621]
+      value: Unity.Localization UnityEngine.Localization.SmartFormat.PersistentVariables.NestedVariablesGroup
+      objectReference: {fileID: 0}
+    - target: {fileID: 675566491552571230, guid: 9e869019ab2a659498c6cbdaa840caf0, type: 3}
+      propertyPath: managedReferences[8902537187982573622]
+      value: Unity.Localization UnityEngine.Localization.LocalizedString
+      objectReference: {fileID: 0}
+    - target: {fileID: 675566491552571230, guid: 9e869019ab2a659498c6cbdaa840caf0, type: 3}
+      propertyPath: managedReferences[8902537187982573623]
+      value: Unity.Localization UnityEngine.Localization.SmartFormat.PersistentVariables.UIntVariable
+      objectReference: {fileID: 0}
+    - target: {fileID: 675566491552571230, guid: 9e869019ab2a659498c6cbdaa840caf0, type: 3}
+      propertyPath: managedReferences[8902537187982573624]
+      value: Unity.Localization UnityEngine.Localization.SmartFormat.PersistentVariables.ObjectVariable
+      objectReference: {fileID: 0}
+    - target: {fileID: 675566491552571230, guid: 9e869019ab2a659498c6cbdaa840caf0, type: 3}
+      propertyPath: m_StringReference.m_LocalVariables.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 675566491552571230, guid: 9e869019ab2a659498c6cbdaa840caf0, type: 3}
+      propertyPath: managedReferences[8902537187982573620].m_Value
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 675566491552571230, guid: 9e869019ab2a659498c6cbdaa840caf0, type: 3}
+      propertyPath: managedReferences[8902537187982573621].m_Value
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 675566491552571230, guid: 9e869019ab2a659498c6cbdaa840caf0, type: 3}
+      propertyPath: managedReferences[8902537187982573623].m_Value
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 675566491552571230, guid: 9e869019ab2a659498c6cbdaa840caf0, type: 3}
+      propertyPath: managedReferences[8902537187982573624].m_Value
+      value: 
+      objectReference: {fileID: 7787846795684818996}
+    - target: {fileID: 675566491552571230, guid: 9e869019ab2a659498c6cbdaa840caf0, type: 3}
+      propertyPath: m_StringReference.m_LocalVariables.Array.data[0].name
+      value: CombatManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 675566491552571230, guid: 9e869019ab2a659498c6cbdaa840caf0, type: 3}
+      propertyPath: managedReferences[8902537187982573622].m_FallbackState
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 675566491552571230, guid: 9e869019ab2a659498c6cbdaa840caf0, type: 3}
+      propertyPath: m_StringReference.m_LocalVariables.Array.data[0].variable
+      value: 8902537187982573624
+      objectReference: {fileID: 0}
+    - target: {fileID: 675566491552571230, guid: 9e869019ab2a659498c6cbdaa840caf0, type: 3}
+      propertyPath: managedReferences[8902537187982573622].m_WaitForCompletion
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 675566491552571230, guid: 9e869019ab2a659498c6cbdaa840caf0, type: 3}
+      propertyPath: managedReferences[8902537187982573622].m_LocalVariables.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 675566491552571230, guid: 9e869019ab2a659498c6cbdaa840caf0, type: 3}
+      propertyPath: managedReferences[8902537187982573622].m_TableEntryReference.m_Key
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 675566491552571230, guid: 9e869019ab2a659498c6cbdaa840caf0, type: 3}
+      propertyPath: managedReferences[8902537187982573622].m_TableEntryReference.m_KeyId
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 675566491552571230, guid: 9e869019ab2a659498c6cbdaa840caf0, type: 3}
+      propertyPath: managedReferences[8902537187982573622].m_TableReference.m_TableCollectionName
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 7596143551169391790, guid: 9e869019ab2a659498c6cbdaa840caf0, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -4700,6 +4772,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 18a5144501cd0c44cadebe2837c878c3, type: 3}
+--- !u!1 &7787846795684818996 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7787846795857698414, guid: 18a5144501cd0c44cadebe2837c878c3, type: 3}
+  m_PrefabInstance: {fileID: 7787846795684818995}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8447196786688942786
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4721,7 +4798,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8447196785075651363, guid: 6924c1468c1dd024d887fab2f7ab4196, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.0000059480203
+      value: 0.0000016704004
       objectReference: {fileID: 0}
     - target: {fileID: 8447196786502668833, guid: 6924c1468c1dd024d887fab2f7ab4196, type: 3}
       propertyPath: m_Name

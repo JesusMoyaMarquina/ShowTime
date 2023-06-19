@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Localization-Assets-Shared
+  m_EditorClassIdentifier: 
+  m_GroupName: Localization-Assets-Shared
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 972c71d6ed37f3f45b8732c708ba8964
+  m_SerializeEntries:
+  - m_GUID: d717297785c89ce4da4032582bec119c
+    m_Address: Assets/Localization/Tables/MainMenu Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+  - m_GUID: 4774a2154e4e0cb469fc7b5631f61ab2
+    m_Address: Assets/Localization/Tables/CreditsScreen Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+  - m_GUID: 92073efbca9319448af07205a2be9ee9
+    m_Address: Assets/Localization/Tables/GameUI Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+  m_ReadOnly: 1
+  m_Settings: {fileID: 11400000, guid: 7094d519a37831046878eae1ed04944e, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: f7e73b51be1d14e4d95dafd5ca049299, type: 2}
+    - {fileID: 11400000, guid: e7de552a468414748ba765a71bc69d80, type: 2}
