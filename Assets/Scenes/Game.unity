@@ -4432,7 +4432,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 675566491552571230, guid: 9e869019ab2a659498c6cbdaa840caf0, type: 3}
       propertyPath: m_StringReference.m_LocalVariables.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 675566491552571230, guid: 9e869019ab2a659498c6cbdaa840caf0, type: 3}
       propertyPath: managedReferences[8902537187982573620].m_Value
@@ -4798,7 +4798,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8447196785075651363, guid: 6924c1468c1dd024d887fab2f7ab4196, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.0000016704004
+      value: 0.00065067207
       objectReference: {fileID: 0}
     - target: {fileID: 8447196786502668833, guid: 6924c1468c1dd024d887fab2f7ab4196, type: 3}
       propertyPath: m_Name
