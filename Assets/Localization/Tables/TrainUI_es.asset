@@ -1,0 +1,97 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: TrainUI_es
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: es
+  m_SharedData: {fileID: 11400000, guid: 305425273fa5cd7488ee99eb8f0c95b3, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 721775030272
+    m_Localized: Salud
+    m_Metadata:
+      m_Items: []
+  - m_Id: 795129212928
+    m_Localized: 'Modo entrenamiento: Estatico
+
+      Presiona Z para alternar'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1450539544576
+    m_Localized: 'SUAVE
+
+      SUAVE
+
+      SUAVE'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1551936843776
+    m_Localized: 'SUAVE
+
+      SUAVE
+
+      FUERTE'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1679934418944
+    m_Localized: 'SUAVE
+
+      FUERTE
+
+      SUAVE'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1769138876416
+    m_Localized: 'SUAVE
+
+      FUERTE
+
+      FUERTE'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1850642591744
+    m_Localized: 'FUERTE
+
+      SUAVE
+
+      SUAVE'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1919710195712
+    m_Localized: 'FUERTE
+
+      SUAVE
+
+      FUERTE'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1992053551104
+    m_Localized: 'FUERTE
+
+      FUERTE
+
+      SUAVE'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2091118817280
+    m_Localized: 'FUERTE
+
+      FUERTE
+
+      FUERTE'
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

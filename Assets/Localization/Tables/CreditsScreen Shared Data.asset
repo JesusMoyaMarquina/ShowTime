@@ -71,6 +71,10 @@ MonoBehaviour:
     m_Key: Return
     m_Metadata:
       m_Items: []
+  - m_Id: 118306910826496
+    m_Key: Translation
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

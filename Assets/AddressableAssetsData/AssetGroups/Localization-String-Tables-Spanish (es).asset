@@ -35,6 +35,54 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-es
     - Preload
+  - m_GUID: d511dc289d7aae64baa870d283b10546
+    m_Address: KeyBindingMenu_es
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-es
+    - Preload
+  - m_GUID: 314f60fd59ddf8c4e947307f8de43b3d
+    m_Address: LoseMenu_es
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-es
+    - Preload
+  - m_GUID: 0ff0a9305fe35c144883c8348ad2c29b
+    m_Address: PauseMenu_es
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-es
+    - Preload
+  - m_GUID: 47fd255106e6197459d35d03e74c62cb
+    m_Address: SelectDifficultyMenu_es
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-es
+    - Preload
+  - m_GUID: 33dd7b15f2c6d344c884675651b434cf
+    m_Address: SettingsMenu_es
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-es
+    - Preload
+  - m_GUID: 29eac8fb87628db44a12c44153161c45
+    m_Address: TrainingZoneSettings_es
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-es
+    - Preload
+  - m_GUID: 34a634a138ca9694b96c0e9b787f71a4
+    m_Address: VictoryMenu_es
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-es
+    - Preload
+  - m_GUID: 12c1f79b108a9be4f878b41fedd5f14c
+    m_Address: TrainUI_es
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-es
+    - Preload
   m_ReadOnly: 1
   m_Settings: {fileID: 11400000, guid: 7094d519a37831046878eae1ed04944e, type: 2}
   m_SchemaSet:

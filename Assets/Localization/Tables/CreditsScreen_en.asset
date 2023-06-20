@@ -77,6 +77,10 @@ MonoBehaviour:
     m_Localized: RETURN
     m_Metadata:
       m_Items: []
+  - m_Id: 118306910826496
+    m_Localized: TRANSLATION
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
