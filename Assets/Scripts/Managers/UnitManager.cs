@@ -27,15 +27,15 @@ public class UnitManager : MonoBehaviour
             switch (SelectDifficultyScript.Instance.GetDifficulty())
             {
                 case 0:
-                    generateUnit = 10;
+                    generateUnit = 15;
                     unitIncremental = 0;
                     break;
                 case 1:
-                    generateUnit = 11;
+                    generateUnit = 15;
                     unitIncremental = 1;
                     break;
                 case 2:
-                    generateUnit = 12;
+                    generateUnit = 15;
                     unitIncremental = 2;
                     break;
                 default:

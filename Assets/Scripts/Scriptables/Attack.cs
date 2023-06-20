@@ -9,6 +9,7 @@ public class Attack
     [SerializeField] float damage;
     [SerializeField] float cd;
     [SerializeField] GameObject collider;
+    [SerializeField] float knockbackForce;
 
     public string GetAttackName()
     {
@@ -23,6 +24,11 @@ public class Attack
     public float GetCD()
     {
         return cd;
+    }
+
+    public float GetKnockbackForce()
+    {
+        return knockbackForce;
     }
 
     public void ActivateCollider()

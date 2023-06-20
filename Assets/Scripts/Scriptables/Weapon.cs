@@ -6,7 +6,6 @@ public abstract class Weapon : MonoBehaviour
 {
     [SerializeField] private float cdReducer;
     [SerializeField] private int lifeSteal;
-    [SerializeField] private float knockbackForce;
     public float[] MngList;
 
     [SerializeField] protected List<Attack> attacks = new List<Attack>();

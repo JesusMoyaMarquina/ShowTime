@@ -43,7 +43,7 @@ public class PlayerAttackScript : MonoBehaviour
                 player.ReduceCooldown();
             }
 
-            enemy.Knockback(weapon.MngList[player.inputQueue.Count], player.GetComponent<SpriteRenderer>().flipX ? Vector2.right : Vector2.left);
+            enemy.Knockback(player.executedAttack.GetKnockbackForce(), player.GetComponent<SpriteRenderer>().flipX ? Vector2.right : Vector2.left);
 
             enemy.GetDamage(player.executedAttack.GetDamage());
 

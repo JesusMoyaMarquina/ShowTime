@@ -130,7 +130,7 @@ public abstract class EnemyMovement : MonoBehaviour
         rb.velocity = Vector2.zero;
 
         rb.mass = 1;
-        rb.AddForce(direction * knockbackForce * rb.mass, ForceMode2D.Impulse);
+        rb.AddForce(this.direction.normalized * knockbackForce * rb.mass * -1, ForceMode2D.Impulse);
     }
 
     public GameObject FindNearPlayer()
