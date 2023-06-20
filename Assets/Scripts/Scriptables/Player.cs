@@ -227,9 +227,12 @@ public class Player : MonoBehaviour
 
     private void PlayerDirection()
     {
-        if (isDashing || knockbacked || attacking) return;
+        if (isDashing || attacking) return;
 
-        if (rb.velocity.x != 0)
+
+        if(knockbacked && alive)
+            direction = - damageDirection;
+        else if (rb.velocity.x != 0 && alive)
             direction = rb.velocity;
 
         spriteRenderer.flipX = direction.x > 0;
@@ -390,6 +393,8 @@ public class Player : MonoBehaviour
 
         if (currentHealth <= 0)
         {
+            direction = -damageDirection;
+            PlayerDirection();
             currentHealth = 0;
             alive = false;
             rb.velocity = Vector2.zero;

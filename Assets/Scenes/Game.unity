@@ -3658,7 +3658,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cinematic1Text:
-  - 'Noah: Were am i? Am i dead?.'
+  - 'Noah: Where am i? Am i dead?.'
   - "GOD: No, you aren\xB4t. You are here to be punished for your crimes against
     the time laws."
   - 'Noah: Jajajaja, no way, what will be my legal penalty, a sermon?'
@@ -4721,7 +4721,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8447196785075651363, guid: 6924c1468c1dd024d887fab2f7ab4196, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.0000059480203
+      value: 0.000025682783
       objectReference: {fileID: 0}
     - target: {fileID: 8447196786502668833, guid: 6924c1468c1dd024d887fab2f7ab4196, type: 3}
       propertyPath: m_Name

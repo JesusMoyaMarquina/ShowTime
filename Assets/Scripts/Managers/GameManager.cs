@@ -139,6 +139,10 @@ public class GameManager : MonoBehaviour
     private void HandleLose()
     {
         print("HandleLose");
+        foreach(EnemyMovement enemy in FindObjectsOfType<EnemyMovement>()) 
+        {
+            enemy.StopMoving();
+        }
 
         isInCombat = false;
 

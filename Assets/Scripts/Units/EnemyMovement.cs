@@ -213,6 +213,11 @@ public abstract class EnemyMovement : MonoBehaviour
         return look;
     }
 
+    public void StopMoving()
+    {
+        anim.SetBool("isMoving", false);
+    }
+
     public void SetAnimation()
     {
         if(knockbacked) return;

@@ -230,24 +230,18 @@ public class CombatManager : MonoBehaviour
     #region State conditions
     private void ManageLoseCondition()
     {
-        Transform players = GameObject.Find("Players").transform;
-        int totalOfPlayers = FindObjectsOfType<Player>().Length;
+        Player[] players = FindObjectsOfType<Player>();
         int deadPlayers = 0;
 
-        for(int i = 0; i < totalOfPlayers; i++)
+        foreach(Player player in players)
         {
-            if(players.GetChild(i).GetComponent<Player>() == null)
-            {
-                continue;
-            }
-
-            if (!players.GetChild(i).GetComponent<Player>().isAlive())
+            if (!player.isAlive())
             {
                 deadPlayers++;
             }
         }
 
-        if(deadPlayers == totalOfPlayers) 
+        if(deadPlayers == players.Length) 
         {
             GameManager.Instance.UpdateGameState(GameState.Lose);
         }
