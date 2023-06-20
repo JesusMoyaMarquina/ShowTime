@@ -27,7 +27,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 1511743262720
-    m_Localized: Hits {CombatManager :{cSHelp}}
+    m_Localized: Hits {CombatManager.cSHelp}
     m_Metadata:
       m_Items: []
   - m_Id: 1695457972224

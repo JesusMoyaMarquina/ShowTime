@@ -257,7 +257,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Hits 0
+  m_text: Golpes {CombatManager.instance.cSHelp}
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6caed5cf8ae11004093e83629e6e56a5, type: 2}
   m_sharedMaterial: {fileID: 1459220465561632488, guid: 6caed5cf8ae11004093e83629e6e56a5, type: 2}
@@ -284,7 +284,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 33.3
+  m_fontSize: 18
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -575,7 +575,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Hits 0
+  m_text: Golpes {CombatManager.instance.cSHelp}
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6caed5cf8ae11004093e83629e6e56a5, type: 2}
   m_sharedMaterial: {fileID: 1459220465561632488, guid: 6caed5cf8ae11004093e83629e6e56a5, type: 2}
@@ -602,7 +602,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20
+  m_fontSize: 18
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -665,9 +665,9 @@ MonoBehaviour:
     m_FallbackState: 0
     m_WaitForCompletion: 0
     m_LocalVariables:
-    - name: cSHelp
+    - name: CombatManager
       variable:
-        rid: 8902537187982573619
+        rid: 8472723820481871875
   m_FormatArguments: []
   m_UpdateString:
     m_PersistentCalls:
@@ -687,10 +687,10 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 8902537187982573619
-      type: {class: IntVariable, ns: UnityEngine.Localization.SmartFormat.PersistentVariables, asm: Unity.Localization}
+    - rid: 8472723820481871875
+      type: {class: ObjectVariable, ns: UnityEngine.Localization.SmartFormat.PersistentVariables, asm: Unity.Localization}
       data:
-        m_Value: 0
+        m_Value: {fileID: 0}
 --- !u!1 &7596143551872353369
 GameObject:
   m_ObjectHideFlags: 0
@@ -834,7 +834,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: First wave
+  m_text: Primera oleada
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6caed5cf8ae11004093e83629e6e56a5, type: 2}
   m_sharedMaterial: {fileID: 1459220465561632488, guid: 6caed5cf8ae11004093e83629e6e56a5, type: 2}
@@ -1388,11 +1388,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1731232329839152041, guid: f09dc427e53e8b54489c35879b53d3d5, type: 3}
       propertyPath: m_text
-      value: Health
+      value: Salud
       objectReference: {fileID: 0}
     - target: {fileID: 1731232329839152041, guid: f09dc427e53e8b54489c35879b53d3d5, type: 3}
       propertyPath: m_fontSize
-      value: 31.45
+      value: 37.85
       objectReference: {fileID: 0}
     - target: {fileID: 3239906119490747313, guid: f09dc427e53e8b54489c35879b53d3d5, type: 3}
       propertyPath: m_SizeDelta.x
@@ -2285,6 +2285,14 @@ PrefabInstance:
     - target: {fileID: 8378258385428186675, guid: 525e53f45b3468e48875285d09fe6047, type: 3}
       propertyPath: m_Name
       value: BossProgressBar
+      objectReference: {fileID: 0}
+    - target: {fileID: 8378258385993439439, guid: 525e53f45b3468e48875285d09fe6047, type: 3}
+      propertyPath: m_text
+      value: Jefe
+      objectReference: {fileID: 0}
+    - target: {fileID: 8378258385993439439, guid: 525e53f45b3468e48875285d09fe6047, type: 3}
+      propertyPath: m_fontSize
+      value: 47.5
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8390656764472981174, guid: 525e53f45b3468e48875285d09fe6047, type: 3}

@@ -31,6 +31,10 @@ MonoBehaviour:
     m_Key: Boss
     m_Metadata:
       m_Items: []
+  - m_Id: 314032372039680
+    m_Key: HitCount
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

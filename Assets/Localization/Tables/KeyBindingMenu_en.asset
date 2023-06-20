@@ -47,11 +47,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 2635308789760
-    m_Localized: Reset All
+    m_Localized: RESET ALL
     m_Metadata:
       m_Items: []
   - m_Id: 2885247365120
-    m_Localized: Return
+    m_Localized: RETURN
     m_Metadata:
       m_Items: []
   references:

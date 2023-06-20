@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Localization;
 using UnityEngine.Localization.Components;
+using UnityEngine.Localization.Tables;
 
 public class CombatManager : MonoBehaviour
 {
@@ -42,7 +44,7 @@ public class CombatManager : MonoBehaviour
 
     private float comboMp = 1;
 
-    protected int cSHelp = 0;
+    public int cSHelp = 0;
     #endregion
 
     #region Game state variables
@@ -359,7 +361,7 @@ public class CombatManager : MonoBehaviour
         {
             hitsTimerCombatProgressBar.gameObject.SetActive(true);
             multiplierActive = true;
-            hitsTimerCombatText.GetComponent<LocalizeStringEvent>();
+
             hitsTimerCombatText.SetActive(true);
         }
         else if (cSHelp > 0 && bossCombatUI.activeSelf)

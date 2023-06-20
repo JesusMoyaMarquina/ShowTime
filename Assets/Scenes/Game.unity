@@ -4411,6 +4411,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 1466770242}
     m_Modifications:
     - target: {fileID: 675566491552571230, guid: 9e869019ab2a659498c6cbdaa840caf0, type: 3}
+      propertyPath: managedReferences[8472723820481871876]
+      value: Unity.Localization UnityEngine.Localization.SmartFormat.PersistentVariables.ObjectVariable
+      objectReference: {fileID: 0}
+    - target: {fileID: 675566491552571230, guid: 9e869019ab2a659498c6cbdaa840caf0, type: 3}
       propertyPath: managedReferences[8902537187982573620]
       value: Unity.Localization UnityEngine.Localization.SmartFormat.PersistentVariables.ObjectVariable
       objectReference: {fileID: 0}
@@ -4432,8 +4436,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 675566491552571230, guid: 9e869019ab2a659498c6cbdaa840caf0, type: 3}
       propertyPath: m_StringReference.m_LocalVariables.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 675566491552571230, guid: 9e869019ab2a659498c6cbdaa840caf0, type: 3}
+      propertyPath: managedReferences[8472723820481871876].m_Value
+      value: 
+      objectReference: {fileID: 7787846795684818996}
     - target: {fileID: 675566491552571230, guid: 9e869019ab2a659498c6cbdaa840caf0, type: 3}
       propertyPath: managedReferences[8902537187982573620].m_Value
       value: 
@@ -4460,7 +4468,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 675566491552571230, guid: 9e869019ab2a659498c6cbdaa840caf0, type: 3}
       propertyPath: m_StringReference.m_LocalVariables.Array.data[0].variable
-      value: 8902537187982573624
+      value: 8472723820481871876
       objectReference: {fileID: 0}
     - target: {fileID: 675566491552571230, guid: 9e869019ab2a659498c6cbdaa840caf0, type: 3}
       propertyPath: managedReferences[8902537187982573622].m_WaitForCompletion
@@ -4481,6 +4489,26 @@ PrefabInstance:
     - target: {fileID: 675566491552571230, guid: 9e869019ab2a659498c6cbdaa840caf0, type: 3}
       propertyPath: managedReferences[8902537187982573622].m_TableReference.m_TableCollectionName
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1160498018880063678, guid: 9e869019ab2a659498c6cbdaa840caf0, type: 3}
+      propertyPath: managedReferences[8472723820481871877]
+      value: Unity.Localization UnityEngine.Localization.SmartFormat.PersistentVariables.ObjectVariable
+      objectReference: {fileID: 0}
+    - target: {fileID: 1160498018880063678, guid: 9e869019ab2a659498c6cbdaa840caf0, type: 3}
+      propertyPath: m_StringReference.m_LocalVariables.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1160498018880063678, guid: 9e869019ab2a659498c6cbdaa840caf0, type: 3}
+      propertyPath: managedReferences[8472723820481871877].m_Value
+      value: 
+      objectReference: {fileID: 7787846795684818996}
+    - target: {fileID: 1160498018880063678, guid: 9e869019ab2a659498c6cbdaa840caf0, type: 3}
+      propertyPath: m_StringReference.m_LocalVariables.Array.data[0].name
+      value: CombatManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 1160498018880063678, guid: 9e869019ab2a659498c6cbdaa840caf0, type: 3}
+      propertyPath: m_StringReference.m_LocalVariables.Array.data[0].variable
+      value: 8472723820481871877
       objectReference: {fileID: 0}
     - target: {fileID: 7596143551169391790, guid: 9e869019ab2a659498c6cbdaa840caf0, type: 3}
       propertyPath: m_Pivot.x
@@ -4722,6 +4750,14 @@ PrefabInstance:
       propertyPath: timerMultiplierProgressBar
       value: 
       objectReference: {fileID: 1664105585}
+    - target: {fileID: 7787846795857698412, guid: 18a5144501cd0c44cadebe2837c878c3, type: 3}
+      propertyPath: comboString.m_TableEntryReference.m_KeyId
+      value: 314032372039680
+      objectReference: {fileID: 0}
+    - target: {fileID: 7787846795857698412, guid: 18a5144501cd0c44cadebe2837c878c3, type: 3}
+      propertyPath: comboString.m_TableReference.m_TableCollectionName
+      value: GUID:92073efbca9319448af07205a2be9ee9
+      objectReference: {fileID: 0}
     - target: {fileID: 7787846795857698413, guid: 18a5144501cd0c44cadebe2837c878c3, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -4798,7 +4834,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8447196785075651363, guid: 6924c1468c1dd024d887fab2f7ab4196, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00007107904
+      value: -0.0000012085964
       objectReference: {fileID: 0}
     - target: {fileID: 8447196786502668833, guid: 6924c1468c1dd024d887fab2f7ab4196, type: 3}
       propertyPath: m_Name
