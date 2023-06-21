@@ -82,6 +82,7 @@ public class BossEM : EnemyMovement
         CheckDeadCondition();
 
         stunned = false;
+        anim.SetBool("stunned", false);
 
         hitted = false;
         anim.SetBool("hitted", hitted);
@@ -159,12 +160,14 @@ public class BossEM : EnemyMovement
                 float percentage = (Time.time - dashChargeTime - dashPreparationTime) / dashPreparationTime + 1;
                 dashAim = dashCast.UpdateDirection(new Vector2(transform.position.x, transform.position.y), direction, attackLine, percentage);
                 SetAttackingFalse();
+                SetDirection(new Vector2(transform.position.x - dashAim.x, 0));
             }
             else if (isDashing)
             {
                 dashCast.UpdateDirection(new Vector2(transform.position.x, transform.position.y), direction, attackLine);
                 rb.velocity = direction.normalized * dashSpeed;
                 SetAttackingFalse();
+                SetDirection(new Vector2(transform.position.x - dashAim.x, 0));
             }
             else
             {
@@ -257,7 +260,6 @@ public class BossEM : EnemyMovement
     private void BossDash()
     {
         isDashing = true;
-        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         anim.SetBool("isDashing", isDashing);
     }
 

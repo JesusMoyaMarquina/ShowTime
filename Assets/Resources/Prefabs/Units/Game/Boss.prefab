@@ -162,8 +162,8 @@ MonoBehaviour:
   score: 1000
   bossAttack: {fileID: 0}
   attackLine: {fileID: -370279155021738748}
-  dashPreparationTime: 2
-  dashCoolDown: 7
+  dashPreparationTime: 0.6
+  dashCoolDown: 6
   minimumDashDistance: 8
   dashSpeed: 36
   dashStunTime: 1

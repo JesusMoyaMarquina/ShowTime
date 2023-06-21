@@ -213,6 +213,40 @@ public abstract class EnemyMovement : MonoBehaviour
         return look;
     }
 
+    public char SetDirection(Vector2 direction, bool withFourAngles = false)
+    {
+        char look;
+
+        if (withFourAngles)
+            if (Mathf.Abs(direction.x) >= Mathf.Abs(direction.y))
+                if (direction.x > 0)
+                    look = 'L';
+                else
+                    look = 'R';
+            else
+                if (direction.y >= 0)
+                look = 'U';
+            else
+                look = 'D';
+        else
+            if (direction.x > 0)
+            look = 'L';
+        else
+            look = 'R';
+
+        switch (SetDirection())
+        {
+            case 'L':
+                spriteRenderer.flipX = true;
+                break;
+            case 'R':
+                spriteRenderer.flipX = false;
+                break;
+        }
+
+        return look;
+    }
+
     public void StopMoving()
     {
         anim.SetBool("isMoving", false);
@@ -288,8 +322,10 @@ public abstract class EnemyMovement : MonoBehaviour
     public IEnumerator SetStunned(float seconds)
     {
         stunned = true;
+        anim.SetBool("stunned", true);
         yield return new WaitForSeconds(seconds);
         stunned = false;
+        anim.SetBool("stunned", false);
     }
 
     #region stats functions
