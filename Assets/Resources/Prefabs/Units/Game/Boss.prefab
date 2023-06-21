@@ -81,15 +81,15 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: e1c77ba4dd7917e47a10819f29507318, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 003c34220a694044aae1e27d9630ebd5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 2.7692308, y: 2.3076923}
+  m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!50 &5037429430027693205
@@ -123,7 +123,7 @@ Animator:
   m_GameObject: {fileID: 5037429430027693209}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: c8941695b412cd342ab97be0068fa46b, type: 2}
+  m_Controller: {fileID: 9100000, guid: 6055c75d873e8834fb72343dab8ef137, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -151,6 +151,7 @@ MonoBehaviour:
   minDistance: 2
   hitted: 0
   stunned: 0
+  inmortal: 0
   totalHealth: 1000
   damage: 20
   distanceToPlayer: 0
@@ -315,9 +316,9 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.55, y: 0.2}
+    pivot: {x: 0.44, y: 0.22}
     oldSize: {x: 1, y: 1}
-    newSize: {x: 2.7692308, y: 2.3076923}
+    newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0

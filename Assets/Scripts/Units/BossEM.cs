@@ -239,6 +239,7 @@ public class BossEM : EnemyMovement
     {
         isDash = false;
         attackLine.enabled = false;
+        anim.SetBool("isDash", false);
         StopCoroutine(lastPreparateDashCoroutine);
     }
 
@@ -249,6 +250,7 @@ public class BossEM : EnemyMovement
         isDash = true;
         yield return new WaitForSeconds(dashPreparationTime);
         isDash = false;
+        anim.SetBool("isDash", false);
         BossDash();
     }
 
@@ -263,6 +265,7 @@ public class BossEM : EnemyMovement
     {
         attackLine.enabled = false;
         isDashing = false;
+        anim.SetBool("isDash", false);
         anim.SetBool("isDashing", isDashing);
         StartCoroutine(DashCooldown());
     }
@@ -285,7 +288,14 @@ public class BossEM : EnemyMovement
             inMovementRange = false;
         }
         Translation();
-        SetAnimation();
+        if (isDash)
+        {
+            anim.SetBool("isDash", true);
+        }
+        else
+        {
+            SetAnimation();
+        }
     }
 
     private void OnCollisionStay2D(Collision2D collision)
